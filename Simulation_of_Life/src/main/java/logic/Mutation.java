@@ -30,7 +30,11 @@ public class Mutation
     public Genome controlMutation(Genome genome) {
         List<Integer> genes = genome.getGenes();
         int numberOfMutations = random.nextInt(this.config.numberOfMinimumGenes, this.config.numberOfMaximumGenes);
-
+        for (int i = 0; i < numberOfMutations; i++) {
+            int geneIndex = random.nextInt(genes.size());
+            int geneValue = List.of(genes.get(geneIndex) + 1, genes.get(geneIndex) - 1).get(random.nextInt(2));
+            genes.set(geneIndex, geneValue);
+        }
         return new Genome(genes);
     }
 }
