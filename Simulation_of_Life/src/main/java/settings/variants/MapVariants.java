@@ -1,2 +1,6 @@
-package settings.variants;public enum MapVariants {
+package settings.variants;
+
+public enum MapVariants {
+    EARTH,
+    HELL_PORTAL,
 }

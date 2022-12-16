@@ -1,2 +1,6 @@
-package settings.variants;public enum GrowthPlantVariant {
+package settings.variants;
+
+public enum GrowthPlantVariant {
+    EQUATOR,
+    TOXIC_CORPSES,
 }
