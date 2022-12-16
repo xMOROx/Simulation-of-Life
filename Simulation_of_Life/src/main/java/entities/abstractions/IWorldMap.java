@@ -1,2 +1,4 @@
-package entities.abstractions;public interface IWorldMap {
+package entities.abstractions;
+
+public interface IWorldMap {
 }
