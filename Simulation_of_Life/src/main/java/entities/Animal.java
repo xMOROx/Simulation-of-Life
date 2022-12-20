@@ -1,16 +1,13 @@
 package entities;
 
-import entities.abstractions.ICanMove;
-import entities.abstractions.ICanReproduce;
-import entities.abstractions.IsAlive;
-import entities.abstractions.StatefulObject;
+import entities.abstractions.*;
 import logic.Genome;
 import misc.MapDirection;
 import misc.Vector2D;
 
 
 
-public class Animal extends StatefulObject<Animal.State> implements ICanMove<Animal.State, Animal>, IsAlive<Animal.State, Animal>, ICanReproduce
+public class Animal extends StatefulObject<Animal.State> implements ICanMove<Animal.State, Animal>, IsAlive<Animal.State, Animal>, ICanReproduce, ICanDecide
 {
     Animal(State initialState) { super(initialState); }
 
@@ -57,6 +54,8 @@ public class Animal extends StatefulObject<Animal.State> implements ICanMove<Ani
         public  int maximumEnergy = 100;
         public  int energyFromGrass = 10;
     }
+
+
 
 
     public static class State implements ICanMove.State, IsAlive.State {
