@@ -1,2 +1,4 @@
-package gui.render;public interface IsRenderable {
+package gui.render;
+
+public interface IsRenderable {
 }
