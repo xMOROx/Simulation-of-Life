@@ -161,6 +161,11 @@ public class Animal extends StatefulObject<Animal.State> implements
         this.world = world;
     }
 
+    @Override
+    public void render() {
+    //TODO implement
+    }
+
     public static class DefaultConfiguration  {
         public  int initialEnergy = 100;
         public  int maximumEnergy = 300;

@@ -1,6 +1,7 @@
 package entities.abstractions;
 
-import gui.render.IsRenderable;
+
+import Gui.Render.IsRenderable;
 import misc.Vector2D;
 import world.World;
 

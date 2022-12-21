@@ -24,7 +24,7 @@ public class Mutation
             int geneValue = random.nextInt(8);
             genes.set(geneIndex, geneValue);
         }
-        return new Genome(genes);
+        return new Genome(genes, genome.getMutator());
     }
 
     public Genome controlMutation(Genome genome) {
@@ -35,6 +35,6 @@ public class Mutation
             int geneValue = List.of(genes.get(geneIndex) + 1, genes.get(geneIndex) - 1).get(random.nextInt(2));
             genes.set(geneIndex, geneValue);
         }
-        return new Genome(genes);
+        return new Genome(genes, genome.getMutator());
     }
 }

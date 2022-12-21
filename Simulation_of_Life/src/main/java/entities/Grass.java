@@ -28,6 +28,11 @@ public class Grass extends StatefulObject<Grass.State> implements IsAlive<Grass.
         super.setWorld(world);
     }
 
+    @Override
+    public void render() {
+        //TODO implement
+    }
+
     public static class State implements IsAlive.State {
         int nutritionValue;
 

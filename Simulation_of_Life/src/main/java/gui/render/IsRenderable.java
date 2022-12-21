@@ -1,4 +1,5 @@
-package gui.render;
+package Gui.Render;
 
 public interface IsRenderable {
+    public void render();
 }
