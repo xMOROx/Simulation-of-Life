@@ -24,6 +24,7 @@ public class Animal extends StatefulObject<Animal.State> implements
     private final Genome genome;
     private final DefaultConfiguration config;
     private final int energyToReproduce;
+    private final int energyConsumedWhenReproducing;
     private final AnimalBrain brain;
     private final MutationVariant mutationVariant;
     private final AnimalBehaviorVariant animalBehaviorVariant;
@@ -31,7 +32,7 @@ public class Animal extends StatefulObject<Animal.State> implements
     private int currentGeneIndex = 0;
 
 
-        public Animal(Genome genome, Vector2D startPosition, DefaultConfiguration configuration) {
+    public Animal(Genome genome, Vector2D startPosition, DefaultConfiguration configuration) {
             super(new State()
                   {{
                       this.energy = configuration.initialEnergy;
@@ -45,6 +46,7 @@ public class Animal extends StatefulObject<Animal.State> implements
             this.brain = new AnimalBrain(genome);
             this.mutationVariant = configuration.mutationVariant;
             this.animalBehaviorVariant = configuration.animalBehaviorVariant;
+            this.energyConsumedWhenReproducing = configuration.energyConsumedWhenReproducing;
             getState().setDirection(MapDirection.getRandomDirection());
         }
 
@@ -76,8 +78,8 @@ public class Animal extends StatefulObject<Animal.State> implements
 
         int percentageOfGenesOfDominantParent = (int)(reproducer.calculatePercentageOfGenesOfDominantParent());
 
-        this.consumeEnergy(this.energyToReproduce);
-        secondParent.consumeEnergy(this.energyToReproduce);
+        this.consumeEnergy(this.energyConsumedWhenReproducing);
+        secondParent.consumeEnergy(this.energyConsumedWhenReproducing);
 
         Genome firstGenome = reproducer.getGenesFromSideOfDominantParent(sideOfGenomeOfDominantParent, percentageOfGenesOfDominantParent);
         Genome secondGenome = reproducer.getGenesFromSideOfSubordinationParent(switch (sideOfGenomeOfDominantParent) {
@@ -95,7 +97,7 @@ public class Animal extends StatefulObject<Animal.State> implements
 
         Vector2D childPosition = this.getPosition();
         Animal child = new Animal(childGenome, childPosition, this.config);
-        child.getState().setEnergy(this.energyToReproduce * 2);
+        child.getState().setEnergy(this.energyConsumedWhenReproducing * 2);
         this.childCount++;
         secondParent.childCount++;
 
@@ -114,7 +116,7 @@ public class Animal extends StatefulObject<Animal.State> implements
 
     @Override
     public void makeDecision() {
-    //TODO maybe wrong implementation 
+    //TODO maybe wrong implementation
        if(isDead()) return;
        this.age++;
        this.rotate(this.genome.getGene(this.currentGeneIndex % genomeLength));
@@ -164,6 +166,7 @@ public class Animal extends StatefulObject<Animal.State> implements
         public  int maximumEnergy = 300;
         public  int dailyEnergyLoss = 1;
         public  int energyToReproduce = 80;
+        public  int energyConsumedWhenReproducing = 50;
         public MutationVariant mutationVariant = MutationVariant.FULL_RANDOM;
         public AnimalBehaviorVariant animalBehaviorVariant = AnimalBehaviorVariant.FULL_PREDICTABLE;
 
@@ -173,11 +176,16 @@ public class Animal extends StatefulObject<Animal.State> implements
     public static class State implements ICanMove.State, IsAlive.State {
         int energy;
 
-        Vector2D position;
+        Vector2D position, previousPosition;
         MapDirection direction = MapDirection.NORTH;
         @Override
         public Vector2D getPosition() {
             return this.position;
+        }
+
+        @Override
+        public Vector2D getPreviousPosition() {
+            return previousPosition;
         }
 
         @Override
@@ -199,7 +207,6 @@ public class Animal extends StatefulObject<Animal.State> implements
         public int getEnergy() {
             return this.energy;
         }
-
 
         @Override
         public void setEnergy(int newEnergy) {

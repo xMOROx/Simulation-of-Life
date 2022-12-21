@@ -27,6 +27,7 @@ public interface ICanMove<State extends ICanMove.State, StateObject extends Stat
 
     interface State
     {
+        Vector2D getPreviousPosition();
         Vector2D getPosition();
         MapDirection getDirection();
         void setPosition(Vector2D position);
