@@ -8,7 +8,6 @@ import misc.MapDirection;
 import misc.Vector2D;
 import world.World;
 
-import java.util.List;
 
 
 public class Animal extends StatefulObject<Animal.State> implements
@@ -21,11 +20,9 @@ public class Animal extends StatefulObject<Animal.State> implements
     private World world;
     private final Genome genome;
     private final DefaultConfiguration config;
-    private final int energyFromGrass;
     private final int energyToReproduce;
-    private AnimalBrain brain;
-
-    public static final int genomeLength = 32;
+    private final AnimalBrain brain;
+    private static final int genomeLength = 32;
 
 
 
@@ -39,7 +36,6 @@ public class Animal extends StatefulObject<Animal.State> implements
             );
             this.genome = genome;
             this.config = configuration;
-            this.energyFromGrass = configuration.energyFromGrass;
             this.energyToReproduce = configuration.energyToReproduce;
             this.brain = new AnimalBrain(genome);
             getState().setDirection(MapDirection.getRandomDirection());
@@ -130,6 +126,10 @@ public class Animal extends StatefulObject<Animal.State> implements
     public World getWorld() {
         return world;
     }
+
+    public int getGenomeLength() {
+        return this.genomeLength;
+    }
     @Override
     public void setWorld(World world) {
         this.world = world;
@@ -138,13 +138,9 @@ public class Animal extends StatefulObject<Animal.State> implements
     public static class DefaultConfiguration  {
         public  int initialEnergy = 100;
         public  int maximumEnergy = 300;
-
         public  int dailyEnergyLoss = 1;
-        public  int energyToReproduce = 50;
-        public  int energyFromGrass = 10;
+        public  int energyToReproduce = 80;
     }
-
-
 
 
     public static class State implements ICanMove.State, IsAlive.State {
