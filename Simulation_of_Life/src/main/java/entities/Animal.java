@@ -1,20 +1,49 @@
 package entities;
 
 import entities.abstractions.*;
+import logic.AnimalBrain;
 import logic.Genome;
+import logic.Reproduce;
 import misc.MapDirection;
 import misc.Vector2D;
+import world.World;
+
+import java.util.List;
 
 
-
-public class Animal extends StatefulObject<Animal.State> implements ICanMove<Animal.State, Animal>, IsAlive<Animal.State, Animal>, ICanReproduce, ICanDecide
+public class Animal extends StatefulObject<Animal.State> implements
+        ICanMove<Animal.State, Animal>,
+        IsAlive<Animal.State, Animal>,
+        ICanReproduce, ICanDecide
 {
-    Animal(State initialState) { super(initialState); }
-
     private int age = 0;
-    private DefaultConfiguration config;
+    private int childCount = 0;
+    private World world;
+    private final Genome genome;
+    private final DefaultConfiguration config;
+    private final int energyFromGrass;
+    private final int energyToReproduce;
+    private AnimalBrain brain;
 
-    private Genome genome;
+    public static final int genomeLength = 32;
+
+
+
+        public Animal(Genome genome, Vector2D startPosition, DefaultConfiguration configuration) {
+            super(new State()
+                  {{
+                      this.energy = configuration.initialEnergy;
+                      this.position = startPosition;
+                      this.direction = MapDirection.getRandomDirection();
+                  }}
+            );
+            this.genome = genome;
+            this.config = configuration;
+            this.energyFromGrass = configuration.energyFromGrass;
+            this.energyToReproduce = configuration.energyToReproduce;
+            this.brain = new AnimalBrain(genome);
+            getState().setDirection(MapDirection.getRandomDirection());
+        }
 
     @Override
     public void eat(int energy) {
@@ -33,25 +62,85 @@ public class Animal extends StatefulObject<Animal.State> implements ICanMove<Ani
 
     @Override
     public boolean canReproduce() {
-        return !isDead() && getState().energy >= config.energyToReproduce;
+        return !isDead() && getState().energy >= this.energyToReproduce;
     }
 
     @Override
     public Animal reproduce(ICanReproduce other) {
-        //TODO: implement
-        return null;
+        Animal secondParent = (Animal) other;
+        Reproduce reproducer = new Reproduce(this, secondParent);
+        Reproduce.SideOfGenome sideOfGenomeOfDominantParent = reproducer.getSideOfGenome();
+
+        int percentageOfGenesOfDominantParent = (int)(reproducer.calculatePercentageOfGenesOfDominantParent());
+
+        this.consumeEnergy(this.energyToReproduce);
+        secondParent.consumeEnergy(this.energyToReproduce);
+
+        Genome firstGenome = reproducer.getGenesFromSideOfDominantParent(sideOfGenomeOfDominantParent, percentageOfGenesOfDominantParent);
+        Genome secondGenome = reproducer.getGenesFromSideOfSubordinationParent(switch (sideOfGenomeOfDominantParent) {
+            case LEFT -> Reproduce.SideOfGenome.RIGHT;
+            case RIGHT -> Reproduce.SideOfGenome.LEFT;
+        }, 1 - percentageOfGenesOfDominantParent);
+
+        Genome childGenome =  firstGenome.crossGenomes(secondGenome);
+        Vector2D childPosition = this.getPosition();
+        Animal child = new Animal(childGenome, childPosition, this.config);
+        child.getState().setEnergy(this.energyToReproduce * 2);
+        this.childCount++;
+        secondParent.childCount++;
+
+        this.notify(reproduced);
+        secondParent.notify(reproduced);
+        this.world.addObject(child);
+
+        return child;
+
     }
 
+    @Override
+    public Vector2D getPosition() {
+        return this.getState().getPosition();
+    }
+
+    @Override
+    public void makeDecision() {
+       if(isDead()) return;
+       this.age++;
+       this.rotate(this.brain.calculateDecision());
+       this.move();
+       this.consumeEnergy(config.dailyEnergyLoss);
+    }
 
     public Genome getGenome() {
         return this.genome;
     }
 
+    public int getAge() {
+        return this.age;
+    }
+
+    public int getChildCount() {
+        return this.childCount;
+    }
+
+    public int getEnergy() {
+        return this.getState().getEnergy();
+    }
+
+    public World getWorld() {
+        return world;
+    }
+    @Override
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
     public static class DefaultConfiguration  {
         public  int initialEnergy = 100;
+        public  int maximumEnergy = 300;
+
         public  int dailyEnergyLoss = 1;
         public  int energyToReproduce = 50;
-        public  int maximumEnergy = 100;
         public  int energyFromGrass = 10;
     }
 
@@ -93,10 +182,7 @@ public class Animal extends StatefulObject<Animal.State> implements ICanMove<Ani
         }
     }
 
-    @Override
-    public Vector2D getPosition() {
-        return this.getState().getPosition();
-    }
+
 
 
 }

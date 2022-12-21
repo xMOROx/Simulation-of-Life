@@ -37,11 +37,11 @@ public class Genome {
     }
 
     public Genome cutNucleusFromLeft(int nucleusSize) {
-        return new Genome(genes.subList(0, nucleusSize));
+        return new Genome(this.genes.subList(0, nucleusSize));
     }
 
-    public Genome cutNucleusFromRight(int nucleusSize) {
-        return new Genome(genes.subList(size - nucleusSize, size));
+    public Genome  cutNucleusFromRight(int nucleusSize) {
+        return new Genome(this.genes.subList(this.size - nucleusSize, this.size));
     }
 
     public List<Integer> getGenes() {
@@ -52,6 +52,13 @@ public class Genome {
         this.genes = genes;
     }
 
+    public int getSize() {
+        return size;
+    }
+
+    public int getGene(int index) {
+        return genes.get(index);
+    }
     public Genome crossGenomes(Genome other) {
         return new Genome(
                 Stream.of(this.genes, other.getGenes())
