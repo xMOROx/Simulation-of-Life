@@ -1,5 +1,7 @@
 package world;
 
+import entities.abstractions.IWorldElement;
+
 public class World {
     private int width;
     private int height;
@@ -18,6 +20,9 @@ public class World {
         return height;
     }
 
+    public void addObject(IWorldElement object) {
+
+    }
 
 
 }

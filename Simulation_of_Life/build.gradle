@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
 }
 
 group 'org.example'
@@ -7,6 +9,10 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    javafx {
+        version = "17"
+        modules = [ 'javafx.controls' ]
+    }
 }
 
 dependencies {
@@ -17,4 +23,10 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
 }

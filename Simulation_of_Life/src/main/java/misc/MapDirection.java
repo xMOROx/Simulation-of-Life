@@ -33,7 +33,7 @@ public enum MapDirection {
         };
     }
 
-    public MapDirection getRandomDirection() throws IllegalArgumentException {
+    public static MapDirection getRandomDirection() throws IllegalArgumentException {
         int value = (new Random().nextInt(8));
 
         return switch (value) {
