@@ -4,10 +4,12 @@ import entities.StateEvent;
 import misc.MapDirection;
 import misc.Vector2D;
 
+
 public interface ICanMove<State extends ICanMove.State, StateObject extends StatefulObject<State>>
 {
 
     default void move() {
+
         var stateObject = (StateObject) this;
         var state = stateObject.getState();
         state.setPosition(state.getPosition().add(state.getDirection().toUnitVector()));
@@ -29,7 +31,6 @@ public interface ICanMove<State extends ICanMove.State, StateObject extends Stat
         MapDirection getDirection();
         void setPosition(Vector2D position);
         void setDirection(MapDirection direction);
-
     }
 
     StateEvent moved = new StateEvent("moved");

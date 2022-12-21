@@ -11,7 +11,8 @@ public class AnimalBrain {
         this.genome = genome;
     }
 
-    public int calculateDecision() {
-        return genome.getGene(random.nextInt(genome.getSize()));
+    public int randomGeneActivation() {
+        return random.nextInt(genome.getSize());
     }
+
 }

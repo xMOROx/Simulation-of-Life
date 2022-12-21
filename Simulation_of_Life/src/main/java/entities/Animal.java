@@ -6,8 +6,11 @@ import logic.Genome;
 import logic.Reproduce;
 import misc.MapDirection;
 import misc.Vector2D;
+import settings.variants.AnimalBehaviorVariant;
+import settings.variants.MutationVariant;
 import world.World;
 
+import java.util.Random;
 
 
 public class Animal extends StatefulObject<Animal.State> implements
@@ -22,8 +25,10 @@ public class Animal extends StatefulObject<Animal.State> implements
     private final DefaultConfiguration config;
     private final int energyToReproduce;
     private final AnimalBrain brain;
+    private final MutationVariant mutationVariant;
+    private final AnimalBehaviorVariant animalBehaviorVariant;
     private static final int genomeLength = 32;
-
+    private int currentGeneIndex = 0;
 
 
         public Animal(Genome genome, Vector2D startPosition, DefaultConfiguration configuration) {
@@ -38,6 +43,8 @@ public class Animal extends StatefulObject<Animal.State> implements
             this.config = configuration;
             this.energyToReproduce = configuration.energyToReproduce;
             this.brain = new AnimalBrain(genome);
+            this.mutationVariant = configuration.mutationVariant;
+            this.animalBehaviorVariant = configuration.animalBehaviorVariant;
             getState().setDirection(MapDirection.getRandomDirection());
         }
 
@@ -79,6 +86,13 @@ public class Animal extends StatefulObject<Animal.State> implements
         }, 1 - percentageOfGenesOfDominantParent);
 
         Genome childGenome =  firstGenome.crossGenomes(secondGenome);
+
+        if(mutationVariant == MutationVariant.FULL_RANDOM) {
+            childGenome.getMutator().normalMutation(childGenome);
+        } else {
+            childGenome.getMutator().controlMutation(childGenome);
+        }
+
         Vector2D childPosition = this.getPosition();
         Animal child = new Animal(childGenome, childPosition, this.config);
         child.getState().setEnergy(this.energyToReproduce * 2);
@@ -100,9 +114,22 @@ public class Animal extends StatefulObject<Animal.State> implements
 
     @Override
     public void makeDecision() {
+    //TODO maybe wrong implementation 
        if(isDead()) return;
        this.age++;
-       this.rotate(this.brain.calculateDecision());
+       this.rotate(this.genome.getGene(this.currentGeneIndex % genomeLength));
+
+       if(this.animalBehaviorVariant == AnimalBehaviorVariant.FULL_PREDICTABLE) {
+           this.currentGeneIndex++;
+       } else {
+           Random random = new Random();
+           if(random.nextDouble( 1.0) > 1 - this.animalBehaviorVariant.getNormalMoveProbability()) {
+               this.currentGeneIndex = this.brain.randomGeneActivation();
+           } else {
+                this.currentGeneIndex++;
+           }
+       }
+
        this.move();
        this.consumeEnergy(config.dailyEnergyLoss);
     }
@@ -127,9 +154,6 @@ public class Animal extends StatefulObject<Animal.State> implements
         return world;
     }
 
-    public int getGenomeLength() {
-        return this.genomeLength;
-    }
     @Override
     public void setWorld(World world) {
         this.world = world;
@@ -140,11 +164,15 @@ public class Animal extends StatefulObject<Animal.State> implements
         public  int maximumEnergy = 300;
         public  int dailyEnergyLoss = 1;
         public  int energyToReproduce = 80;
+        public MutationVariant mutationVariant = MutationVariant.FULL_RANDOM;
+        public AnimalBehaviorVariant animalBehaviorVariant = AnimalBehaviorVariant.FULL_PREDICTABLE;
+
     }
 
 
     public static class State implements ICanMove.State, IsAlive.State {
         int energy;
+
         Vector2D position;
         MapDirection direction = MapDirection.NORTH;
         @Override
@@ -171,6 +199,7 @@ public class Animal extends StatefulObject<Animal.State> implements
         public int getEnergy() {
             return this.energy;
         }
+
 
         @Override
         public void setEnergy(int newEnergy) {
