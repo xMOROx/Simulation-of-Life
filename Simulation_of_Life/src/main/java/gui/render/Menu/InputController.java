@@ -1,8 +1,8 @@
 package Gui.Render.Menu;
 
 import Gui.Render.IsRenderable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 public class InputController implements IsRenderable {
@@ -12,15 +12,17 @@ public class InputController implements IsRenderable {
     protected int boxWidth;
     protected int boxHeight;
     protected int textSize;
+    protected int padding;
     protected VBox box;
 
     public InputController(Config config) {
         this.name = config.name;
-        this.width = config.width;
-        this.height = config.height;
-        this.boxWidth = config.boxWidth;
-        this.boxHeight = config.boxHeight;
+        this.width = config.width - 2*config.padding;
+        this.height = config.height - 2*config.padding;
+        this.boxWidth = config.boxWidth - 2*config.padding;
+        this.boxHeight = config.boxHeight - 2*config.padding;
         this.textSize = config.textSize;
+        this.padding  = config.padding;
         this.box = new VBox();
     }
 
@@ -35,6 +37,7 @@ public class InputController implements IsRenderable {
         input.setMinWidth(this.width);
         input.setMinHeight(this.height);
         input.setAlignment(javafx.geometry.Pos.CENTER);
+        this.box.setPadding(new Insets(this.padding));
         this.box.getChildren().addAll(title, input);
 
     }
@@ -50,5 +53,6 @@ public class InputController implements IsRenderable {
         public int boxWidth = 150;
         public int boxHeight = 30;
         public int textSize = 20;
+        public int padding = 10;
     }
 }

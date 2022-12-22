@@ -20,6 +20,7 @@ public class Menu implements IsRenderable {
     protected int boxWidth;
     protected int boxHeight;
     protected int textSize;
+    protected int padding;
     protected Scene scene;
     protected VBox main;
     protected VBox entitiesPlace;
@@ -39,6 +40,8 @@ public class Menu implements IsRenderable {
         this.boxWidth = config.boxWidth;
         this.boxHeight = config.boxHeight;
         this.textSize = config.textSize;
+        this.padding  = config.padding;
+
         this.mapStage = new Stage();
         this.main = new VBox();
         this.parametersPlace = new HBox();
@@ -59,6 +62,8 @@ public class Menu implements IsRenderable {
         public int boxWidth = 150;
         public int boxHeight = 50;
         public int textSize = 24;
+
+        public int padding = 10;
     }
 
     @Override
@@ -75,13 +80,14 @@ public class Menu implements IsRenderable {
         this.mapSettingsPlace.setMinWidth(mapWidth);
         this.mapSettingsPlace.setMinHeight(this.height - this.boxHeight);
         this.mapSettingsPlace.setStyle("-fx-background-color: red;");
+        this.mapSettingsPlace.setAlignment(Pos.TOP_LEFT);
 
         ComboBoxController mapVariant = new ComboBoxController(mapWidth, boxHeight, MapVariants.getValues(), "Map Variants");
         mapVariant.render();
 
         InputController mapWidthInput = new InputController(new InputController.Config(){{
             this.name = "Map Width";
-            this.width = mapWidth;
+            this.width = mapWidth - 20;
             this.height = boxHeight;
         }});
 
@@ -89,7 +95,7 @@ public class Menu implements IsRenderable {
 
         InputController mapHeightInput = new InputController(new InputController.Config(){{
             this.name = "Map Height";
-            this.width = mapWidth;
+            this.width = mapWidth - 20;
             this.height = boxHeight;
         }});
 
@@ -151,7 +157,7 @@ public class Menu implements IsRenderable {
         childSettings.setStyle("-fx-background-color: purple;");
 
 
-        Label childSettingsTitle = new Label("Child Settings");
+        Label childSettingsTitle = new Label("Animal Settings");
         childSettingsTitle.setMinWidth(animalSettingsWidth);
         childSettingsTitle.setMinHeight(boxHeight);
         childSettingsTitle.setAlignment(Pos.CENTER);
@@ -167,6 +173,8 @@ public class Menu implements IsRenderable {
         this.plantsSettings.setMinWidth(entitiesWidth);
         this.plantsSettings.setMinHeight(entitiesSettingsHeight);
         this.plantsSettings.setStyle("-fx-background-color: blue;");
+
+
 //        Misc settings
         this.miscSettings.setMinWidth(entitiesWidth);
         this.miscSettings.setMinHeight(entitiesSettingsHeight);
@@ -191,18 +199,40 @@ public class Menu implements IsRenderable {
 
         this.mutationSettings.setMinWidth(widthMisc);
         this.mutationSettings.setMinHeight(entitiesSettingsHeight);
-        this.mutationSettings.setStyle("-fx-background-color: purple;");
 
         ComboBoxController mutationVariant = new ComboBoxController(widthMisc, boxHeight, MutationVariant.getValues(), "Mutation Variants");
         mutationVariant.render();
-        this.mutationSettings.getChildren().add(mutationVariant.getBox());
+
+        HBox mutationMinMax = new HBox();
+        mutationMinMax.setMinWidth(widthMisc);
+        mutationMinMax.setPrefHeight(entitiesSettingsHeight - boxHeight);
+
+        InputController mutationMinInput = new InputController(new InputController.Config(){{
+            this.name = "Mutation Min";
+            this.width = widthMisc/2 - 10;
+            this.height = boxHeight;
+        }});
+
+        InputController mutationMaxInput = new InputController(new InputController.Config(){{
+            this.name = "Mutation Max";
+            this.width = widthMisc/2 - 10;
+            this.height = boxHeight;
+
+        }});
+
+        mutationMinInput.render();
+        mutationMaxInput.render();
+
+        mutationMinMax.getChildren().addAll(mutationMinInput.getBox(), mutationMaxInput.getBox());
+        mutationMinMax.setAlignment(Pos.CENTER);
+
+        this.mutationSettings.getChildren().addAll(mutationVariant.getBox(), mutationMinMax);
 
         this.miscSettings.getChildren().addAll(this.genomeSettings, this.mutationSettings);
 
 //        Misc settings
 
         this.entitiesPlaceSettings.getChildren().addAll(this.animalsSettings, this.plantsSettings, this.miscSettings);
-
         this.entitiesPlace.getChildren().addAll(this.entitiesPlaceSettings);
 
 //       Entities
