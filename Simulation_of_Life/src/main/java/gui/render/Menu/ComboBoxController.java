@@ -23,7 +23,7 @@ public class ComboBoxController implements IsRenderable {
         this.comboBox = new ComboBox<>();
         this.comboBox.setPrefWidth(width);
         this.comboBox.setPrefHeight(height);
-        this.box = new VBox();
+        this.box = new VBox((int)(this.padding / 2));
         this.box.setStyle("-fx-background-color: #ccc;");
         this.box.setPrefWidth(width);
         this.box.setPrefHeight(2*height);

@@ -18,7 +18,7 @@ public class Mutation
 
     public Genome normalMutation(Genome genome) {
         List<Integer> genes = genome.getGenes();
-        int numberOfMutations = random.nextInt(this.config.numberOfMinimumGenes, this.config.numberOfMaximumGenes);
+        int numberOfMutations = random.nextInt(this.config.numberOfMinimumGenes, this.config.numberOfMaximumGenes + 1);
         for (int i = 0; i < numberOfMutations; i++) {
             int geneIndex = random.nextInt(genes.size());
             int geneValue = random.nextInt(8);
@@ -29,7 +29,7 @@ public class Mutation
 
     public Genome controlMutation(Genome genome) {
         List<Integer> genes = genome.getGenes();
-        int numberOfMutations = random.nextInt(this.config.numberOfMinimumGenes, this.config.numberOfMaximumGenes);
+        int numberOfMutations = random.nextInt(this.config.numberOfMinimumGenes, this.config.numberOfMaximumGenes + 1);
         for (int i = 0; i < numberOfMutations; i++) {
             int geneIndex = random.nextInt(genes.size());
             int geneValue = List.of(genes.get(geneIndex) + 1, genes.get(geneIndex) - 1).get(random.nextInt(2));

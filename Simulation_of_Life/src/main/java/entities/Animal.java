@@ -90,9 +90,9 @@ public class Animal extends StatefulObject<Animal.State> implements
         Genome childGenome =  firstGenome.crossGenomes(secondGenome);
 
         if(mutationVariant == MutationVariant.FULL_RANDOM) {
-            childGenome.getMutator().normalMutation(childGenome);
+            childGenome =  childGenome.getMutator().normalMutation(childGenome);
         } else {
-            childGenome.getMutator().controlMutation(childGenome);
+            childGenome =  childGenome.getMutator().controlMutation(childGenome);
         }
 
         Vector2D childPosition = this.getPosition();

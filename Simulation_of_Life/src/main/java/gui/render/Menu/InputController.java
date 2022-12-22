@@ -3,6 +3,8 @@ package Gui.Render.Menu;
 import Gui.Render.IsRenderable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.VBox;
 
 public class InputController implements IsRenderable {
@@ -13,6 +15,9 @@ public class InputController implements IsRenderable {
     protected int boxHeight;
     protected int textSize;
     protected int padding;
+
+    protected int min;
+    protected int max;
     protected VBox box;
 
     public InputController(Config config) {
@@ -23,6 +28,8 @@ public class InputController implements IsRenderable {
         this.boxHeight = config.boxHeight - 2*config.padding;
         this.textSize = config.textSize;
         this.padding  = config.padding;
+        this.min = config.min;
+        this.max = config.max;
         this.box = new VBox();
     }
 
@@ -30,15 +37,38 @@ public class InputController implements IsRenderable {
     public void render() {
         Label title = new Label(this.name);
         title.setMinWidth(this.width);
-        title.setMinHeight(this.height);
+        title.setMinHeight(this.height/2);
         title.setAlignment(javafx.geometry.Pos.CENTER);
 
-        NumberTextField input = new NumberTextField();
-        input.setMinWidth(this.width);
-        input.setMinHeight(this.height);
-        input.setAlignment(javafx.geometry.Pos.CENTER);
+        TextField numberField = new NumberTextField();
+        numberField.setPromptText(this.min + " - " + this.max);
+        numberField.setTextFormatter(new TextFormatter<>(change -> {
+            if (change.isDeleted()) {
+                return change;
+            }
+
+            String txt = change.getControlNewText();
+
+            if (txt.matches("0\\d+")) {
+                return null;
+            }
+
+            try {
+                int n = Integer.parseInt(txt);
+                return this.min <= n && n <= this.max ? change : null;
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }));
+
+        numberField.setMinWidth(this.width);
+        numberField.setMinHeight(this.height/2);
+        numberField.setAlignment(javafx.geometry.Pos.CENTER);
         this.box.setPadding(new Insets(this.padding));
-        this.box.getChildren().addAll(title, input);
+        this.box.setSpacing((int)(this.padding/2));
+        this.box.setMinWidth(this.boxWidth);
+        this.box.setMinHeight(this.boxHeight);
+        this.box.getChildren().addAll(title, numberField);
 
     }
 
@@ -53,6 +83,9 @@ public class InputController implements IsRenderable {
         public int boxWidth = 150;
         public int boxHeight = 30;
         public int textSize = 20;
+
+        public int min = 1;
+        public int max = 64;
         public int padding = 10;
     }
 }

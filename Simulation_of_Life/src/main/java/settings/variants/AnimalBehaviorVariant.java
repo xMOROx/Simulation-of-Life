@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 
 public enum AnimalBehaviorVariant {
     FULL_PREDICTABLE,
-    SOME_CRAZY_MOVES;
+    CRAZY_MOVES;
 
     public final double normalMoveProbability = 0.8;
 
