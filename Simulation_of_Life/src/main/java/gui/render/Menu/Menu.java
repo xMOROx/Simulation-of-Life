@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 
 import javafx.stage.Stage;
 import settings.variants.AnimalBehaviorVariant;
+import settings.variants.GrowthPlantVariant;
 import settings.variants.MapVariants;
 import settings.variants.MutationVariant;
 
@@ -26,7 +27,7 @@ public class Menu implements IsRenderable {
     protected VBox main;
     protected VBox entitiesPlace;
     protected HBox animalsSettings;
-    protected HBox plantsSettings;
+    protected VBox plantsSettings;
     protected HBox miscSettings;
     protected VBox buttonsSettings;
     protected VBox mutationSettings;
@@ -50,7 +51,7 @@ public class Menu implements IsRenderable {
         this.entitiesPlace = new VBox();
         this.mapSettingsPlace = new VBox();
         this.animalsSettings = new HBox();
-        this.plantsSettings = new HBox();
+        this.plantsSettings = new VBox();
         this.miscSettings = new HBox();
         this.entitiesPlaceSettings = new VBox();
         this.buttonsSettings = new VBox();
@@ -168,7 +169,7 @@ public class Menu implements IsRenderable {
         }});
 
         InputController firstPopulationNumber = new InputController(new InputController.Config(){{
-            this.name = "First Population Number";
+            this.name = "Animals First Population";
             this.width = animalSettingsWidth/2 - this.padding;
             this.height = boxHeight;
         }});
@@ -188,10 +189,43 @@ public class Menu implements IsRenderable {
 
         this.plantsSettings.setMinWidth(entitiesWidth);
         this.plantsSettings.setMinHeight(entitiesSettingsHeight);
-        this.plantsSettings.setStyle("-fx-background-color: blue;");
-
         
+        HBox plantsInputsUpper = new HBox();
+        plantsInputsUpper.setMinWidth(entitiesWidth);
+        plantsInputsUpper.setMinHeight(entitiesSettingsHeight/2);
+        HBox plantsInputsLower = new HBox();
+        plantsInputsLower.setMinWidth(entitiesWidth);
+        plantsInputsLower.setMinHeight(entitiesSettingsHeight/2);
 
+        InputController plantEnergyInput = new InputController(new InputController.Config(){{
+            this.name = "Plant Energy Restoration";
+            this.width = animalSettingsWidth;
+            this.height = entitiesSettingsHeight/2;
+        }});
+
+        InputController plantNumberInput = new InputController(new InputController.Config(){{
+            this.name = "Plants First Population";
+            this.width = animalSettingsWidth;
+            this.height = entitiesSettingsHeight/2;
+        }});
+
+        InputController plantGrowthInput = new InputController(new InputController.Config(){{
+            this.name = "Plants Growth Per Day";
+            this.width = animalSettingsWidth;
+            this.height = entitiesSettingsHeight/2;
+        }});
+
+        ComboBoxController plantGrowthVariant = new ComboBoxController(animalSettingsWidth, boxHeight, GrowthPlantVariant.getValues(), "Growth Variants");
+
+        plantEnergyInput.render();
+        plantNumberInput.render();
+        plantGrowthInput.render();
+        plantGrowthVariant.render();
+
+        plantsInputsUpper.getChildren().addAll(plantEnergyInput.getBox(), plantNumberInput.getBox());
+        plantsInputsLower.getChildren().addAll(plantGrowthInput.getBox(), plantGrowthVariant.getBox());
+
+        this.plantsSettings.getChildren().addAll(plantsInputsUpper, plantsInputsLower);
 
 //        Misc settings
         this.miscSettings.setMinWidth(entitiesWidth);
