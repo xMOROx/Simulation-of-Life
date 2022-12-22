@@ -1,9 +1,11 @@
 package Gui.Render.Menu;
 
 import Gui.Render.IsRenderable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -16,6 +18,8 @@ import settings.variants.MutationVariant;
 
 
 public class Menu implements IsRenderable {
+    //TODO implement recieving data from settings
+    //TODO implement saving data to settings
     protected String name;
     protected int width;
     protected int height;
@@ -24,6 +28,8 @@ public class Menu implements IsRenderable {
     protected int textSize;
     protected int padding;
     protected Scene scene;
+    protected Button launchMapButton;
+    protected Button ExitButton;
     protected VBox main;
     protected VBox entitiesPlace;
     protected HBox animalsSettings;
@@ -46,6 +52,10 @@ public class Menu implements IsRenderable {
         this.padding  = config.padding;
 
         this.mapStage = new Stage();
+
+        this.launchMapButton = new Button("Launch Map");
+        this.ExitButton = new Button("Exit");
+
         this.main = new VBox();
         this.parametersPlace = new HBox();
         this.entitiesPlace = new VBox();
@@ -82,9 +92,7 @@ public class Menu implements IsRenderable {
         int mapWidth = (int)(this.width/4);
         this.mapSettingsPlace.setMinWidth(mapWidth);
         this.mapSettingsPlace.setMinHeight(this.height - this.boxHeight);
-        this.mapSettingsPlace.setStyle("-fx-background-color: red;");
-        this.mapSettingsPlace.setAlignment(Pos.TOP_LEFT);
-
+        this.mapSettingsPlace.setStyle("-fx-background-color:" + this.color + ";");
         ComboBoxController mapVariant = new ComboBoxController(mapWidth, boxHeight, MapVariants.getValues(), "Map Variants");
 
         InputController mapWidthInput = new InputController(new InputController.Config(){{
@@ -189,7 +197,7 @@ public class Menu implements IsRenderable {
 
         this.plantsSettings.setMinWidth(entitiesWidth);
         this.plantsSettings.setMinHeight(entitiesSettingsHeight);
-        
+
         HBox plantsInputsUpper = new HBox();
         plantsInputsUpper.setMinWidth(entitiesWidth);
         plantsInputsUpper.setMinHeight(entitiesSettingsHeight/2);
@@ -235,10 +243,24 @@ public class Menu implements IsRenderable {
 
         this.buttonsSettings.setMinWidth(widthMisc);
         this.buttonsSettings.setMinHeight(entitiesSettingsHeight);
+        this.buttonsSettings.setAlignment(Pos.BOTTOM_CENTER);
+        this.buttonsSettings.setPadding(new Insets(this.padding));
+
+        HBox buttons = new HBox(this.padding);
+
+        buttons.setMinWidth(widthMisc);
+        buttons.setMinHeight(entitiesSettingsHeight);
+        buttons.setAlignment(Pos.BOTTOM_CENTER);
+
+        this.launchMapButton.setMinWidth(boxWidth);
+        this.launchMapButton.setMinHeight(boxHeight);
+
+        this.ExitButton.setMinWidth(boxWidth);
+        this.ExitButton.setMinHeight(boxHeight);
 
 
-
-//        this.buttonsSettings.getChildren().add();
+        buttons.getChildren().addAll(this.launchMapButton, this.ExitButton);
+        this.buttonsSettings.getChildren().addAll(buttons);
 
 
         this.mutationSettings.setMinWidth(widthMisc);
