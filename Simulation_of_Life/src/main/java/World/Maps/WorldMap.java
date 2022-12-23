@@ -54,7 +54,6 @@ public abstract class WorldMap {
         Cell cell = this.cellOrNullAt(coords);
         if(cell != null) return cell;
         cell = new Cell();
-//        TODO implement spawnProbability at cell
         this.objects.put(coords, cell);
         return cell;
     }
@@ -161,8 +160,6 @@ public abstract class WorldMap {
         this.avgStats.grassCount = (this.avgStats.grassCount + this.statistics.grassCount) / 2;
 
     }
-
-
 
 
     public int getHeight() {

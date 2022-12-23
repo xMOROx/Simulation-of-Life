@@ -8,9 +8,9 @@ import Misc.Vector2D;
 import java.util.Random;
 
 public abstract class Spawner {
-    private static final Gson GSON = new Gson();
-    private final Random random = new Random();
-    private WorldMap world = null;
+    protected static final Gson GSON = new Gson();
+    protected final Random random = new Random();
+    protected WorldMap world = null;
 
     public boolean register(WorldMap world) {
         this.world = world;
