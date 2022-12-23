@@ -11,10 +11,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import javafx.stage.Stage;
-import settings.variants.AnimalBehaviorVariant;
-import settings.variants.GrowthPlantVariant;
-import settings.variants.MapVariants;
-import settings.variants.MutationVariant;
+import Settings.Variants.AnimalBehaviorVariant;
+import Settings.Variants.GrowthPlantVariant;
+import Settings.Variants.MapVariants;
+import Settings.Variants.MutationVariant;
 
 
 public class Menu implements IsRenderable {
