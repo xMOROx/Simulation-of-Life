@@ -7,8 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Cell implements IsRenderable {
-    public List<IWorldElement> objects = new LinkedList<>();
-    public int deadAnimals = 0;
+    private List<IWorldElement> objects = new LinkedList<>();
+    private int deadAnimals = 0;
     public final int size;
     public final double spawnProbability;
     public Cell(Config config) {
@@ -27,6 +27,13 @@ public class Cell implements IsRenderable {
         return objects.isEmpty();
     }
 
+    public List<IWorldElement> getObjects() {
+        return this.objects;
+    }
+
+    public int getDeadAnimals() {
+        return this.deadAnimals;
+    }
     public void addObject(IWorldElement object) {
         objects.add(object);
     }

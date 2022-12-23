@@ -103,7 +103,7 @@ public class Animal extends StatefulObject<Animal.State> implements
 
         this.notify(reproduced);
         secondParent.notify(reproduced);
-        this.world.addObject(child);
+        this.world.addEntity(child);
 
         return child;
 
@@ -145,7 +145,7 @@ public class Animal extends StatefulObject<Animal.State> implements
         return this.age;
     }
 
-    public int getChildCount() {
+    public int getChildrenCount() {
         return this.childCount;
     }
 

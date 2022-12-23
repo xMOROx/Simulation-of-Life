@@ -19,8 +19,18 @@ public abstract class WorldMap {
     protected final Map<Vector2D, Cell> objects = new HashMap<>();
     protected final List<IWorldElement> deadEntities = new LinkedList<>();
     protected final List<IWorldElement> newChildrenToAdd = new LinkedList<>();
+    protected final SortedMap<List<Integer>, Integer> genoTypes = new TreeMap<>((o1, o2) -> {
+        for(int i = 0; i < o1.size(); i++) {
+            if(o1.get(i) < o2.get(i)) return -1;
+            if(o1.get(i) > o2.get(i)) return 1;
+        }
+        return 0;
+    });
+
     protected final List<Spawner> spawners =  new LinkedList<>();
     //TODO InteractionResolver
+    protected int animalLifespanSum = 0;
+    protected int animalDead = 0;
     protected final Statistics avgStats = new Statistics();
     protected final Statistics statistics = new Statistics();
 
@@ -64,13 +74,26 @@ public abstract class WorldMap {
     }
     protected Void objectDied(IWorldElement entity) {
         this.deadEntities.add(entity);
+
+        if(entity instanceof Animal animal) {
+            if(this.genoTypes.getOrDefault(animal.getGenome().getGenes(), null) == null) return null;
+            if(this.genoTypes.get(animal.getGenome().getGenes()) > 0)  {
+                this.genoTypes.put(animal.getGenome().getGenes(), this.genoTypes.get(animal.getGenome().getGenes()) - 1);
+            } else {
+                this.genoTypes.remove(animal.getGenome().getGenes());
+            }
+        }
+
         return null;
     }
 
-    protected void addEntity(IWorldElement entity) {
+    public void addEntity(IWorldElement entity) {
         this.newChildrenToAdd.add(entity);
+        if(entity instanceof Animal animal) {
+            this.genoTypes.put(animal.getGenome().getGenes(), this.genoTypes.getOrDefault(animal.getGenome().getGenes(), 0) + 1);
+        }
     }
-    protected void addFirstPopulation(IWorldElement entity) {
+    public void addFirstPopulation(IWorldElement entity) {
         this.getCellAt(entity.getPosition()).addObject(entity);
         entity.setWorld(this);
 
@@ -92,6 +115,54 @@ public abstract class WorldMap {
         if(entity instanceof Grass) this.statistics.grassCount++;
 
     }
+    protected void removeEntity(IWorldElement entity) {
+        Vector2D position = entity.getPosition();
+        Cell cell = this.getCellAt(position);
+        cell.removeObject(entity);
+        if(cell.isEmpty()) this.objects.remove(position);
+        if(entity instanceof Animal) {
+            Animal animal = (Animal) entity;
+            this.animalLifespanSum += animal.getAge();
+            this.animalDead++;
+            this.statistics.animalCount--;
+        }
+
+        if(entity instanceof Grass) this.statistics.grassCount--;
+    }
+
+
+    public void UpdateStatistics() {
+        statistics.avgLifespan = this.animalDead == 0 ? 0 : (double) this.animalLifespanSum / this.animalDead;
+        int energySum = 0;
+        int childrenSum = 0;
+
+        for(Cell cell : this.objects.values()) {
+            for(IWorldElement entity : cell.getObjects()) {
+                if(entity instanceof Animal animal) {
+                    energySum += animal.getEnergy();
+                    childrenSum += animal.getChildrenCount();
+                }
+            }
+
+            if(cell.isEmpty()) {
+                this.statistics.emptyFieldsCount++;
+            }
+        }
+
+        this.statistics.theMostPopularGenes = this.genoTypes.lastKey();
+
+        this.statistics.avgEnergy = this.statistics.animalCount == 0 ? 0 : (double) energySum / this.statistics.animalCount;
+        this.statistics.avgChildren = this.statistics.animalCount == 0 ? 0 : (double) childrenSum / this.statistics.animalCount;
+
+        this.avgStats.avgEnergy = (this.avgStats.avgEnergy + this.statistics.avgEnergy) / 2;
+        this.avgStats.avgLifespan = (this.avgStats.avgLifespan + this.statistics.avgLifespan) / 2;
+        this.avgStats.avgChildren = (this.avgStats.avgChildren + this.statistics.avgChildren) / 2;
+        this.avgStats.animalCount = (this.avgStats.animalCount + this.statistics.animalCount) / 2;
+        this.avgStats.grassCount = (this.avgStats.grassCount + this.statistics.grassCount) / 2;
+
+    }
+
+
 
 
     public int getHeight() {
@@ -122,7 +193,9 @@ public abstract class WorldMap {
         public int grassCount = 0;
         public int emptyFieldsCount = 0;
         public double avgEnergy = 0;
+        public double avgChildren = 0;
         public double avgLifespan = 0;
         public List<Integer> theMostPopularGenes = new LinkedList<>();
     }
 }
+
