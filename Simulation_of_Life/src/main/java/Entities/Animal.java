@@ -8,7 +8,7 @@ import Misc.MapDirection;
 import Misc.Vector2D;
 import Settings.Variants.AnimalBehaviorVariant;
 import Settings.Variants.MutationVariant;
-import World.World;
+import World.Maps.WorldMap;
 
 import java.util.Random;
 
@@ -20,7 +20,7 @@ public class Animal extends StatefulObject<Animal.State> implements
 {
     private int age = 0;
     private int childCount = 0;
-    private World world;
+    private WorldMap world;
     private final Genome genome;
     private final DefaultConfiguration config;
     private final int energyToReproduce;
@@ -114,6 +114,7 @@ public class Animal extends StatefulObject<Animal.State> implements
         return this.getState().getPosition();
     }
 
+
     @Override
     public void makeDecision() {
     //TODO maybe wrong implementation
@@ -152,12 +153,12 @@ public class Animal extends StatefulObject<Animal.State> implements
         return this.getState().getEnergy();
     }
 
-    public World getWorld() {
+    public WorldMap getWorld() {
         return world;
     }
 
     @Override
-    public void setWorld(World world) {
+    public void setWorld(WorldMap world) {
         this.world = world;
     }
 
@@ -200,6 +201,7 @@ public class Animal extends StatefulObject<Animal.State> implements
 
         @Override
         public void setPosition(Vector2D position) {
+            this.previousPosition = this.position;
             this.position = position;
         }
 

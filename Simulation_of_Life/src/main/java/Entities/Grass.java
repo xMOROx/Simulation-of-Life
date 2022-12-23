@@ -3,7 +3,7 @@ package Entities;
 import Entities.Abstractions.IsAlive;
 import Entities.Abstractions.StatefulObject;
 import Misc.Vector2D;
-import World.World;
+import World.Maps.WorldMap;
 
 public class Grass extends StatefulObject<Grass.State> implements IsAlive<Grass.State, Grass> {
 
@@ -24,7 +24,7 @@ public class Grass extends StatefulObject<Grass.State> implements IsAlive<Grass.
     }
 
     @Override
-    public void setWorld(World world) {
+    public void setWorld(WorldMap world) {
         super.setWorld(world);
     }
 

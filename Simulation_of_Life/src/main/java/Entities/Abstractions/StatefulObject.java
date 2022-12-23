@@ -17,7 +17,7 @@ public abstract class StatefulObject<State> implements IWorldElement {
         this.state = state;
     }
 
-    protected State getState() {
+    public State getState() {
         return state;
     }
 

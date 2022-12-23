@@ -1,18 +1,18 @@
 package Spawners;
 
 import Gui.Render.World.Cell;
+import World.Maps.WorldMap;
 import com.google.gson.Gson;
 import Misc.Vector2D;
-import World.World;
 
 import java.util.Random;
 
 public abstract class Spawner {
     private static final Gson GSON = new Gson();
-    private Random random = new Random();
-    private World world = null;
+    private final Random random = new Random();
+    private WorldMap world = null;
 
-    public boolean register(World world) {
+    public boolean register(WorldMap world) {
         this.world = world;
         return true;
     }

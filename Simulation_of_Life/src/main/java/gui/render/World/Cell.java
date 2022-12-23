@@ -16,6 +16,10 @@ public class Cell implements IsRenderable {
         this.spawnProbability = config.grassSpawnProbability;
     }
 
+    public Cell() {
+        this(new Config());
+    }
+
     public static boolean isCellEmpty(Cell cell) {
         return cell == null || cell.isEmpty();
     }

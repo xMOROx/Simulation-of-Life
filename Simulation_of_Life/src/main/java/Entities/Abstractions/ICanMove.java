@@ -11,7 +11,7 @@ public interface ICanMove<State extends ICanMove.State, StateObject extends Stat
     default void move() {
 
         var stateObject = (StateObject) this;
-        var state = stateObject.getState();
+        State state = stateObject.getState();
         state.setPosition(state.getPosition().add(state.getDirection().toUnitVector()));
         stateObject.notify(moved);
     }
@@ -20,7 +20,7 @@ public interface ICanMove<State extends ICanMove.State, StateObject extends Stat
 
     default void rotate(int i) {
         var stateObject = (StateObject)this;
-        var state = stateObject.getState();
+        State state = stateObject.getState();
         state.setDirection(state.getDirection().rotateRight(i));
 
     }
