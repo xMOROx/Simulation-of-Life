@@ -28,7 +28,7 @@ public class Animal extends StatefulObject<Animal.State> implements
     private final AnimalBrain brain;
     private final MutationVariant mutationVariant;
     private final AnimalBehaviorVariant animalBehaviorVariant;
-    private static final int genomeLength = 32;
+    public static final int genomeLength = 32;
     private int currentGeneIndex = 0;
 
 
