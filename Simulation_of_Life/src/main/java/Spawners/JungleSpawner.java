@@ -7,7 +7,7 @@ import World.Maps.WorldMap;
 import com.google.gson.JsonElement;
 
 public class JungleSpawner extends Spawner {
-    private Config config;
+    private final Config config;
     public JungleSpawner(Config config) {
         this.config = config;
     }
@@ -51,7 +51,7 @@ public class JungleSpawner extends Spawner {
     }
 
     public static Spawner fromConfig(JsonElement configJSON) {
-        var config = GSON.fromJson(configJSON, Config.class);
+        Config config = GSON.fromJson(configJSON, Config.class);
         return new JungleSpawner(config);
     }
 
