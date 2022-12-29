@@ -4,6 +4,8 @@ import Entities.Abstractions.IsAlive;
 import Entities.Abstractions.StatefulObject;
 import Misc.Vector2D;
 import World.Maps.WorldMap;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 
 public class Grass extends StatefulObject<Grass.State> implements IsAlive<Grass.State, Grass> {
 
@@ -29,8 +31,12 @@ public class Grass extends StatefulObject<Grass.State> implements IsAlive<Grass.
     }
 
     @Override
-    public void render() {
+    public VBox render() {
         //TODO implement
+        VBox vBox = new VBox(5);
+        Label label = new Label("Energy: " + this.getState().getEnergy());
+        vBox.getChildren().add(label);
+        return vBox;
     }
 
     public static class State implements IsAlive.State {

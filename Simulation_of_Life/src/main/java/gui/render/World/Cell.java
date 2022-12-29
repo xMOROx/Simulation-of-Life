@@ -2,11 +2,14 @@ package Gui.Render.World;
 
 import Gui.Render.IsRenderable;
 import Entities.Abstractions.IWorldElement;
+import Gui.Render.isRenderableOnMap;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class Cell implements IsRenderable {
+public class Cell implements isRenderableOnMap {
     private final List<IWorldElement> objects = new LinkedList<>();
     private int deadAnimals = 0;
     public final int size;
@@ -56,11 +59,20 @@ public class Cell implements IsRenderable {
 
     }
 
-    //TODO implement cell display
-    @Override
-    public void render() {
-        //TODO implement cell display
-    }
+    public HBox render(int size, int padding) {
+        int c = (int) Math.ceil(Math.sqrt(objects.size()));
+        HBox hBox = new HBox(5);
+        Label label = new Label("Komorka");
+        size /= c;
+        hBox.getChildren().add(label);
+        for (int y = 0, o = 0; y < c; y++) {
+            for (int x = 0; x < c; x++, o++) {
+                if (o >= objects.size()) return null;
 
+                hBox.getChildren().add(objects.get(o).render());
+            }
+        }
+        return hBox;
+    }
 
 }

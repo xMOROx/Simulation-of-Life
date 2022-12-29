@@ -1,2 +1,7 @@
-package Gui.Render;public class isRenderableInsideCell {
+package Gui.Render;
+
+import javafx.scene.layout.VBox;
+
+public interface isRenderableInsideCell {
+    VBox render();
 }

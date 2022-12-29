@@ -3,6 +3,7 @@ package Gui.Render.Menu;
 import Gui.Render.CommonParams;
 import Gui.Render.IsRenderable;
 import Gui.Render.World.Map;
+import World.Maps.Earth;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -345,6 +346,9 @@ public class Menu extends CommonParams implements IsRenderable {
             this.name = "Map";
             this.width = mapWidthInput.getValue();
             this.height = mapHeightInput.getValue();
+            this.borderWidth = 1.5;
+            this.boxHeight = 50;
+            this.boxWidth = 50;
             this.energyToReproduce = parentEnergyReproductionConsumeInput.getValue();
             this.energyNeededToReproduce = parentEnergyNeedToReproductionInput.getValue();
             this.genomeLength = genomeLengthInput.getValue();
@@ -359,7 +363,7 @@ public class Menu extends CommonParams implements IsRenderable {
             this.animalBehaviorVariant = AnimalBehaviorVariant.fromString(animalBehaviorVariantSelector.getSelectedValue());
             this.mutationVariant = MutationVariant.fromString(mutationVariantSelector.getSelectedValue());
             this.growthPlantVariant = GrowthPlantVariant.fromString(plantGrowthVariantSelector.getSelectedValue());
-        }}));
+        }}, new Earth(this.width, this.height)));
     }
 
 }

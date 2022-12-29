@@ -11,7 +11,7 @@ import java.util.function.Function;
 public abstract class StatefulObject<State> implements IWorldElement {
     private State state;
 
-    private Map<StateEvent, List<Function<StatefulObject<State>, Void>>> subscribers;
+    private final Map<StateEvent, List<Function<StatefulObject<State>, Void>>> subscribers;
 
     protected void setState(State state) {
         this.state = state;
@@ -28,7 +28,7 @@ public abstract class StatefulObject<State> implements IWorldElement {
 
 
     public final State observe(StateEvent event, Function<StatefulObject<State>, Void> listener) {
-        var list = subscribers.getOrDefault(event, null);
+        List<Function<StatefulObject<State>, Void>> list = subscribers.getOrDefault(event, null);
         if (list == null) {
             list = new ArrayList<>();
             subscribers.put(event, list);
@@ -39,7 +39,7 @@ public abstract class StatefulObject<State> implements IWorldElement {
     }
 
     public void stopObserving(StateEvent event, Function<StatefulObject<State>, Void> listener) {
-        var list = subscribers.getOrDefault(event, null);
+        List<Function<StatefulObject<State>, Void>> list = subscribers.getOrDefault(event, null);
         if (list == null) {
             return;
         }
@@ -49,7 +49,7 @@ public abstract class StatefulObject<State> implements IWorldElement {
 
 
     public void notify(StateEvent event) {
-        var list = subscribers.getOrDefault(event, null);
+        List<Function<StatefulObject<State>, Void>> list = subscribers.getOrDefault(event, null);
         if (list != null) {
             for (var subscriber : list) {
                 subscriber.apply(this);

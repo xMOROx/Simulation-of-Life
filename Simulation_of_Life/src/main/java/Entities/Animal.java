@@ -9,6 +9,8 @@ import Misc.Vector2D;
 import Settings.Variants.AnimalBehaviorVariant;
 import Settings.Variants.MutationVariant;
 import World.Maps.WorldMap;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 
 import java.util.Random;
 
@@ -163,8 +165,12 @@ public class Animal extends StatefulObject<Animal.State> implements
     }
 
     @Override
-    public void render() {
-    //TODO implement
+    public VBox render() {
+        //TODO
+        VBox vBox = new VBox(5);
+        Label label = new Label("Energy: " + this.getState().getEnergy());
+        vBox.getChildren().add(label);
+        return vBox;
     }
 
     public static class DefaultConfiguration  {
@@ -220,8 +226,4 @@ public class Animal extends StatefulObject<Animal.State> implements
             this.energy = newEnergy;
         }
     }
-
-
-
-
 }
