@@ -1,6 +1,8 @@
 package Gui.Render.Menu;
 
+import Gui.Render.CommonParams;
 import Gui.Render.IsRenderable;
+import Gui.Render.World.Map;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -16,19 +18,15 @@ import Settings.Variants.GrowthPlantVariant;
 import Settings.Variants.MapVariants;
 import Settings.Variants.MutationVariant;
 
+import java.util.function.Consumer;
 
-public class Menu implements IsRenderable {
+
+public class Menu extends CommonParams implements IsRenderable {
     //TODO implement recieving data from settings
     //TODO implement saving data to settings
-    protected String name;
-    protected int width;
-    protected int height;
-    protected int boxWidth;
-    protected int boxHeight;
-    protected int textSize;
-    protected int padding;
-    protected Scene scene;
+
     protected Button launchMapButton;
+    protected Consumer<Map> launchMap;
     protected Button ExitButton;
     protected VBox main;
     protected VBox entitiesPlace;
@@ -40,9 +38,27 @@ public class Menu implements IsRenderable {
     protected VBox mapSettingsPlace;
     protected HBox parametersPlace;
     protected VBox entitiesPlaceSettings;
-    protected Stage mapStage;
+    protected Stage menuStage;
     protected String color = "#ccc";
-    public Menu(Config config) {
+
+    protected InputController mapWidthInput;
+    protected InputController mapHeightInput;
+    protected InputController genomeLengthInput;
+    protected InputController parentEnergyReproductionConsumeInput;
+    protected InputController parentEnergyNeedToReproductionInput;
+    protected InputController animalFirstPopulationInput;
+    protected InputController startEnergyInput;
+    protected InputController plantGrowthInput;
+    protected InputController plantEnergyRestorationInput;
+    protected InputController plantFirstPopulationInput;
+    protected InputController mutationMinInput;
+    protected InputController mutationMaxInput;
+
+    protected ComboBoxController mapVariantSelector;
+    protected ComboBoxController animalBehaviorVariantSelector;
+    protected ComboBoxController plantGrowthVariantSelector;
+    protected ComboBoxController mutationVariantSelector;
+    public Menu(Config config, Consumer<Map> onMapLaunch) {
         this.name = config.name;
         this.width = config.width;
         this.height = config.height;
@@ -50,8 +66,9 @@ public class Menu implements IsRenderable {
         this.boxHeight = config.boxHeight;
         this.textSize = config.textSize;
         this.padding  = config.padding;
+        this.launchMap = onMapLaunch;
 
-        this.mapStage = new Stage();
+        this.menuStage = new Stage();
 
         this.launchMapButton = new Button("Launch Map");
         this.ExitButton = new Button("Exit");
@@ -68,16 +85,7 @@ public class Menu implements IsRenderable {
         this.mutationSettings = new VBox();
     }
 
-    public static class Config {
-        public String name = "Menu";
-        public int width = 600;
-        public int height = 300;
-        public int boxWidth = 150;
-        public int boxHeight = 50;
-        public int textSize = 24;
 
-        public int padding = 10;
-    }
 
     @Override
     public void render() {
@@ -93,35 +101,38 @@ public class Menu implements IsRenderable {
         this.mapSettingsPlace.setMinWidth(mapWidth);
         this.mapSettingsPlace.setMinHeight(this.height - this.boxHeight);
         this.mapSettingsPlace.setStyle("-fx-background-color:" + this.color + ";");
-        ComboBoxController mapVariant = new ComboBoxController(mapWidth, boxHeight, MapVariants.getValues(), "Map Variants");
-
-        InputController mapWidthInput = new InputController(new InputController.Config(){{
+        this.mapVariantSelector = new ComboBoxController(mapWidth, boxHeight, MapVariants.getValues(), "Map Variants");
+        this.mapWidthInput = new InputController(new InputController.Config(){{
             this.name = "Map Width";
             this.width = mapWidth - 20;
             this.height = boxHeight;
+            this.min = 1;
+            this.max = 500;
         }});
 
 
-        InputController mapHeightInput = new InputController(new InputController.Config(){{
+        this.mapHeightInput = new InputController(new InputController.Config(){{
             this.name = "Map Height";
             this.width = mapWidth - 2*this.padding;
             this.height = boxHeight;
+            this.min = 1;
+            this.max = 500;
         }});
 
-        InputController genomeLengthInput = new InputController(new InputController.Config(){{
+        this.genomeLengthInput = new InputController(new InputController.Config(){{
             this.name = "Genome Length";
             this.width = mapWidth - 2*this.padding;
             this.height = boxHeight;
-            this.min = 8;
+            this.min = 2;
             this.max = 32;
         }});
 
         mapWidthInput.render();
         mapHeightInput.render();
         genomeLengthInput.render();
-        mapVariant.render();
+        mapVariantSelector.render();
 
-        this.mapSettingsPlace.getChildren().addAll(mapVariant.getBox(), mapWidthInput.getBox(), mapHeightInput.getBox(), genomeLengthInput.getBox());
+        this.mapSettingsPlace.getChildren().addAll(mapVariantSelector.getBox(), mapWidthInput.getBox(), mapHeightInput.getBox(), genomeLengthInput.getBox());
         this.mapSettingsPlace.alignmentProperty().setValue(Pos.CENTER);
 //      Map
 
@@ -146,7 +157,7 @@ public class Menu implements IsRenderable {
         parentSettings.setMinHeight(entitiesSettingsHeight);
 
 
-        InputController parentEnergyReproductionConsumeInput = new InputController(new InputController.Config(){{
+        this.parentEnergyReproductionConsumeInput = new InputController(new InputController.Config(){{
             this.name = "Energy Reproduction Consume";
             this.width = animalSettingsWidth;
             this.height = entitiesSettingsHeight/2;
@@ -154,7 +165,7 @@ public class Menu implements IsRenderable {
 
         parentEnergyReproductionConsumeInput.render();
 
-        InputController parentEnergyNeedToReproductionInput = new InputController(new InputController.Config(){{
+        this.parentEnergyNeedToReproductionInput = new InputController(new InputController.Config(){{
             this.name = "Energy Need To Reproduction";
             this.width = animalSettingsWidth;
             this.height = entitiesSettingsHeight/2;
@@ -168,15 +179,15 @@ public class Menu implements IsRenderable {
         childSettings.setMinWidth(animalSettingsWidth);
         childSettings.setMinHeight(entitiesSettingsHeight);
 
-        ComboBoxController animalBehaviorVariant = new ComboBoxController(animalSettingsWidth, boxHeight, AnimalBehaviorVariant.getValues(), "Behavior Variants");
+        this.animalBehaviorVariantSelector = new ComboBoxController(animalSettingsWidth, boxHeight, AnimalBehaviorVariant.getValues(), "Behavior Variants");
 
-        InputController startEnergyInput = new InputController(new InputController.Config(){{
+        this.startEnergyInput = new InputController(new InputController.Config(){{
             this.name = "Start Energy";
             this.width = animalSettingsWidth/2 - this.padding;
             this.height = boxHeight;
         }});
 
-        InputController firstPopulationNumber = new InputController(new InputController.Config(){{
+        this.animalFirstPopulationInput = new InputController(new InputController.Config(){{
             this.name = "Animals First Population";
             this.width = animalSettingsWidth/2 - this.padding;
             this.height = boxHeight;
@@ -185,13 +196,13 @@ public class Menu implements IsRenderable {
         HBox animalInputs = new HBox();
         animalInputs.setMinWidth(animalSettingsWidth);
         animalInputs.setMinHeight(boxHeight);
-        animalInputs.getChildren().addAll(startEnergyInput.getBox(), firstPopulationNumber.getBox());
+        animalInputs.getChildren().addAll(startEnergyInput.getBox(), animalFirstPopulationInput.getBox());
 
-        animalBehaviorVariant.render();
+        animalBehaviorVariantSelector.render();
         startEnergyInput.render();
-        firstPopulationNumber.render();
+        animalFirstPopulationInput.render();
 
-        childSettings.getChildren().addAll( animalBehaviorVariant.getBox(), animalInputs);
+        childSettings.getChildren().addAll( animalBehaviorVariantSelector.getBox(), animalInputs);
 
         this.animalsSettings.getChildren().addAll(parentSettings, childSettings);
 
@@ -200,38 +211,38 @@ public class Menu implements IsRenderable {
 
         HBox plantsInputsUpper = new HBox();
         plantsInputsUpper.setMinWidth(entitiesWidth);
-        plantsInputsUpper.setMinHeight(entitiesSettingsHeight/2);
+        plantsInputsUpper.setMinHeight((int)(entitiesSettingsHeight/2));
         HBox plantsInputsLower = new HBox();
         plantsInputsLower.setMinWidth(entitiesWidth);
-        plantsInputsLower.setMinHeight(entitiesSettingsHeight/2);
+        plantsInputsLower.setMinHeight((int)(entitiesSettingsHeight/2));
 
-        InputController plantEnergyInput = new InputController(new InputController.Config(){{
+        this.plantEnergyRestorationInput = new InputController(new InputController.Config(){{
             this.name = "Plant Energy Restoration";
             this.width = animalSettingsWidth;
             this.height = entitiesSettingsHeight/2;
         }});
 
-        InputController plantNumberInput = new InputController(new InputController.Config(){{
+        this.plantFirstPopulationInput = new InputController(new InputController.Config(){{
             this.name = "Plants First Population";
             this.width = animalSettingsWidth;
             this.height = entitiesSettingsHeight/2;
         }});
 
-        InputController plantGrowthInput = new InputController(new InputController.Config(){{
+        this.plantGrowthInput = new InputController(new InputController.Config(){{
             this.name = "Plants Growth Per Day";
             this.width = animalSettingsWidth;
             this.height = entitiesSettingsHeight/2;
         }});
 
-        ComboBoxController plantGrowthVariant = new ComboBoxController(animalSettingsWidth, boxHeight, GrowthPlantVariant.getValues(), "Growth Variants");
+        this.plantGrowthVariantSelector = new ComboBoxController(animalSettingsWidth, boxHeight, GrowthPlantVariant.getValues(), "Growth Variants");
 
-        plantEnergyInput.render();
-        plantNumberInput.render();
+        plantEnergyRestorationInput.render();
+        plantFirstPopulationInput.render();
         plantGrowthInput.render();
-        plantGrowthVariant.render();
+        plantGrowthVariantSelector.render();
 
-        plantsInputsUpper.getChildren().addAll(plantEnergyInput.getBox(), plantNumberInput.getBox());
-        plantsInputsLower.getChildren().addAll(plantGrowthInput.getBox(), plantGrowthVariant.getBox());
+        plantsInputsUpper.getChildren().addAll(plantEnergyRestorationInput.getBox(), plantFirstPopulationInput.getBox());
+        plantsInputsLower.getChildren().addAll(plantGrowthInput.getBox(), plantGrowthVariantSelector.getBox());
 
         this.plantsSettings.getChildren().addAll(plantsInputsUpper, plantsInputsLower);
 
@@ -254,10 +265,11 @@ public class Menu implements IsRenderable {
 
         this.launchMapButton.setMinWidth(boxWidth);
         this.launchMapButton.setMinHeight(boxHeight);
+        this.launchMapButton.setOnAction(event -> launchMap());
 
         this.ExitButton.setMinWidth(boxWidth);
         this.ExitButton.setMinHeight(boxHeight);
-
+        this.ExitButton.setOnAction(event -> System.exit(0));
 
         buttons.getChildren().addAll(this.launchMapButton, this.ExitButton);
         this.buttonsSettings.getChildren().addAll(buttons);
@@ -266,13 +278,13 @@ public class Menu implements IsRenderable {
         this.mutationSettings.setMinWidth(widthMisc);
         this.mutationSettings.setMinHeight(entitiesSettingsHeight);
 
-        ComboBoxController mutationVariant = new ComboBoxController(widthMisc, boxHeight, MutationVariant.getValues(), "Mutation Variants");
+        this.mutationVariantSelector = new ComboBoxController(widthMisc, boxHeight, MutationVariant.getValues(), "Mutation Variants");
 
         HBox mutationMinMax = new HBox();
         mutationMinMax.setMinWidth(widthMisc);
         mutationMinMax.setPrefHeight(entitiesSettingsHeight - boxHeight);
 
-        InputController mutationMinInput = new InputController(new InputController.Config(){{
+        this.mutationMinInput = new InputController(new InputController.Config(){{
             this.name = "Mutation Min";
             this.width = widthMisc/2 - this.padding;
             this.height = boxHeight;
@@ -280,7 +292,7 @@ public class Menu implements IsRenderable {
             this.max = 16;
         }});
 
-        InputController mutationMaxInput = new InputController(new InputController.Config(){{
+        this.mutationMaxInput = new InputController(new InputController.Config(){{
             this.name = "Mutation Max";
             this.width = widthMisc/2 - 10;
             this.height = boxHeight;
@@ -288,14 +300,14 @@ public class Menu implements IsRenderable {
             this.max = 24;
         }});
 
-        mutationVariant.render();
+        mutationVariantSelector.render();
         mutationMinInput.render();
         mutationMaxInput.render();
 
         mutationMinMax.getChildren().addAll(mutationMinInput.getBox(), mutationMaxInput.getBox());
         mutationMinMax.setAlignment(Pos.CENTER);
 
-        this.mutationSettings.getChildren().addAll(mutationVariant.getBox(), mutationMinMax);
+        this.mutationSettings.getChildren().addAll(mutationVariantSelector.getBox(), mutationMinMax);
 
         this.miscSettings.getChildren().addAll(this.mutationSettings, this.buttonsSettings );
 
@@ -311,22 +323,43 @@ public class Menu implements IsRenderable {
         this.parametersPlace.setStyle("-fx-background-color: #AAA;");
         this.parametersPlace.getChildren().addAll(this.mapSettingsPlace, this.entitiesPlace);
 
-
         this.main.setPrefWidth(this.width);
         this.main.setPrefHeight(this.height);
         this.main.getChildren().addAll(title, this.parametersPlace);
 
-
         this.scene = new Scene(main, this.width, this.height);
 
+        this.menuStage.setTitle(this.name);
+        this.menuStage.setScene(this.scene);
+        this.menuStage.setResizable(false);
+
+        this.menuStage.show();
 
 
 
-        this.mapStage.setTitle(this.name);
-        this.mapStage.setScene(this.scene);
-        this.mapStage.setResizable(false);
 
-        this.mapStage.show();
+    }
+
+    private void launchMap(){
+        this.launchMap.accept(new Map(new Map.ExtendedConfig(){{
+            this.name = "Map";
+            this.width = mapWidthInput.getValue();
+            this.height = mapHeightInput.getValue();
+            this.energyToReproduce = parentEnergyReproductionConsumeInput.getValue();
+            this.energyNeededToReproduce = parentEnergyNeedToReproductionInput.getValue();
+            this.genomeLength = genomeLengthInput.getValue();
+            this.startEnergy = startEnergyInput.getValue();
+            this.animalFirstPopulation = animalFirstPopulationInput.getValue();
+            this.plantFirstPopulation = plantFirstPopulationInput.getValue();
+            this.plantEnergyRestoration = plantEnergyRestorationInput.getValue();
+            this.plantGrowthPerDay = plantGrowthInput.getValue();
+            this.minimalNumberOfMutations = mutationMinInput.getValue();
+            this.maximalNumberOfMutations = mutationMaxInput.getValue();
+            this.mapVariant = MapVariants.fromString(mapVariantSelector.getSelectedValue());
+            this.animalBehaviorVariant = AnimalBehaviorVariant.fromString(animalBehaviorVariantSelector.getSelectedValue());
+            this.mutationVariant = MutationVariant.fromString(mutationVariantSelector.getSelectedValue());
+            this.growthPlantVariant = GrowthPlantVariant.fromString(plantGrowthVariantSelector.getSelectedValue());
+        }}));
     }
 
 }

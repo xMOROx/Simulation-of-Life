@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Cell implements IsRenderable {
-    private List<IWorldElement> objects = new LinkedList<>();
+    private final List<IWorldElement> objects = new LinkedList<>();
     private int deadAnimals = 0;
     public final int size;
     public final double spawnProbability;

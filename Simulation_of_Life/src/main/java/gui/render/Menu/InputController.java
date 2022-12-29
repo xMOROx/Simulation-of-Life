@@ -76,6 +76,10 @@ public class InputController implements IsRenderable {
         return this.box;
     }
 
+    public int getValue() {
+        return Integer.parseInt(((TextField)this.box.getChildren().get(1)).getText());
+    }
+
     public static class Config {
         public String name = "InputController";
         public int width = 150;

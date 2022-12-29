@@ -42,6 +42,8 @@ public class ComboBoxController implements IsRenderable {
         this.comboBox.setPromptText(this.items.get(0));
         this.comboBox.setEditable(false);
         this.comboBox.setOnAction(this::setValue);
+        this.comboBox.setValue(this.items.get(0));
+        this.selectedValue = this.items.get(0);
         this.box.getChildren().addAll(this.label, this.comboBox);
         this.box.setAlignment(javafx.geometry.Pos.CENTER);
         this.label.setAlignment(javafx.geometry.Pos.CENTER);
@@ -49,6 +51,10 @@ public class ComboBoxController implements IsRenderable {
 
     public void setValue (ActionEvent actionEvent) {
         this.selectedValue  = this.comboBox.getValue();
+    }
+
+    public String getSelectedValue() {
+        return this.selectedValue.toUpperCase();
     }
 
     public VBox getBox() {
