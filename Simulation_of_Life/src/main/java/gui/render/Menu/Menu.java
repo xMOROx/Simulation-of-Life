@@ -3,7 +3,14 @@ package Gui.Render.Menu;
 import Gui.Render.CommonParams;
 import Gui.Render.IsRenderable;
 import Gui.Render.World.Map;
+import Settings.SimpleConfig;
+import Spawners.AnimalSpawner;
+import Spawners.Builder;
+import Spawners.GrassSpawner;
+import Spawners.JungleSpawner;
 import World.Maps.Earth;
+import World.Maps.WorldMap;
+import World.SimulationEngine;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -19,6 +26,7 @@ import Settings.Variants.GrowthPlantVariant;
 import Settings.Variants.MapVariants;
 import Settings.Variants.MutationVariant;
 
+import java.io.FileNotFoundException;
 import java.util.function.Consumer;
 
 
@@ -266,7 +274,9 @@ public class Menu extends CommonParams implements IsRenderable {
 
         this.launchMapButton.setMinWidth(boxWidth);
         this.launchMapButton.setMinHeight(boxHeight);
-        this.launchMapButton.setOnAction(event -> launchMap());
+        this.launchMapButton.setOnAction(event -> {
+            launchMap();
+        });
 
         this.ExitButton.setMinWidth(boxWidth);
         this.ExitButton.setMinHeight(boxHeight);
@@ -341,7 +351,10 @@ public class Menu extends CommonParams implements IsRenderable {
 
     }
 
-    private void launchMap(){
+    private void launchMap() {
+
+
+
         this.launchMap.accept(new Map(new Map.ExtendedConfig(){{
             this.name = "Map";
             this.width = mapWidthInput.getValue();
@@ -363,7 +376,10 @@ public class Menu extends CommonParams implements IsRenderable {
             this.animalBehaviorVariant = AnimalBehaviorVariant.fromString(animalBehaviorVariantSelector.getSelectedValue());
             this.mutationVariant = MutationVariant.fromString(mutationVariantSelector.getSelectedValue());
             this.growthPlantVariant = GrowthPlantVariant.fromString(plantGrowthVariantSelector.getSelectedValue());
-        }}, new Earth(this.width, this.height)));
+        }}));
+
+
+
     }
 
 }

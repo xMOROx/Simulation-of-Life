@@ -12,7 +12,6 @@ public class AnimalSpawner extends Spawner {
 
     protected final AnimalSpawner.Config config;
     protected final Animal.DefaultConfiguration defaultConfig;
-    protected static Gson g = new Gson();
 
     public AnimalSpawner(Config config) {
         this.config = config;
@@ -22,10 +21,6 @@ public class AnimalSpawner extends Spawner {
         }};
     }
 
-    public static Spawner fromConfig(JsonElement configJson) {
-        Config config = g.fromJson(configJson, Config.class);
-        return new AnimalSpawner(config);
-    }
 
     @Override
     public boolean register(WorldMap world) {
@@ -48,14 +43,20 @@ public class AnimalSpawner extends Spawner {
 
     @Override
     public void spawn() {
-
+        if(world.getStatistics().animalCount < 10) {
+            this.trySpawnOne(120);
+        }
     }
 
     @Override
     public boolean canSpawn(Cell cell) {
-        return cell.isEmpty();
+        return Cell.isCellEmpty(cell);
     }
 
+    public static Spawner fromConfig(JsonElement configJson) {
+        Config config = GSON.fromJson(configJson, Config.class);
+        return new AnimalSpawner(config);
+    }
 
     public static class Config {
         protected int eatingEnergy = 100;

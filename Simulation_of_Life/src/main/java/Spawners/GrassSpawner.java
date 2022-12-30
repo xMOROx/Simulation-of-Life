@@ -4,6 +4,7 @@ import Entities.Grass;
 import Gui.Render.World.Cell;
 import Misc.Vector2D;
 import World.Maps.WorldMap;
+import com.google.gson.JsonElement;
 
 public class GrassSpawner extends Spawner {
     public final Config config;
@@ -14,7 +15,7 @@ public class GrassSpawner extends Spawner {
 
     @Override
     public boolean canSpawn(Cell cell) {
-        return cell.isEmpty();
+        return Cell.isCellEmpty(cell);
     }
     @Override
     public boolean register(WorldMap world) {
@@ -39,6 +40,11 @@ public class GrassSpawner extends Spawner {
                 break;
             }
         }
+    }
+
+    public static Spawner fromConfig(JsonElement configJson) {
+        Config config = GSON.fromJson(configJson, Config.class);
+        return new GrassSpawner(config);
     }
 
     public static class Config {

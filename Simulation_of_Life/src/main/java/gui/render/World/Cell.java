@@ -27,7 +27,7 @@ public class Cell implements isRenderableOnMap {
         return cell == null || cell.isEmpty();
     }
     public boolean isEmpty() {
-        return objects.isEmpty();
+        return  objects.isEmpty();
     }
 
     public List<IWorldElement> getObjects() {

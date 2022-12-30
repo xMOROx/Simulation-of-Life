@@ -47,7 +47,7 @@ public class JungleSpawner extends Spawner {
 
     @Override
     public boolean canSpawn(Cell cell) {
-        return cell.isEmpty();
+        return Cell.isCellEmpty(cell);
     }
 
     public static Spawner fromConfig(JsonElement configJSON) {

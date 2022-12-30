@@ -15,7 +15,7 @@ public class SimpleConfig {
     public int plantEnergy = 20;
     public double jungleRatio = 0.3;
 
-    static SimpleConfig fromFile(String file) throws FileNotFoundException {
+    public static SimpleConfig fromFile(String file) throws FileNotFoundException {
         var reader = new FileReader(file);
         return g.fromJson(reader, SimpleConfig.class);
     }

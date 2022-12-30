@@ -2,24 +2,33 @@ package Gui.Render.World;
 
 import Gui.Render.CommonParams;
 import Gui.Render.IsRenderable;
+import Settings.SimpleConfig;
 import Settings.Variants.AnimalBehaviorVariant;
 import Settings.Variants.GrowthPlantVariant;
 import Settings.Variants.MapVariants;
 import Settings.Variants.MutationVariant;
+import Spawners.AnimalSpawner;
+import Spawners.Builder;
+import Spawners.GrassSpawner;
+import Spawners.JungleSpawner;
 import World.Maps.WorldMap;
+import World.SimulationEngine;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 
 import javafx.scene.layout.HBox;
+import javafx.scene.shape.Box;
 import javafx.stage.Stage;
+
+import java.io.FileNotFoundException;
 
 public class Map extends CommonParams implements IsRenderable {
 
+    protected SimpleConfig simpleConfig;
     protected Stage mapStage;
     protected GridPane gridPane;
     protected MapVariants mapVariant;
@@ -27,6 +36,7 @@ public class Map extends CommonParams implements IsRenderable {
     protected GrowthPlantVariant growthPlantVariant;
     protected MutationVariant mutationVariant;
     protected WorldMap worldMap;
+    protected SimulationEngine simulationEngine;
     protected int energyToReproduce;
     protected int energyNeededToReproduce;
     protected int genomeLength;
@@ -37,7 +47,7 @@ public class Map extends CommonParams implements IsRenderable {
     protected int plantGrowthPerDay;
     protected int minimalNumberOfMutations;
     protected int maximalNumberOfMutations;
-    public Map(ExtendedConfig config, WorldMap worldMap) {
+    public Map(ExtendedConfig config) {
         this.name = config.name;
         this.width = config.width;
         this.height = config.height;
@@ -64,15 +74,25 @@ public class Map extends CommonParams implements IsRenderable {
         this.minimalNumberOfMutations = config.minimalNumberOfMutations;
         this.maximalNumberOfMutations = config.maximalNumberOfMutations;
 
+        Builder.register(GrassSpawner.class, GrassSpawner::fromConfig);
+        Builder.register(AnimalSpawner.class, AnimalSpawner::fromConfig);
+        Builder.register(JungleSpawner.class, JungleSpawner::fromConfig);
+        try {
+            this.simpleConfig = SimpleConfig.fromFile("config.json");
+        } catch (FileNotFoundException e) {
+            System.err.println("Config file not found. Load default config.");
+            this.simpleConfig = new SimpleConfig();
+        }
+        this.worldMap = SimulationEngine.fromConfig(this.simpleConfig);
+        this.simulationEngine = new SimulationEngine(worldMap);
+
+
         this.mapStage = new Stage();
         this.gridPane = new GridPane();
-        this.worldMap = worldMap;
     }
 
     @Override
     public void render() {
-
-
 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setContent(this.gridPane);
@@ -81,6 +101,8 @@ public class Map extends CommonParams implements IsRenderable {
         scrollPane.getOnDragDetected(
 
         );
+        this.simulationEngine.step();
+
         this.scene  = new Scene(scrollPane, this.width * 2, this.height * 2);
         this.mapStage.setTitle(this.name);
         this.mapStage.setScene(this.scene);
@@ -134,18 +156,25 @@ public class Map extends CommonParams implements IsRenderable {
             value += 1;
         }
 
-
-
-        for (int y = 0; y <= yCount ; y++) {
+        for (int y = 1; y <= yCount + 1 ; y++) {
             int cellY = Math.floorMod(y + firstCellY, this.height);
-            for (int x = 0; x <= xCount ; x++) {
+            for (int x = 1; x <= xCount + 1 ; x++) {
                 int cellX = Math.floorMod(x + firstCellX, this.width);
                 Cell cell = this.worldMap.cellOrNullAt(cellX, cellY);
+                System.out.println(cellX + " " + cellY);
+                System.out.println(cell);
                 if(cell != null) {
                     this.gridPane.add(cell.render(this.boxWidth, this.padding), x, y);
+                } else {
+                    HBox box = new HBox();
+                    box.setMinWidth(this.boxWidth);
+                    box.setMinHeight(this.boxHeight);
+                    box.setStyle("-fx-background-color: yellow");
+                    this.gridPane.add(box, x, y);
                 }
             }
         }
+
         var test = new HBox();
         test.setMinWidth(100);
         test.setMinHeight(100);

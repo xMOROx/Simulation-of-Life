@@ -64,7 +64,7 @@ public abstract class WorldMap {
         }
 
         for(IWorldElement entity : newChildrenToAdd) {
-            this.addEntity(entity);
+            this.addPopulation(entity);
         }
         newChildrenToAdd.clear();
     }
@@ -121,7 +121,7 @@ public abstract class WorldMap {
             this.genoTypes.put(animal.getGenome().getGenes(), this.genoTypes.getOrDefault(animal.getGenome().getGenes(), 0) + 1);
         }
     }
-    public void addFirstPopulation(IWorldElement entity) {
+    public void addPopulation(IWorldElement entity) {
         this.getCellAt(entity.getPosition()).addObject(entity);
         entity.setWorld(this);
 
