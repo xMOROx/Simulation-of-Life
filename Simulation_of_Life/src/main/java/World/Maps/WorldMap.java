@@ -5,8 +5,6 @@ import Entities.Animal;
 import Entities.Grass;
 import Gui.Render.World.Cell;
 import Misc.Vector2D;
-import Settings.Config;
-import Settings.SimpleConfig;
 import Spawners.Spawner;
 
 import java.util.*;
@@ -40,11 +38,42 @@ public abstract class WorldMap {
         this.height = height;
     }
 
+    public void removeDeadEntities() {
+        for (IWorldElement entity : deadEntities) {
+            this.removeEntity(entity);
+        }
+        deadEntities.clear();
+    }
 
+    public void entitiesMove() {
+        for (ICanDecide entity : canDecidesEntities) {
+            entity.makeDecision();
+        }
+    }
 
-    public abstract  WorldMap fromConfig(Config config);
-    public abstract WorldMap fromConfig(SimpleConfig config);
+    public void resolveInteractions() {
+//        for (ICanDecide entity : canDecidesEntities) {
+//            entity.resolveInteractions();
+//        }
+        //TODO implements
+    }
 
+    public void addNewEntities() {
+        for(Spawner spawner : spawners) {
+            spawner.spawn();
+        }
+
+        for(IWorldElement entity : newChildrenToAdd) {
+            this.addEntity(entity);
+        }
+        newChildrenToAdd.clear();
+    }
+
+    public void registerSpawners(Spawner spawner) {
+            if(spawner.register(this)) {
+                spawners.add(spawner);
+            }
+    }
 
     public Cell cellOrNullAt(int cellX, int cellY) {return objects.getOrDefault(this.mapCoords(cellX, cellY), null);}
     public Cell cellOrNullAt(Vector2D coords) {return objects.getOrDefault(this.mapCoords(coords), null);}
@@ -119,8 +148,7 @@ public abstract class WorldMap {
         Cell cell = this.getCellAt(position);
         cell.removeObject(entity);
         if(cell.isEmpty()) this.objects.remove(position);
-        if(entity instanceof Animal) {
-            Animal animal = (Animal) entity;
+        if(entity instanceof Animal animal) {
             this.animalLifespanSum += animal.getAge();
             this.animalDead++;
             this.statistics.animalCount--;

@@ -8,15 +8,15 @@ public class HellPortal extends WorldMap {
         super(width, height);
     }
 
-    @Override
-    public WorldMap fromConfig(Config config) {
-        return null;
-    }
-
-    @Override
-    public WorldMap fromConfig(SimpleConfig config) {
-        return null;
-    }
+//    @Override
+//    public static WorldMap fromConfig(Config config) {
+//        return null;
+//    }
+//
+//    @Override
+//    public WorldMap fromConfig(SimpleConfig config) {
+//        return null;
+//    }
 
 }
 

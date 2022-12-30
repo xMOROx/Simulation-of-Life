@@ -7,16 +7,6 @@ public class Earth extends WorldMap {
     public Earth(int width, int height) {
         super(width, height);
     }
-
-    @Override
-    public WorldMap fromConfig(Config config) {
-        return null;
-    }
-
-    @Override
-    public WorldMap fromConfig(SimpleConfig config) {
-        return null;
-    }
 }
 
 
