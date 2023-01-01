@@ -58,11 +58,14 @@ public class Map extends CommonParams implements IsRenderable {
         this.borderWidth = config.borderWidth;
         this.offsetX = config.offsetX;
         this.offsetY = config.offsetY;
+
+//      Variants
         this.mapVariant = config.mapVariant;
         this.animalBehaviorVariant = config.animalBehaviorVariant;
         this.growthPlantVariant = config.growthPlantVariant;
         this.mutationVariant = config.mutationVariant;
 
+//      Config
         this.energyToReproduce = config.energyToReproduce;
         this.energyNeededToReproduce = config.energyNeededToReproduce;
         this.genomeLength = config.genomeLength;
@@ -74,6 +77,7 @@ public class Map extends CommonParams implements IsRenderable {
         this.minimalNumberOfMutations = config.minimalNumberOfMutations;
         this.maximalNumberOfMutations = config.maximalNumberOfMutations;
 
+
         Builder.register(GrassSpawner.class, GrassSpawner::fromConfig);
         Builder.register(AnimalSpawner.class, AnimalSpawner::fromConfig);
         Builder.register(JungleSpawner.class, JungleSpawner::fromConfig);
@@ -83,9 +87,8 @@ public class Map extends CommonParams implements IsRenderable {
             System.err.println("Config file not found. Load default config.");
             this.simpleConfig = new SimpleConfig();
         }
-        this.worldMap = SimulationEngine.fromConfig(this.simpleConfig);
+        this.worldMap = SimulationEngine.fromInputs(config, this.mapVariant);
         this.simulationEngine = new SimulationEngine(worldMap);
-
 
         this.mapStage = new Stage();
         this.gridPane = new GridPane();
@@ -195,6 +198,7 @@ public class Map extends CommonParams implements IsRenderable {
         public int plantGrowthPerDay = 10;
         public int minimalNumberOfMutations = 1;
         public int maximalNumberOfMutations = 3;
+        public double jungleRatio = 0.3;
         public MapVariants mapVariant = MapVariants.EARTH;
         public MutationVariant mutationVariant = MutationVariant.FULL_RANDOM;
         public AnimalBehaviorVariant animalBehaviorVariant = AnimalBehaviorVariant.FULL_PREDICTABLE;

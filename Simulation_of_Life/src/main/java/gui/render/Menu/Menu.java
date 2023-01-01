@@ -194,6 +194,7 @@ public class Menu extends CommonParams implements IsRenderable {
             this.name = "Start Energy";
             this.width = animalSettingsWidth/2 - this.padding;
             this.height = boxHeight;
+            this.max = 800;
         }});
 
         this.animalFirstPopulationInput = new InputController(new InputController.Config(){{

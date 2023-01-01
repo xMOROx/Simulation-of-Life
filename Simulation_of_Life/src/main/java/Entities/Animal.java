@@ -30,7 +30,7 @@ public class Animal extends StatefulObject<Animal.State> implements
     private final AnimalBrain brain;
     private final MutationVariant mutationVariant;
     private final AnimalBehaviorVariant animalBehaviorVariant;
-    public static final int genomeLength = 32;
+    public int genomeLength = 32;
     private int currentGeneIndex = 0;
 
 
@@ -175,10 +175,11 @@ public class Animal extends StatefulObject<Animal.State> implements
 
     public static class DefaultConfiguration  {
         public  int initialEnergy = 100;
-        public  int maximumEnergy = 300;
+        public  int maximumEnergy = 800;
         public  int dailyEnergyLoss = 1;
         public  int energyToReproduce = 80;
         public  int energyConsumedWhenReproducing = 50;
+        public int genomeLength = 32;
         public MutationVariant mutationVariant = MutationVariant.FULL_RANDOM;
         public AnimalBehaviorVariant animalBehaviorVariant = AnimalBehaviorVariant.FULL_PREDICTABLE;
 

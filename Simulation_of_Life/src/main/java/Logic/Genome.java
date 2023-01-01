@@ -18,7 +18,9 @@ public class Genome {
     public Genome(int size) {
         this(randomGenome(size), new Mutation(new Mutation.DefaultConfiguration()));
     }
-
+    public Genome(int size, Mutation.DefaultConfiguration config) {
+        this(randomGenome(size), new Mutation(config));
+    }
     public Genome(List<Integer> genes, Mutation mutator) {
         this.genes = genes;
         this.size = genes.size();
