@@ -1,12 +1,12 @@
 package Spawners;
 
 import Entities.Animal;
-import Gui.Render.World.Cell;
-import Logic.Genome;
 import Logic.Mutation;
-import Misc.Vector2D;
 import Settings.Variants.AnimalBehaviorVariant;
 import Settings.Variants.MutationVariant;
+import gui.render.World.Cell;
+import Logic.Genome;
+import Misc.Vector2D;
 import World.Maps.WorldMap;
 import com.google.gson.JsonElement;
 
@@ -20,11 +20,12 @@ public class AnimalSpawner extends Spawner {
         this.defaultConfig = new Animal.DefaultConfiguration() {{
             this.dailyEnergyLoss = config.dailyEnergyLoss;
             this.initialEnergy = config.startEnergy;
-            this.animalBehaviorVariant = config.behaviorVariant;
             this.mutationVariant = config.mutationVariant;
+            this.animalBehaviorVariant = config.animalBehaviorVariant;
             this.energyToReproduce = config.energyToReproduce;
-            this.energyConsumedWhenReproducing = config.energyNeededToReproduce;
+            this.energyConsumedWhenReproducing = config.energyConsumedWhenReproducing;
             this.genomeLength = config.genomeLength;
+
         }};
     }
 
@@ -43,10 +44,10 @@ public class AnimalSpawner extends Spawner {
         if (position == null) {
             return false;
         }
-        Animal animal = new Animal(new Genome(defaultConfig.genomeLength, new Mutation.DefaultConfiguration(){{
-            this.numberOfMinimumGenes = config.minimalNumberOfMutations;
-            this.numberOfMaximumGenes = config.maximalNumberOfMutations;
-        }}), position, defaultConfig);
+        Animal animal = new Animal(new Genome(defaultConfig.genomeLength, new Mutation(new Mutation.DefaultConfiguration(){{
+            this.numberOfMinimumGenes = 0;
+            this.numberOfMaximumGenes = defaultConfig.genomeLength / 2;
+        }})), position, defaultConfig);
         this.world.addEntity(animal);
         return true;
     }
@@ -69,16 +70,13 @@ public class AnimalSpawner extends Spawner {
     }
 
     public static class Config {
-        protected int eatingEnergy = 100;
         protected int startEnergy = 100;
-        protected int dailyEnergyLoss = 10;
+        protected int dailyEnergyLoss = 100;
         protected int initialPopulation = 100;
-        protected int energyToReproduce = 100;
-        protected int energyNeededToReproduce = 100;
+        protected  int energyToReproduce = 80;
+        protected  int energyConsumedWhenReproducing = 50;
         protected int genomeLength = 32;
-        protected int minimalNumberOfMutations = 1;
-        protected int maximalNumberOfMutations = 3;
-        protected AnimalBehaviorVariant behaviorVariant = AnimalBehaviorVariant.FULL_PREDICTABLE;
         protected MutationVariant mutationVariant = MutationVariant.FULL_RANDOM;
+        protected AnimalBehaviorVariant animalBehaviorVariant = AnimalBehaviorVariant.FULL_PREDICTABLE;
     }
 }

@@ -1,8 +1,9 @@
-package Gui.Render.World;
+package gui.render.World;
 
-import Gui.Render.IsRenderable;
+
+import gui.render.IsRenderable;
 import Entities.Abstractions.IWorldElement;
-import Gui.Render.isRenderableOnMap;
+import gui.render.isRenderableOnMap;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 

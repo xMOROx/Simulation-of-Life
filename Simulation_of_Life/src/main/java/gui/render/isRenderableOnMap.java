@@ -1,4 +1,4 @@
-package Gui.Render;
+package gui.render;
 
 import javafx.scene.layout.HBox;
 

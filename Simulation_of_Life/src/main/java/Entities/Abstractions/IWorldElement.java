@@ -1,9 +1,9 @@
 package Entities.Abstractions;
 
 
-import Gui.Render.IsRenderable;
-import Gui.Render.isRenderableInsideCell;
-import Gui.Render.isRenderableOnMap;
+import gui.render.IsRenderable;
+import gui.render.isRenderableInsideCell;
+import gui.render.isRenderableOnMap;
 import Misc.Vector2D;
 import World.Maps.WorldMap;
 

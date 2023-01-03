@@ -1,9 +1,8 @@
 package Spawners;
 
 import Entities.Grass;
-import Gui.Render.World.Cell;
+import gui.render.World.Cell;
 import Misc.Vector2D;
-import Settings.Variants.GrowthPlantVariant;
 import World.Maps.WorldMap;
 import com.google.gson.JsonElement;
 
@@ -51,6 +50,5 @@ public class GrassSpawner extends Spawner {
     public static class Config {
         protected int spawnRate = 10;
         protected int nutritionValue = 10;
-        protected GrowthPlantVariant growthVariant = GrowthPlantVariant.EQUATOR;
     }
 }

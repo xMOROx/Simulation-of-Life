@@ -1,14 +1,15 @@
-package Gui;
+package gui;
 
-import Gui.Render.Menu.Menu;
-import Gui.Render.World.Map;
 
 import javafx.application.Application;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import java.io.FileInputStream;
 import java.util.function.Consumer;
-
 
 public class App extends Application {
 
@@ -19,14 +20,13 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
-        Consumer<Map> mapFunction = Map::render;
-        Menu menu = new Menu(new Menu.Config(){{
-            this.name = "Menu";
-            this.width = 900;
-            this.height = 600;
-        }}, mapFunction);
-        menu.render();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/main-scene.fxml"));
+        Scene scene = new Scene(loader.load(), 1530, 790);
+        primaryStage.setResizable(true);
+        primaryStage.setMaximized(true);
+        primaryStage.setTitle("Simulation of life!");
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 }
 

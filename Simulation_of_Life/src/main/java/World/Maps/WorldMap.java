@@ -3,7 +3,7 @@ package World.Maps;
 import Entities.Abstractions.*;
 import Entities.Animal;
 import Entities.Grass;
-import Gui.Render.World.Cell;
+import gui.render.World.Cell;
 import Misc.Vector2D;
 import Spawners.Spawner;
 

@@ -1,6 +1,6 @@
 package Spawners;
 
-import Gui.Render.World.Cell;
+import gui.render.World.Cell;
 import World.Maps.WorldMap;
 import com.google.gson.Gson;
 import Misc.Vector2D;

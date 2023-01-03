@@ -1,7 +1,7 @@
 package Spawners;
 
 import Entities.Grass;
-import Gui.Render.World.Cell;
+import gui.render.World.Cell;
 import Misc.Vector2D;
 import World.Maps.WorldMap;
 import com.google.gson.JsonElement;
