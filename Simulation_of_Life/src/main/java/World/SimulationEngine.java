@@ -1,18 +1,24 @@
 package World;
 
-import Settings.Config;
-import Settings.Parameters;
-import Settings.SimpleConfig;
-import Settings.Variants.MapVariants;
+import World.Maps.Settings.Config;
+import World.Maps.Settings.Parameters;
+import World.Maps.Settings.SimpleConfig;
+import World.Maps.Settings.Variants.MapVariants;
 import Spawners.*;
 import World.Maps.Earth;
 import World.Maps.HellPortal;
 import World.Maps.WorldMap;
+import gui.interfaces.IGuiObserver;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class SimulationEngine extends Thread {
     private final WorldMap world;
+    private final List<IGuiObserver> guiObservers = new LinkedList<>();
     public SimulationEngine(WorldMap world) {
         this.world = world;
+
     }
 
     public static WorldMap fromConfig (Config config) {
@@ -82,11 +88,34 @@ public class SimulationEngine extends Thread {
         return map;
     }
 
+    public void registerGuiObserver(IGuiObserver observer) {
+        guiObservers.add(observer);
+    }
+
+    private void refreshGui() {
+        for (var observer : guiObservers) {
+            observer.updateGui();
+        }
+    }
+
+    public WorldMap getWorld() {
+        return world;
+    }
+
+    public void run() {
+        while (this.world.getStatistics().animalCount > 0) {
+            this.step();
+        }
+    }
 
     public void step() {
+        this.refreshGui();
         this.world.removeDeadEntities();
+        this.refreshGui();
         this.world.entitiesMove();
+        this.refreshGui();
         this.world.resolveInteractions();
+        this.refreshGui();
         this.world.addNewEntities();
         this.world.UpdateStatistics();
     }

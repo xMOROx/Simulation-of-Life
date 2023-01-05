@@ -38,9 +38,7 @@ public class MapVisualizer {
                 Cell cell = this.map.cellOrNullAt(position);
                 if(cell != null) {
                     GridPane cellGrid = cell.render(this.sideLengthOfSquarePx, 5);
-//                    if(cellGrid != null) {
-                        gridPane.add(cellGrid, x, y);
-//                    }
+                    gridPane.add(cellGrid, x, y);
                 }
                 else {
                     HBox hBox = new HBox();
