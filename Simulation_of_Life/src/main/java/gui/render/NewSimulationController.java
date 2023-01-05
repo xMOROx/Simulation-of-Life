@@ -1,10 +1,10 @@
 package gui.render;
 
-import Settings.Parameters;
-import Settings.Variants.AnimalBehaviorVariant;
-import Settings.Variants.GrowthPlantVariant;
-import Settings.Variants.MapVariants;
-import Settings.Variants.MutationVariant;
+import World.Maps.Settings.Parameters;
+import World.Maps.Settings.Variants.AnimalBehaviorVariant;
+import World.Maps.Settings.Variants.GrowthPlantVariant;
+import World.Maps.Settings.Variants.MapVariants;
+import World.Maps.Settings.Variants.MutationVariant;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static Settings.Constants.*;
+import static World.Maps.Settings.Constants.*;
 
 public class NewSimulationController implements Initializable {
 
@@ -191,7 +191,7 @@ public class NewSimulationController implements Initializable {
                 && validateArgument(plantsStartSpawningLabel, plantStartSpawningTextField, MIN_PLANTS_SPAWNING_AT_THE_START, MAX_PLANTS_SPAWNING_AT_THE_START)
                 && validateArgument(plantsEachDaySpawningLabel, plantEachDaySpawningTextField, MIN_PLANTS_SPAWNED_AT_EACH_DAY, MAX_PLANTS_SPAWNED_AT_EACH_DAY)
                 && validateArgument(refreshTimeLabel, refreshTimeTextField, MIN_REFRESH_TIME, MAX_REFRESH_TIME)
-                && validateTwoArguments(minEnergyToCopulationLabel, minEnergyToCopulationTextField, energyUsedToCopulationLabel, energyUsedToCopulationTextField);
+                && validateTwoArguments(energyUsedToCopulationLabel, energyUsedToCopulationTextField, minEnergyToCopulationLabel, minEnergyToCopulationTextField);
     }
 
     private boolean validateArgument(Label argumentLabel, TextField argumentTextField, int minValue, int maxValue) {
@@ -224,7 +224,7 @@ public class NewSimulationController implements Initializable {
         if (intUserArgument1 > intUserArgument2) {
             argumentLabel1.setTextFill(Color.RED);
             argumentLabel1.setTextFill(Color.RED);
-            errorMessagesLabel.setText("ERROR: The argument " + argumentLabel1.getText() + " cannot be greater than the argument " + argumentLabel2.getText());
+            errorMessagesLabel.setText("ERROR: The argument " + argumentLabel1.getText() + "\n cannot be greater than the argument " + argumentLabel2.getText());
             return false;
         }
         return true;

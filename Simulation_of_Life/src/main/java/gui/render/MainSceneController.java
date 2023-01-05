@@ -1,10 +1,12 @@
 package gui.render;
 
 
-import Settings.Parameters;
+import World.Maps.Settings.Parameters;
+import Spawners.AnimalSpawner;
+import Spawners.Builder;
+import Spawners.GrassSpawner;
 import World.Maps.WorldMap;
 import World.SimulationEngine;
-import com.sun.tools.javac.Main;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -52,12 +54,17 @@ public class MainSceneController implements Initializable {
     }
 
     public void createNewSimulation(Parameters parameters) throws IOException {
-        System.out.println(getClass().getResource("/simulation-scene.fxml"));
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/simulation-scene.fxml"));
         Parent root = fxmlLoader.load();
         SimulationSceneController simulationSceneController = fxmlLoader.getController();
         simulationSceneController.setMainSceneController(this);
+
+        Builder.register(GrassSpawner.class, GrassSpawner::fromConfig);
+        Builder.register(AnimalSpawner.class, AnimalSpawner::fromConfig);
+
         WorldMap worldMap = SimulationEngine.fromConfig(parameters);
+
+
         simulationSceneController.setWorld(new SimulationEngine(worldMap));
         simulationSceneControllerList.add(simulationSceneController);
         Tab tab = new Tab("Simulation " + simulationNumber);

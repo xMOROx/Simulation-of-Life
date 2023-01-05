@@ -1,7 +1,7 @@
 package gui.render;
 
-import World.Maps.WorldMap;
 import World.SimulationEngine;
+import gui.interfaces.IGuiObserver;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -11,7 +11,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
-public class SimulationSceneController {
+import java.util.Arrays;
+
+public class SimulationSceneController implements IGuiObserver {
 
     //FXML---------------------------------------------------
     private MainSceneController mainSceneController;
@@ -35,7 +37,7 @@ public class SimulationSceneController {
 
     //simulation--------------------------------------------
     private SimulationEngine engine;
-//    private MapVisualizer mapVisualizer;
+    private MapVisualizer mapVisualizer;
     private Thread thread;
 
     //------------------------------------------------------
@@ -83,9 +85,10 @@ public class SimulationSceneController {
 
     public void setWorld(SimulationEngine engine) {
         this.engine = engine;
-//        engine.addObserver(this);
+        engine.registerGuiObserver(this);
         this.thread = new Thread(engine);
-//        this.mapVisualizer = new MapVisualizer(world.getMap(), mapGridPane);
+        this.engine.getWorld().firstPopulation();
+        this.mapVisualizer = new MapVisualizer(this.engine.getWorld(), mapGridPane);
         mapGridPane.setAlignment(Pos.CENTER);
         updateGui();
     }
@@ -96,18 +99,11 @@ public class SimulationSceneController {
             Platform.runLater(this::updateMap);
             Thread.sleep(300);
         } catch (InterruptedException ex) {
-            System.out.println(ex.getMessage());
+            System.out.println(Arrays.toString(ex.getStackTrace()));
         }
     }
 
     public void updateMap() {
-//        mapVisualizer.visualizeMap();
+        mapVisualizer.visualizeMap();
     }
-
-
-    public void generalStatisticsChanged() {
-
-    }
-
-
 }
