@@ -24,6 +24,7 @@ public class GrassSpawner extends Spawner {
     }
 
     private boolean tryToSpawn() {
+
         Vector2D position = findValidPosition(100);
         if(position == null) {
             return false;

@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-import Settings.Config;
+import World.Maps.Settings.Config;
 
 public class Builder {
     private static Map<String, Function<JsonElement, Spawner>> spawners = new HashMap<>();

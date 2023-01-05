@@ -2,8 +2,8 @@ package Spawners;
 
 import Entities.Animal;
 import Logic.Mutation;
-import Settings.Variants.AnimalBehaviorVariant;
-import Settings.Variants.MutationVariant;
+import World.Maps.Settings.Variants.AnimalBehaviorVariant;
+import World.Maps.Settings.Variants.MutationVariant;
 import gui.render.World.Cell;
 import Logic.Genome;
 import Misc.Vector2D;
@@ -39,17 +39,16 @@ public class AnimalSpawner extends Spawner {
         return true;
     }
 
-    protected boolean trySpawnOne(int attempts) {
+    protected void trySpawnOne(int attempts) {
         Vector2D position = findValidPosition(attempts);
         if (position == null) {
-            return false;
+            return;
         }
         Animal animal = new Animal(new Genome(defaultConfig.genomeLength, new Mutation(new Mutation.DefaultConfiguration(){{
             this.numberOfMinimumGenes = 0;
             this.numberOfMaximumGenes = defaultConfig.genomeLength / 2;
         }})), position, defaultConfig);
         this.world.addEntity(animal);
-        return true;
     }
 
     @Override
