@@ -6,8 +6,8 @@ import Logic.Genome;
 import Logic.Reproduce;
 import Misc.MapDirection;
 import Misc.Vector2D;
-import Settings.Variants.AnimalBehaviorVariant;
-import Settings.Variants.MutationVariant;
+import World.Maps.Settings.Variants.AnimalBehaviorVariant;
+import World.Maps.Settings.Variants.MutationVariant;
 import World.Maps.WorldMap;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -51,6 +51,7 @@ public class Animal extends StatefulObject<Animal.State> implements
             this.animalBehaviorVariant = configuration.animalBehaviorVariant;
             this.energyConsumedWhenReproducing = configuration.energyConsumedWhenReproducing;
             getState().setDirection(MapDirection.getRandomDirection());
+            getState().setEnergy(configuration.initialEnergy);
         }
 
     @Override
@@ -60,7 +61,6 @@ public class Animal extends StatefulObject<Animal.State> implements
         state.setEnergy(Math.min(state.getEnergy() + energy, config.maximumEnergy));
         notify(eaten);
     }
-
 
     @Override
     public boolean canReproduceWith(ICanReproduce other) {
@@ -79,16 +79,17 @@ public class Animal extends StatefulObject<Animal.State> implements
         Reproduce reproducer = new Reproduce(this, secondParent);
         Reproduce.SideOfGenome sideOfGenomeOfDominantParent = reproducer.getSideOfGenome();
 
-        int percentageOfGenesOfDominantParent = (int)(reproducer.calculatePercentageOfGenesOfDominantParent());
+        double percentageOfGenesOfDominantParent = reproducer.calculatePercentageOfGenesOfDominantParent();
+        int numberOfGenesOfDominantParent = (int) (percentageOfGenesOfDominantParent * this.genomeLength);
 
         this.consumeEnergy(this.energyConsumedWhenReproducing);
         secondParent.consumeEnergy(this.energyConsumedWhenReproducing);
 
-        Genome firstGenome = reproducer.getGenesFromSideOfDominantParent(sideOfGenomeOfDominantParent, percentageOfGenesOfDominantParent);
+        Genome firstGenome = reproducer.getGenesFromSideOfDominantParent(sideOfGenomeOfDominantParent, numberOfGenesOfDominantParent);
         Genome secondGenome = reproducer.getGenesFromSideOfSubordinationParent(switch (sideOfGenomeOfDominantParent) {
             case LEFT -> Reproduce.SideOfGenome.RIGHT;
             case RIGHT -> Reproduce.SideOfGenome.LEFT;
-        }, 1 - percentageOfGenesOfDominantParent);
+        }, this.genomeLength - numberOfGenesOfDominantParent);
 
         Genome childGenome =  firstGenome.crossGenomes(secondGenome);
 
@@ -97,8 +98,7 @@ public class Animal extends StatefulObject<Animal.State> implements
         } else {
             childGenome =  childGenome.getMutator().controlMutation(childGenome);
         }
-
-        Vector2D childPosition = this.getPosition();
+        Vector2D childPosition = this.getState().getPosition();
         Animal child = new Animal(childGenome, childPosition, this.config);
         child.getState().setEnergy(this.energyConsumedWhenReproducing * 2);
         this.childCount++;
@@ -109,7 +109,6 @@ public class Animal extends StatefulObject<Animal.State> implements
         this.world.addEntity(child);
 
         return child;
-
     }
 
     @Override
@@ -121,7 +120,12 @@ public class Animal extends StatefulObject<Animal.State> implements
     @Override
     public void makeDecision() {
        if(isDead()) return;
+
        this.age++;
+//       System.out.println("Position: " + this.getState().getPosition() + " Direction: " + this.getState().getDirection());
+//       System.out.println("Current gene index: " + currentGeneIndex);
+//       System.out.println("Current gene: " + this.genome.getGenes().size());
+//       System.out.println("Age: " + this.age);
        this.rotate(this.genome.getGene(this.currentGeneIndex % genomeLength));
 
        if(this.animalBehaviorVariant == AnimalBehaviorVariant.FULL_PREDICTABLE) {
@@ -166,9 +170,9 @@ public class Animal extends StatefulObject<Animal.State> implements
 
     @Override
     public VBox render() {
-        //TODO
         VBox vBox = new VBox(5);
-        Label label = new Label("Energy: " + this.getState().getEnergy());
+        Label label = new Label("Zwierzatko" + this.getState().getPosition() + this.getEnergy());
+        vBox.setStyle("-fx-background-color: lightblue");
         vBox.getChildren().add(label);
         return vBox;
     }

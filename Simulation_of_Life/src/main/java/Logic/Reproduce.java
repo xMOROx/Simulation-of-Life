@@ -21,16 +21,16 @@ public class Reproduce {
     }
 
     protected  Animal findSubordinationParent() {
-        return firstParent.getEnergy() < secondParent.getEnergy() ? firstParent : secondParent;
+        return this.findDominationParent() == firstParent ? secondParent : firstParent;
     }
 
     public  SideOfGenome getSideOfGenome() {
         return random.nextBoolean() ? SideOfGenome.LEFT : SideOfGenome.RIGHT;
     }
     // Calculate energy of first parent before reproduction
-    public  float calculatePercentageOfGenesOfDominantParent() {
+    public double calculatePercentageOfGenesOfDominantParent() {
         int sumOfEnergy = this.firstParent.getEnergy() + secondParent.getEnergy();
-        return (float) findDominationParent().getEnergy() / sumOfEnergy;
+        return Math.round((double)(findDominationParent().getEnergy()) / sumOfEnergy * 100.0) / 100.0;
     }
 
     private Genome getGenesFromSideOfParent(SideOfGenome sideOfGenome, int nucleusSize, Animal parent) {

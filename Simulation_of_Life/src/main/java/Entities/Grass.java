@@ -34,7 +34,8 @@ public class Grass extends StatefulObject<Grass.State> implements IsAlive<Grass.
     public VBox render() {
         //TODO implement
         VBox vBox = new VBox(5);
-        Label label = new Label("Energy: " + this.getState().getEnergy());
+        Label label = new Label("Trawka" + this.getState().getEnergy() + " " + this.getPosition());
+        vBox.setStyle("-fx-background-color: #00ff00");
         vBox.getChildren().add(label);
         return vBox;
     }
