@@ -1,7 +1,7 @@
 package gui.render;
 
 
-import World.Maps.Settings.Parameters;
+import Settings.Parameters;
 import Spawners.AnimalSpawner;
 import Spawners.Builder;
 import Spawners.GrassSpawner;

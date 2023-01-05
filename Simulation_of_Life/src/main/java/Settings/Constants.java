@@ -1,4 +1,4 @@
-package World.Maps.Settings;
+package Settings;
 
 public class Constants {
     //map properties-----------------------------------

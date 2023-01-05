@@ -1,4 +1,4 @@
-package World.Maps.Settings;
+package Settings;
 
 import com.google.gson.Gson;
 

@@ -1,10 +1,10 @@
 package gui.render;
 
-import World.Maps.Settings.Parameters;
-import World.Maps.Settings.Variants.AnimalBehaviorVariant;
-import World.Maps.Settings.Variants.GrowthPlantVariant;
-import World.Maps.Settings.Variants.MapVariants;
-import World.Maps.Settings.Variants.MutationVariant;
+import Settings.Parameters;
+import Settings.Variants.AnimalBehaviorVariant;
+import Settings.Variants.GrowthPlantVariant;
+import Settings.Variants.MapVariants;
+import Settings.Variants.MutationVariant;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
@@ -18,9 +18,19 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static World.Maps.Settings.Constants.*;
+import static Settings.Constants.*;
 
 public class NewSimulationController implements Initializable {
+
+    //Mutations----------------------------------------------
+    @FXML
+    public Label minimumMutationLabel;
+    @FXML
+    public TextField minimumMutationTextField;
+    public Label maximumMutationLabel;
+    public TextField maximumMutationTextField;
+
+    //------------------------------------------------------
 
     //controllers---------------------------------------------
     private MainSceneController mainSceneController;
@@ -110,8 +120,6 @@ public class NewSimulationController implements Initializable {
 
     //check boxes------------------------------------------------
     private CheckBox saveCSVCheckBox;
-    @FXML
-    private CheckBox removeExcessAnimalsCheckBox;
 
     //-----------------------------------------------------------
 
@@ -162,18 +170,23 @@ public class NewSimulationController implements Initializable {
                 this.mapHeight = Integer.parseInt(mapHeightTextField.getText());
                 this.mapWidth = Integer.parseInt(mapWidthTextField.getText());
 
+                this.minimumMutations = Integer.parseInt(minimumMutationTextField.getText());
+                this.maximumMutations = Integer.parseInt(maximumMutationTextField.getText());
+
                 this.plantsEnergy = Integer.parseInt(plantsEnergyProfitTextField.getText());
                 this.energyRequiredForReproduction = Integer.parseInt(minEnergyToCopulationTextField.getText());
                 this.energyUsedForReproduction = Integer.parseInt(energyUsedToCopulationTextField.getText());
                 this.dailyEnergyConsumption = Integer.parseInt(dailyEnergyCostTextField.getText());
+
                 this.initialAnimalsEnergy = Integer.parseInt(animalStartEnergyTextField.getText());
-                this.genomeLength = Integer.parseInt(genomeLengthTextField.getText());
                 this.initialAnimalsNumber = Integer.parseInt(animalStartSpawningTextField.getText());
                 this.initialPlantsNumber = Integer.parseInt(plantStartSpawningTextField.getText());
+
                 this.numberOfPlantGrowingDaily = Integer.parseInt(plantEachDaySpawningTextField.getText());
 
+                this.genomeLength = Integer.parseInt(genomeLengthTextField.getText());
+
                 this.saveToCSV = saveCSVCheckBox.isSelected();
-                this.removeExcessAnimals = removeExcessAnimalsCheckBox.isSelected();
             }}));
         }
     }
@@ -191,6 +204,9 @@ public class NewSimulationController implements Initializable {
                 && validateArgument(plantsStartSpawningLabel, plantStartSpawningTextField, MIN_PLANTS_SPAWNING_AT_THE_START, MAX_PLANTS_SPAWNING_AT_THE_START)
                 && validateArgument(plantsEachDaySpawningLabel, plantEachDaySpawningTextField, MIN_PLANTS_SPAWNED_AT_EACH_DAY, MAX_PLANTS_SPAWNED_AT_EACH_DAY)
                 && validateArgument(refreshTimeLabel, refreshTimeTextField, MIN_REFRESH_TIME, MAX_REFRESH_TIME)
+                && validateArgument(minimumMutationLabel, minimumMutationTextField, MIN_GENOME_LENGTH - 10, MAX_GENOME_LENGTH)
+                && validateArgument(maximumMutationLabel, maximumMutationTextField, MIN_GENOME_LENGTH - 10, MAX_GENOME_LENGTH)
+                && validateTwoArguments(minimumMutationLabel, minimumMutationTextField, maximumMutationLabel, maximumMutationTextField)
                 && validateTwoArguments(energyUsedToCopulationLabel, energyUsedToCopulationTextField, minEnergyToCopulationLabel, minEnergyToCopulationTextField);
     }
 

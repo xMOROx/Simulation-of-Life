@@ -2,8 +2,8 @@ package Spawners;
 
 import Entities.Animal;
 import Logic.Mutation;
-import World.Maps.Settings.Variants.AnimalBehaviorVariant;
-import World.Maps.Settings.Variants.MutationVariant;
+import Settings.Variants.AnimalBehaviorVariant;
+import Settings.Variants.MutationVariant;
 import gui.render.World.Cell;
 import Logic.Genome;
 import Misc.Vector2D;
@@ -25,7 +25,6 @@ public class AnimalSpawner extends Spawner {
             this.energyToReproduce = config.energyToReproduce;
             this.energyConsumedWhenReproducing = config.energyConsumedWhenReproducing;
             this.genomeLength = config.genomeLength;
-
         }};
     }
 
@@ -45,8 +44,8 @@ public class AnimalSpawner extends Spawner {
             return;
         }
         Animal animal = new Animal(new Genome(defaultConfig.genomeLength, new Mutation(new Mutation.DefaultConfiguration(){{
-            this.numberOfMinimumGenes = 0;
-            this.numberOfMaximumGenes = defaultConfig.genomeLength / 2;
+            this.numberOfMinimumGenes = config.minimumMutations;
+            this.numberOfMaximumGenes = config.maximumMutations;
         }})), position, defaultConfig);
         this.world.addEntity(animal);
     }
@@ -69,6 +68,8 @@ public class AnimalSpawner extends Spawner {
     }
 
     public static class Config {
+        protected int minimumMutations = 0;
+        protected int maximumMutations = 0;
         protected int startEnergy = 100;
         protected int dailyEnergyLoss = 100;
         protected int initialPopulation = 100;

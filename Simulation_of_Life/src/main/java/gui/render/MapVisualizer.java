@@ -1,7 +1,7 @@
 package gui.render;
 
 import Misc.Vector2D;
-import World.Maps.Settings.Constants;
+import Settings.Constants;
 import World.Maps.WorldMap;
 import gui.render.World.Cell;
 import javafx.scene.control.Label;

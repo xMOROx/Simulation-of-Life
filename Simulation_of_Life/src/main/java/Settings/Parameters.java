@@ -1,9 +1,9 @@
-package World.Maps.Settings;
+package Settings;
 
-import World.Maps.Settings.Variants.AnimalBehaviorVariant;
-import World.Maps.Settings.Variants.GrowthPlantVariant;
-import World.Maps.Settings.Variants.MapVariants;
-import World.Maps.Settings.Variants.MutationVariant;
+import Settings.Variants.AnimalBehaviorVariant;
+import Settings.Variants.GrowthPlantVariant;
+import Settings.Variants.MapVariants;
+import Settings.Variants.MutationVariant;
 
 public class Parameters {
     private final int mapHeight;
@@ -17,31 +17,39 @@ public class Parameters {
     private final int genomeLength;
     private final int numberOfPlantGrowingDaily;
     private final int plantsEnergy;
+    private final int minimumMutations;
+    private final int maximumMutations;
     private final MapVariants mapVariant;
     private final AnimalBehaviorVariant behaviourVariant;
     private final MutationVariant mutationVariant;
     private final GrowthPlantVariant terrainVariant;
     private final boolean saveToCSV;
-    private final boolean removeExcessAnimals;
 
     public Parameters(ApplicationConfig config) {
         this.mapHeight = config.mapHeight;
         this.mapWidth = config.mapWidth;
-        this.dailyEnergyConsumption = config.dailyEnergyConsumption;
+
         this.initialPlantsNumber = config.initialPlantsNumber;
         this.initialAnimalsNumber = config.initialAnimalsNumber;
         this.initialAnimalsEnergy = config.initialAnimalsEnergy;
+
+        this.dailyEnergyConsumption = config.dailyEnergyConsumption;
+        this.plantsEnergy = config.plantsEnergy;
         this.energyRequiredForReproduction = config.energyRequiredForReproduction;
         this.energyUsedForReproduction = config.energyUsedForReproduction;
+
         this.genomeLength = config.genomeLength;
         this.numberOfPlantGrowingDaily = config.numberOfPlantGrowingDaily;
+
         this.mapVariant = config.mapVariant;
-        this.plantsEnergy = config.plantsEnergy;
         this.behaviourVariant = config.behaviourVariant;
         this.mutationVariant = config.mutationVariant;
         this.terrainVariant = config.terrainVariant;
+
+        this.minimumMutations = config.minimumMutations;
+        this.maximumMutations = config.maximumMutations;
+
         this.saveToCSV = config.saveToCSV;
-        this.removeExcessAnimals = config.removeExcessAnimals;
     }
 
     public int getMapHeight() {
@@ -99,6 +107,12 @@ public class Parameters {
     public GrowthPlantVariant getTerrainVariant() {
         return terrainVariant;
     }
+    public int getMinimumMutations() {
+        return minimumMutations;
+    }
+    public int getMaximumMutations() {
+        return maximumMutations;
+    }
 
     public int getPlantsEnergy() {
         return plantsEnergy;
@@ -108,9 +122,6 @@ public class Parameters {
         return saveToCSV;
     }
 
-    public boolean isRemoveExcessAnimals() {
-        return removeExcessAnimals;
-    }
 
 
     public static class ApplicationConfig {
@@ -130,6 +141,7 @@ public class Parameters {
         public MutationVariant mutationVariant = MutationVariant.FULL_RANDOM;
         public GrowthPlantVariant terrainVariant = GrowthPlantVariant.EQUATOR;
         public boolean saveToCSV = false;
-        public boolean removeExcessAnimals = false;
+        public int minimumMutations = 0;
+        public int maximumMutations = 0;
     }
 }

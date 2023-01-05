@@ -1,4 +1,4 @@
-package World.Maps.Settings.Variants;
+package Settings.Variants;
 
 import java.util.List;
 import java.util.stream.Stream;

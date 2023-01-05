@@ -154,17 +154,17 @@
       </Label>
       <TextField fx:id="genomeLengthTextField" layoutX="728.0" layoutY="148.0" prefHeight="26.0" prefWidth="120.0" />
       <CheckBox fx:id="saveCSVCheckBox" layoutX="621.0" layoutY="329.0" mnemonicParsing="false" text="Save to CSV file" />
-      <Label fx:id="minEnergyToCopulationLabel1" alignment="CENTER" layoutX="400.0" layoutY="274.0" prefHeight="20.0" prefWidth="138.0" text="Minimum mutation">
+      <Label fx:id="minimumMutationLabel" alignment="CENTER" layoutX="400.0" layoutY="274.0" prefHeight="20.0" prefWidth="138.0" text="Minimum mutation">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="minEnergyToCopulationTextField1" layoutX="409.0" layoutY="294.0" prefHeight="26.0" prefWidth="120.0" />
-      <Label fx:id="minEnergyToCopulationLabel12" alignment="CENTER" layoutX="400.0" layoutY="328.0" prefHeight="20.0" prefWidth="138.0" text="Maximum mutation">
+      <TextField fx:id="minimumMutationTextField" layoutX="409.0" layoutY="294.0" prefHeight="26.0" prefWidth="120.0" />
+      <Label fx:id="maximumMutationLabel" alignment="CENTER" layoutX="400.0" layoutY="328.0" prefHeight="20.0" prefWidth="138.0" text="Maximum mutation">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="minEnergyToCopulationTextField11" layoutX="409.0" layoutY="348.0" prefHeight="26.0" prefWidth="120.0" />
+      <TextField fx:id="maximumMutationTextField" layoutX="409.0" layoutY="348.0" prefHeight="26.0" prefWidth="120.0" />
    </children>
 </AnchorPane>
