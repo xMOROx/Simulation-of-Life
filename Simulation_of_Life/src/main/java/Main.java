@@ -6,11 +6,8 @@ public class Main {
         try{
             Application.launch(App.class, args);
         } catch (Exception error) {
-            System.out.println(error.getMessage());
-
+            error.getStackTrace();
         }
-
-
     }
 
 }

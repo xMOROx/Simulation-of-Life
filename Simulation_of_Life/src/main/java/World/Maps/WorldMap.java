@@ -156,9 +156,17 @@ public abstract class WorldMap {
         if(entity instanceof Grass) this.statistics.grassCount--;
     }
 
+    private int countEmptyCell() {
+        return this.width * this.height - this.objects.size();
+    }
+
 
     public void UpdateStatistics() {
-        statistics.avgLifespan = this.animalDead == 0 ? 0 : (double) this.animalLifespanSum / this.animalDead;
+        this.statistics.day++;
+
+        this.statistics.emptyFieldsCount = this.countEmptyCell();
+
+        this.statistics.avgLifespan = this.animalDead == 0 ? 0 : (double) this.animalLifespanSum / this.animalDead;
         int energySum = 0;
         int childrenSum = 0;
 
@@ -219,6 +227,7 @@ public abstract class WorldMap {
         public double avgEnergy = 0;
         public double avgChildren = 0;
         public double avgLifespan = 0;
+        public Integer day = 1;
         public List<Integer> theMostPopularGenes = new LinkedList<>();
     }
 }

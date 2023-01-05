@@ -1,5 +1,6 @@
 package gui.interfaces;
 
 public interface IGuiObserver {
-    void updateGui();
+    void updateGuiMap();
+    void updateGuiCharts();
 }

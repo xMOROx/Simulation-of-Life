@@ -204,8 +204,8 @@ public class NewSimulationController implements Initializable {
                 && validateArgument(plantsStartSpawningLabel, plantStartSpawningTextField, MIN_PLANTS_SPAWNING_AT_THE_START, MAX_PLANTS_SPAWNING_AT_THE_START)
                 && validateArgument(plantsEachDaySpawningLabel, plantEachDaySpawningTextField, MIN_PLANTS_SPAWNED_AT_EACH_DAY, MAX_PLANTS_SPAWNED_AT_EACH_DAY)
                 && validateArgument(refreshTimeLabel, refreshTimeTextField, MIN_REFRESH_TIME, MAX_REFRESH_TIME)
-                && validateArgument(minimumMutationLabel, minimumMutationTextField, MIN_GENOME_LENGTH - 10, MAX_GENOME_LENGTH)
-                && validateArgument(maximumMutationLabel, maximumMutationTextField, MIN_GENOME_LENGTH - 10, MAX_GENOME_LENGTH)
+                && validateArgument(minimumMutationLabel, minimumMutationTextField, MIN_MUTATION_NUMBER, MAX_MUTATION_NUMBER)
+                && validateArgument(maximumMutationLabel, maximumMutationTextField, MIN_MUTATION_NUMBER, MAX_MUTATION_NUMBER)
                 && validateTwoArguments(minimumMutationLabel, minimumMutationTextField, maximumMutationLabel, maximumMutationTextField)
                 && validateTwoArguments(energyUsedToCopulationLabel, energyUsedToCopulationTextField, minEnergyToCopulationLabel, minEnergyToCopulationTextField);
     }

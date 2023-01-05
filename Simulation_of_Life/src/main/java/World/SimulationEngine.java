@@ -93,7 +93,13 @@ public class SimulationEngine extends Thread {
 
     private void refreshGui() {
         for (var observer : guiObservers) {
-            observer.updateGui();
+            observer.updateGuiMap();
+        }
+    }
+
+    private void refreshGuiCharts() {
+        for (var observer : guiObservers) {
+            observer.updateGuiCharts();
         }
     }
 
@@ -108,6 +114,7 @@ public class SimulationEngine extends Thread {
     }
 
     public void step() {
+        this.refreshGuiCharts();
         this.refreshGui();
         this.world.removeDeadEntities();
         this.refreshGui();
@@ -116,6 +123,7 @@ public class SimulationEngine extends Thread {
         this.world.resolveInteractions();
         this.refreshGui();
         this.world.addNewEntities();
+        this.refreshGui();
         this.world.UpdateStatistics();
     }
 

@@ -1,21 +1,29 @@
 package gui.render;
 
+import Entities.Grass;
 import World.SimulationEngine;
 import gui.interfaces.IGuiObserver;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class SimulationSceneController implements IGuiObserver {
 
+
     //FXML---------------------------------------------------
+    @FXML
     private MainSceneController mainSceneController;
     @FXML
     private Button startButton;
@@ -33,6 +41,32 @@ public class SimulationSceneController implements IGuiObserver {
     private GridPane mapGridPane;
     @FXML
     private HBox MainHBox;
+    @FXML
+    private LineChart<?, ?> populationChart;
+    @FXML
+    private LineChart<?, ?> plantsChart;
+    @FXML
+    public Label numberOfAllPlantsLabel;
+    @FXML
+    public Label numberOfAllAnimalsLabel;
+    @FXML
+    public Label numberOfFreeFieldLabel;
+    @FXML
+    public Label theMostPopularGenomeLabel;
+    @FXML
+    public Label averageEnergyLevelLabel;
+    @FXML
+    public Label lifeExpectancyLabel;
+    @FXML
+    public Label dayLabel;
+    @FXML
+    public ScrollPane theMostPopularGenomeScrollPane;
+    @FXML
+    public Label theMostPopularGenomeLabelOutPut;
+    @FXML
+    private final XYChart.Series seriesA = new XYChart.Series();
+    @FXML
+    private final XYChart.Series seriesB = new XYChart.Series();
     //------------------------------------------------------
 
     //simulation--------------------------------------------
@@ -45,7 +79,7 @@ public class SimulationSceneController implements IGuiObserver {
 
 
     public void onDeleteSimulationButtonClicked() {
-        mainSceneController.removeTab(this);
+        this.mainSceneController.removeTab(this);
     }
 
     public void setMainSceneController(MainSceneController mainSceneController) {
@@ -53,57 +87,87 @@ public class SimulationSceneController implements IGuiObserver {
     }
 
     public void onStartButtonClicked() {
-        startSimulation();
-        deleteSimulationButton.setDisable(true);
-        startButton.setDisable(true);
-        stopButton.setDisable(false);
-        liveAnimalsChoiceBox.setDisable(true);
-        deadAnimalsChoiceBox.setDisable(true);
+        this.startSimulation();
+        this.deleteSimulationButton.setDisable(true);
+        this.startButton.setDisable(true);
+        this.stopButton.setDisable(false);
+        this.liveAnimalsChoiceBox.setDisable(true);
+        this.deadAnimalsChoiceBox.setDisable(true);
     }
 
     public void onStopButtonClicked() throws InterruptedException {
-        deleteSimulationButton.setDisable(false);
-        startButton.setDisable(false);
-        stopButton.setDisable(true);
-        liveAnimalsChoiceBox.setDisable(false);
-        deadAnimalsChoiceBox.setDisable(false);
-        pauseSimulation();
+        this.deleteSimulationButton.setDisable(false);
+        this.startButton.setDisable(false);
+        this.stopButton.setDisable(true);
+        this.liveAnimalsChoiceBox.setDisable(false);
+        this.deadAnimalsChoiceBox.setDisable(false);
+        this.pauseSimulation();
     }
 
     private void startSimulation() {
-        if (firstStart) {
-            thread.start();
-            firstStart = false;
+        if (this.firstStart) {
+            this.thread.start();
+            this.firstStart = false;
         } else {
-            thread.resume();
+            this.thread.resume();
         }
     }
 
     private void pauseSimulation() throws InterruptedException {
-        thread.suspend();
+        this.thread.suspend();
     }
 
     public void setWorld(SimulationEngine engine) {
         this.engine = engine;
-        engine.registerGuiObserver(this);
-        this.thread = new Thread(engine);
+        this.engine.registerGuiObserver(this);
+        this.thread = new Thread(this.engine);
         this.engine.getWorld().firstPopulation();
-        this.mapVisualizer = new MapVisualizer(this.engine.getWorld(), mapGridPane);
-        mapGridPane.setAlignment(Pos.CENTER);
-        updateGui();
+        this.mapVisualizer = new MapVisualizer(this.engine.getWorld(), this.mapGridPane);
+        this.mapGridPane.setAlignment(Pos.CENTER);
+
+        this.seriesA.setName("Day");
+        this.seriesB.setName("Day");
+
+        this.populationChart.getData().add(this.seriesA);
+        this.plantsChart.getData().add(this.seriesB);
+
+        this.plantsChart.setStyle("-fx-stroke: green;");
+
+        this.updateGuiMap();
     }
 
 
-    public void updateGui() {
+    private void updateGeneralStatistics() {
+        this.numberOfAllAnimalsLabel.setText("Number of all animals: " + this.engine.getWorld().getStatistics().animalCount);
+        this.numberOfAllPlantsLabel.setText("Number of all plants: " + this.engine.getWorld().getStatistics().grassCount);
+        this.numberOfFreeFieldLabel.setText("Number of free field: " + this.engine.getWorld().getStatistics().emptyFieldsCount);
+        this.theMostPopularGenomeLabelOutPut.setText(engine.getWorld().getStatistics().theMostPopularGenes.toString());
+        this.averageEnergyLevelLabel.setText("Average energy level: " + Math.round(this.engine.getWorld().getAvgStats().avgEnergy * 100.0) / 100.0);
+        this.lifeExpectancyLabel.setText("Life expectancy: " + Math.round(this.engine.getWorld().getAvgStats().avgLifespan * 100.0) / 100.0);
+        this.dayLabel.setText("Day: " + this.engine.getWorld().getStatistics().day);
+    }
+
+    public void updateGuiMap() {
         try {
             Platform.runLater(this::updateMap);
-            Thread.sleep(300);
+            Platform.runLater(this::updateGeneralStatistics);
+            Thread.sleep(100);
         } catch (InterruptedException ex) {
             System.out.println(Arrays.toString(ex.getStackTrace()));
         }
     }
 
+    public void updateGuiCharts() {
+        Platform.runLater(this::updateCharts);
+    }
     public void updateMap() {
-        mapVisualizer.visualizeMap();
+        this.mapVisualizer.visualizeMap();
+    }
+
+
+    private void updateCharts() {
+        Integer day = this.engine.getWorld().getStatistics().day;
+        seriesA.getData().add(new XYChart.Data<>(Integer.toString(day), this.engine.getWorld().getStatistics().animalCount));
+        seriesB.getData().add(new XYChart.Data<>(Integer.toString(day), this.engine.getWorld().getStatistics().grassCount));
     }
 }
