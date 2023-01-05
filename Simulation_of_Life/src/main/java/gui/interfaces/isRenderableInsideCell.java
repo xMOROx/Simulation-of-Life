@@ -1,4 +1,4 @@
-package gui.render;
+package gui.interfaces;
 
 import javafx.scene.layout.VBox;
 

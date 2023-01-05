@@ -1,2 +1,5 @@
-package gui.interfaces;public interface IGuiObserver {
+package gui.interfaces;
+
+public interface IGuiObserver {
+    void updateGui();
 }
