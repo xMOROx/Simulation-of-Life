@@ -1,11 +1,12 @@
 package gui.render.World;
 
 
-import gui.render.IsRenderable;
 import Entities.Abstractions.IWorldElement;
-import gui.render.isRenderableOnMap;
+import gui.interfaces.IGuiObserver;
+import gui.interfaces.isRenderableOnMap;
+import javafx.application.Platform;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.GridPane;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,12 +14,16 @@ import java.util.List;
 public class Cell implements isRenderableOnMap {
     private final List<IWorldElement> objects = new LinkedList<>();
     private int deadAnimals = 0;
-    public final int size;
+    private final int size;
+    private final GridPane cellGrid;
+
     public final double spawnProbability;
     public Cell(Config config) {
         this.size = config.size;
         this.spawnProbability = config.grassSpawnProbability;
+        this.cellGrid = new GridPane();
     }
+
 
     public Cell() {
         this(new Config());
@@ -54,26 +59,28 @@ public class Cell implements isRenderableOnMap {
         return false;
     }
 
+    public int getNumberOfObjects() {
+        return this.objects.size();
+    }
+
+
+    public GridPane render(int size, int padding) {
+        cellGrid.getChildren().clear();
+        cellGrid.getChildren().add(new Label("Komorka"));
+        int cellSize = (int) (size * Math.ceil(this.objects.size() / 2.0));
+        cellGrid.setPrefSize(cellSize, cellSize);
+        for (int y = 0, i = 0; y < cellSize; y+=size) {
+            for (int x = 0; x < size*2; x+=size, i++) {
+                if(i >= this.objects.size()) break;
+                cellGrid.add(this.objects.get(i).render(), x, y);
+            }
+        }
+        return cellGrid;
+    }
+
     public static class Config {
         public double grassSpawnProbability = 0.5;
         public int size = 10;
-
-    }
-
-    public HBox render(int size, int padding) {
-        int c = (int) Math.ceil(Math.sqrt(objects.size()));
-        HBox hBox = new HBox(5);
-        Label label = new Label("Komorka");
-        size /= c;
-        hBox.getChildren().add(label);
-        for (int y = 0, o = 0; y < c; y++) {
-            for (int x = 0; x < c; x++, o++) {
-                if (o >= objects.size()) return null;
-
-                hBox.getChildren().add(objects.get(o).render());
-            }
-        }
-        return hBox;
     }
 
 }
