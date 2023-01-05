@@ -3,6 +3,7 @@ package World.Maps;
 import Entities.Abstractions.*;
 import Entities.Animal;
 import Entities.Grass;
+import Logic.Interactions.InteractionResolver;
 import gui.render.World.Cell;
 import Misc.Vector2D;
 import Spawners.Spawner;
@@ -17,6 +18,7 @@ public abstract class WorldMap {
     protected final Map<Vector2D, Cell> objects = new HashMap<>();
     protected final List<IWorldElement> deadEntities = new LinkedList<>();
     protected final List<IWorldElement> newChildrenToAdd = new LinkedList<>();
+    protected final InteractionResolver resolver = new InteractionResolver();
     protected final SortedMap<List<Integer>, Integer> genoTypes = new TreeMap<>((o1, o2) -> {
         for(int i = 0; i < o1.size(); i++) {
             if(o1.get(i) < o2.get(i)) return -1;
@@ -26,7 +28,6 @@ public abstract class WorldMap {
     });
 
     protected final List<Spawner> spawners =  new LinkedList<>();
-    //TODO InteractionResolver
     protected int animalLifespanSum = 0;
     protected int animalDead = 0;
     protected final Statistics avgStats = new Statistics();
@@ -52,27 +53,25 @@ public abstract class WorldMap {
     }
 
     public void resolveInteractions() {
-//        for (ICanDecide entity : canDecidesEntities) {
-//            entity.resolveInteractions();
-//        }
-        //TODO implements
+        for(var entity : objects.values()) {
+            resolver.resolve(entity);
+        }
+    }
+
+    public void firstPopulation() {
+        this.addNewEntities();
     }
 
     public void addNewEntities() {
-        for(Spawner spawner : spawners) {
-            spawner.spawn();
-        }
-
-        for(IWorldElement entity : newChildrenToAdd) {
-            this.addPopulation(entity);
-        }
+        this.spawners.forEach(Spawner::spawn);
+        this.newChildrenToAdd.forEach(this::addPopulation);
         newChildrenToAdd.clear();
     }
 
     public void registerSpawners(Spawner spawner) {
-            if(spawner.register(this)) {
-                spawners.add(spawner);
-            }
+        if(spawner.register(this)) {
+            spawners.add(spawner);
+        }
     }
 
     public Cell cellOrNullAt(int cellX, int cellY) {return objects.getOrDefault(this.mapCoords(cellX, cellY), null);}
@@ -92,7 +91,7 @@ public abstract class WorldMap {
         Vector2D newPosition = this.mapCoords(entity.getPosition());
 
         entity.getState().setPosition(newPosition);
-        this.getCellAt(oldPosition).addObject(entity);
+        this.getCellAt(newPosition).addObject(entity);
 
         Cell cell = objects.get(oldPosition);
         if(cell == null) return null;

@@ -1,4 +1,4 @@
-package Settings;
+package World.Maps.Settings;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;

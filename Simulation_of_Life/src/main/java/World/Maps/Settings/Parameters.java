@@ -1,9 +1,9 @@
-package Settings;
+package World.Maps.Settings;
 
-import Settings.Variants.AnimalBehaviorVariant;
-import Settings.Variants.GrowthPlantVariant;
-import Settings.Variants.MapVariants;
-import Settings.Variants.MutationVariant;
+import World.Maps.Settings.Variants.AnimalBehaviorVariant;
+import World.Maps.Settings.Variants.GrowthPlantVariant;
+import World.Maps.Settings.Variants.MapVariants;
+import World.Maps.Settings.Variants.MutationVariant;
 
 public class Parameters {
     private final int mapHeight;
