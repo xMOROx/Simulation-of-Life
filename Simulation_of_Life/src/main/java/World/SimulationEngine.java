@@ -50,8 +50,8 @@ public class SimulationEngine extends Thread {
           this.startEnergy = parameters.getInitialAnimalsEnergy();
           this.initialPopulation = parameters.getInitialAnimalsNumber();
           this.dailyEnergyLoss = parameters.getDailyEnergyConsumption();
-          this.energyToReproduce = parameters.getEnergyUsedForReproduction();
-          this.energyConsumedWhenReproducing = parameters.getEnergyRequiredForReproduction();
+          this.energyToReproduce = parameters.getEnergyRequiredForReproduction();
+          this.energyConsumedWhenReproducing =  parameters.getEnergyUsedForReproduction();
           this.mutationVariant = parameters.getMutationVariant();
           this.animalBehaviorVariant = parameters.getBehaviourVariant();
           this.genomeLength = parameters.getGenomeLength();

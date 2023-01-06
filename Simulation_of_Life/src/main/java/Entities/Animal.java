@@ -93,16 +93,25 @@ public class Animal extends StatefulObject<Animal.State> implements
 
         Genome childGenome =  firstGenome.crossGenomes(secondGenome);
 
+        System.out.println("Child genome before mutation: " + childGenome.getGenes().toString());
+
         if(mutationVariant == MutationVariant.FULL_RANDOM) {
+            System.out.println("Mutation variant: FULL_RANDOM");
             childGenome =  childGenome.getMutator().normalMutation(childGenome);
         } else {
+            System.out.println("Mutation variant: Controlled");
             childGenome =  childGenome.getMutator().controlMutation(childGenome);
         }
+
         Vector2D childPosition = this.getState().getPosition();
         Animal child = new Animal(childGenome, childPosition, this.config);
         child.getState().setEnergy(this.energyConsumedWhenReproducing * 2);
         this.childCount++;
         secondParent.childCount++;
+
+        System.out.println("Child created");
+        System.out.println("Child genome: " + child.getGenome().getGenes().toString());
+        System.out.println("Genome same: " + child.getGenome().equals(childGenome));
 
         this.notify(reproduced);
         secondParent.notify(reproduced);
@@ -122,10 +131,6 @@ public class Animal extends StatefulObject<Animal.State> implements
        if(isDead()) return;
 
        this.age++;
-//       System.out.println("Position: " + this.getState().getPosition() + " Direction: " + this.getState().getDirection());
-//       System.out.println("Current gene index: " + currentGeneIndex);
-//       System.out.println("Current gene: " + this.genome.getGenes().size());
-//       System.out.println("Age: " + this.age);
        this.rotate(this.genome.getGene(this.currentGeneIndex % genomeLength));
 
        if(this.animalBehaviorVariant == AnimalBehaviorVariant.FULL_PREDICTABLE) {
