@@ -17,15 +17,10 @@ public class GrassSpawner extends Spawner {
     public boolean canSpawn(Cell cell) {
         return Cell.isCellEmpty(cell);
     }
+
     @Override
-    public boolean register(WorldMap world) {
-        super.register(world);
-        return true;
-    }
-
-    private boolean tryToSpawn() {
-
-        Vector2D position = findValidPosition(100);
+    protected boolean tryToSpawn(int attempts) {
+        Vector2D position = findValidPosition(attempts);
         if(position == null) {
             return false;
         }
@@ -37,16 +32,16 @@ public class GrassSpawner extends Spawner {
     @Override
     public void spawn() {
         for (int i = 0; i < this.config.spawnRate; i++) {
-            if(!tryToSpawn()) {
+            if(!tryToSpawn(100)) {
                 break;
             }
         }
     }
 
     @Override
-    public void spawnFirstPopulation() {
+    protected void spawnFirstPopulation() {
         for (int i = 0; i < this.config.firstPopulationSpawnRate; i++) {
-            if(!tryToSpawn()) {
+            if(!tryToSpawn(100)) {
                 break;
             }
         }

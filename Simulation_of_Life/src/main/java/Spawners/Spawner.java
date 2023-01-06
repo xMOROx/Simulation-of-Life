@@ -14,12 +14,14 @@ public abstract class Spawner {
 
     public boolean register(WorldMap world) {
         this.world = world;
+        this.spawnFirstPopulation();
         return true;
     }
 
     public abstract void spawn();
 
-    public abstract void spawnFirstPopulation();
+    protected abstract void spawnFirstPopulation();
+    protected abstract boolean tryToSpawn(int attempts);
 
     public abstract boolean canSpawn(Cell cell);
 
@@ -28,12 +30,12 @@ public abstract class Spawner {
     }
 
     protected Vector2D findValidPosition(int attempts) {
-        Vector2D position = getRandomPosition();
         for (int i = 0; i < attempts; i++) {
             Vector2D newPosition = getRandomPosition();
             if(canSpawn(world.cellOrNullAt(newPosition))) {
                 return newPosition;
             }
+            //TODO add limit to spawn for grass
         }
         return null;
     }

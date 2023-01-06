@@ -30,37 +30,28 @@ public class AnimalSpawner extends Spawner {
 
 
     @Override
-    public boolean register(WorldMap world) {
-        super.register(world);
-        for (int i = 0; i < config.initialPopulation; i++) {
-            this.trySpawnOne(120);
-        }
-        return true;
-    }
-
-    protected void trySpawnOne(int attempts) {
+    protected boolean tryToSpawn(int attempts) {
         Vector2D position = findValidPosition(attempts);
         if (position == null) {
-            return;
+            return false;
         }
         Animal animal = new Animal(new Genome(defaultConfig.genomeLength, new Mutation(new Mutation.DefaultConfiguration(){{
             this.numberOfMinimumGenes = config.minimumMutations;
             this.numberOfMaximumGenes = config.maximumMutations;
         }})), position, defaultConfig);
         this.world.addEntity(animal);
+        return true;
     }
 
     @Override
     public void spawn() {
-        if(world.getStatistics().animalCount < 10) {
-            this.trySpawnOne(120);
-        }
+        return;
     }
 
     @Override
-    public void spawnFirstPopulation() {
+    protected void spawnFirstPopulation() {
         for (int i = 0; i < config.initialPopulation; i++) {
-            this.trySpawnOne(120);
+            this.tryToSpawn(120);
         }
     }
 

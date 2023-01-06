@@ -12,11 +12,6 @@ public class JungleSpawner extends Spawner {
         this.config = config;
     }
 
-    @Override
-    public boolean register(WorldMap world) {
-        super.register(world);
-        return true;
-    }
 
     @Override
     protected Vector2D getRandomPosition(){
@@ -26,8 +21,9 @@ public class JungleSpawner extends Spawner {
     }
 
 
-    private boolean tryTosSpawn() {
-        Vector2D position = findValidPosition(100);
+    @Override
+    protected boolean tryToSpawn(int attempts) {
+        Vector2D position = findValidPosition(attempts);
         if(position == null) {
             return false;
         }
@@ -39,16 +35,16 @@ public class JungleSpawner extends Spawner {
     @Override
     public void spawn() {
         for (int i = 0; i < this.config.spawnRate; i++) {
-            if(!tryTosSpawn()) {
+            if(!tryToSpawn(100)) {
                 break;
             }
         }
     }
 
     @Override
-    public void spawnFirstPopulation() {
+    protected void spawnFirstPopulation() {
         for (int i = 0; i < this.config.firstPopulationSpawnRate; i++) {
-            if(!tryTosSpawn()) {
+            if(!tryToSpawn(100)) {
                 break;
             }
         }
