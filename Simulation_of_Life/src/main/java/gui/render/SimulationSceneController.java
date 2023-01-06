@@ -121,7 +121,6 @@ public class SimulationSceneController implements IGuiObserver {
         this.engine = engine;
         this.engine.registerGuiObserver(this);
         this.thread = new Thread(this.engine);
-        this.engine.getWorld().firstPopulation();
         this.mapVisualizer = new MapVisualizer(this.engine.getWorld(), this.mapGridPane);
         this.mapGridPane.setAlignment(Pos.CENTER);
 

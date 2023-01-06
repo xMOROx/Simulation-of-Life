@@ -36,19 +36,8 @@ public class MapVisualizer {
             for (int y = 0; y < map.getHeight(); y++) {
                 Vector2D position = new Vector2D(x, y);
                 Cell cell = this.map.cellOrNullAt(position);
-                if(cell != null) {
-                    GridPane cellGrid = cell.render(this.sideLengthOfSquarePx, 5);
-                    gridPane.add(cellGrid, x, y);
-                }
-                else {
-                    HBox hBox = new HBox();
-                    Label coordinates = new Label(position.toString());
-                    coordinates.setAlignment(javafx.geometry.Pos.CENTER);
-                    hBox.getChildren().add(coordinates);
-                    hBox.setAlignment(javafx.geometry.Pos.CENTER);
-                    hBox.setPrefSize(this.sideLengthOfSquarePx, this.sideLengthOfSquarePx);
-                    this.gridPane.add(hBox, x, y);
-                }
+                GridPane cellGrid = cell.render(this.sideLengthOfSquarePx, 5);
+                gridPane.add(cellGrid, x, y);
             }
         }
     }

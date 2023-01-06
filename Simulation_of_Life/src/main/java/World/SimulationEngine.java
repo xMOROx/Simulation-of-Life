@@ -31,6 +31,13 @@ public class SimulationEngine extends Thread {
 
     public static WorldMap fromConfig(Parameters parameters) {
         WorldMap map = parameters.getMapVariant() == MapVariants.EARTH ? new Earth(parameters.getMapWidth(), parameters.getMapHeight()) : new HellPortal(parameters.getMapWidth(), parameters.getMapHeight());
+        Spawner emptyCellSpawner = new EmptyCellSpawner(new EmptyCellSpawner.Config() {{
+            this.mapHeight = parameters.getMapHeight();
+            this.mapWidth = parameters.getMapWidth();
+        }});
+
+        map.registerSpawners(emptyCellSpawner);
+
         Spawner grassSpawner = new GrassSpawner(new GrassSpawner.Config() {{
           this.nutritionValue = parameters.getPlantsEnergy();
           this.spawnRate = parameters.getNumberOfPlantGrowingDaily();
@@ -51,7 +58,6 @@ public class SimulationEngine extends Thread {
         }});
 
         map.registerSpawners(animalSpawner);
-
 
         return map;
     }

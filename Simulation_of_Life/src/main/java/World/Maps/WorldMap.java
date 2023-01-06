@@ -2,9 +2,11 @@ package World.Maps;
 
 import Entities.Abstractions.*;
 import Entities.Animal;
+import Entities.EmptyEntity;
 import Entities.Grass;
 import Logic.Interactions.InteractionResolver;
 import Spawners.AnimalSpawner;
+import Spawners.EmptyCellSpawner;
 import gui.render.World.Cell;
 import Misc.Vector2D;
 import Spawners.Spawner;
@@ -59,17 +61,9 @@ public abstract class WorldMap {
         }
     }
 
-    public void firstPopulation() {
-        this.spawners.forEach(Spawner::spawnFirstPopulation);
-        this.newChildrenToAdd.forEach(this::addPopulation);
-        this.newChildrenToAdd.clear();
-    }
 
     public void addNewEntities() {
-        for (Spawner spawner : spawners) {
-            if(spawner instanceof AnimalSpawner) continue;
-            spawner.spawn();
-        }
+        spawners.forEach(Spawner::spawn);
         this.newChildrenToAdd.forEach(this::addPopulation);
         newChildrenToAdd.clear();
     }
@@ -78,10 +72,14 @@ public abstract class WorldMap {
         if(spawner.register(this)) {
             spawners.add(spawner);
         }
+        this.newChildrenToAdd.forEach(this::addPopulation);
+        this.newChildrenToAdd.clear();
     }
 
     public Cell cellOrNullAt(int cellX, int cellY) {return objects.getOrDefault(this.mapCoords(cellX, cellY), null);}
-    public Cell cellOrNullAt(Vector2D coords) {return objects.getOrDefault(this.mapCoords(coords), null);}
+    public Cell cellOrNullAt(Vector2D coords) {
+        return objects.getOrDefault(this.mapCoords(coords), null);
+    }
 
 
     protected Cell getCellAt(Vector2D coords) {
@@ -102,7 +100,6 @@ public abstract class WorldMap {
         Cell cell = objects.get(oldPosition);
         if(cell == null) return null;
         cell.removeObject(entity);
-        if(cell.isEmpty()) objects.remove(oldPosition);
         return null;
     }
     protected Void objectDied(IWorldElement entity) {
@@ -152,7 +149,7 @@ public abstract class WorldMap {
         Vector2D position = entity.getPosition();
         Cell cell = this.getCellAt(position);
         cell.removeObject(entity);
-        if(cell.isEmpty()) this.objects.remove(position);
+        cell.incrementDeadAnimals(1);
         if(entity instanceof Animal animal) {
             this.animalLifespanSum += animal.getAge();
             this.animalDead++;
@@ -163,9 +160,16 @@ public abstract class WorldMap {
     }
 
     private int countEmptyCell() {
-        return this.width * this.height - this.objects.size();
+        return this.width * this.height - this.countCellWithEmptyEntity();
     }
 
+    private int countCellWithEmptyEntity() {
+        int count = 0;
+        for(var cell : this.objects.values()) {
+            if(cell.isEmpty()) count++;
+        }
+        return count;
+    }
 
     public void UpdateStatistics() {
         this.statistics.day++;
