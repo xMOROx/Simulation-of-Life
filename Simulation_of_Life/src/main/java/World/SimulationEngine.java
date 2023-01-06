@@ -34,6 +34,7 @@ public class SimulationEngine extends Thread {
         Spawner grassSpawner = new GrassSpawner(new GrassSpawner.Config() {{
           this.nutritionValue = parameters.getPlantsEnergy();
           this.spawnRate = parameters.getNumberOfPlantGrowingDaily();
+          this.firstPopulationSpawnRate = parameters.getInitialPlantsNumber();
         }});
 
         map.registerSpawners(grassSpawner);

@@ -43,6 +43,15 @@ public class GrassSpawner extends Spawner {
         }
     }
 
+    @Override
+    public void spawnFirstPopulation() {
+        for (int i = 0; i < this.config.firstPopulationSpawnRate; i++) {
+            if(!tryToSpawn()) {
+                break;
+            }
+        }
+    }
+
     public static Spawner fromConfig(JsonElement configJson) {
         Config config = GSON.fromJson(configJson, Config.class);
         return new GrassSpawner(config);
@@ -50,6 +59,7 @@ public class GrassSpawner extends Spawner {
 
     public static class Config {
         protected int spawnRate = 10;
+        protected int firstPopulationSpawnRate = 10;
         protected int nutritionValue = 10;
     }
 }

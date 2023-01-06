@@ -19,6 +19,8 @@ public abstract class Spawner {
 
     public abstract void spawn();
 
+    public abstract void spawnFirstPopulation();
+
     public abstract boolean canSpawn(Cell cell);
 
     protected Vector2D getRandomPosition() {

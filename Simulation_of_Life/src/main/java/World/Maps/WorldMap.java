@@ -4,6 +4,7 @@ import Entities.Abstractions.*;
 import Entities.Animal;
 import Entities.Grass;
 import Logic.Interactions.InteractionResolver;
+import Spawners.AnimalSpawner;
 import gui.render.World.Cell;
 import Misc.Vector2D;
 import Spawners.Spawner;
@@ -59,11 +60,16 @@ public abstract class WorldMap {
     }
 
     public void firstPopulation() {
-        this.addNewEntities();
+        this.spawners.forEach(Spawner::spawnFirstPopulation);
+        this.newChildrenToAdd.forEach(this::addPopulation);
+        this.newChildrenToAdd.clear();
     }
 
     public void addNewEntities() {
-        this.spawners.forEach(Spawner::spawn);
+        for (Spawner spawner : spawners) {
+            if(spawner instanceof AnimalSpawner) continue;
+            spawner.spawn();
+        }
         this.newChildrenToAdd.forEach(this::addPopulation);
         newChildrenToAdd.clear();
     }

@@ -64,9 +64,9 @@ public class SimulationSceneController implements IGuiObserver {
     @FXML
     public Label theMostPopularGenomeLabelOutPut;
     @FXML
-    private final XYChart.Series seriesA = new XYChart.Series();
+    private final XYChart.Series populationData = new XYChart.Series();
     @FXML
-    private final XYChart.Series seriesB = new XYChart.Series();
+    private final XYChart.Series grassData = new XYChart.Series();
     //------------------------------------------------------
 
     //simulation--------------------------------------------
@@ -125,11 +125,11 @@ public class SimulationSceneController implements IGuiObserver {
         this.mapVisualizer = new MapVisualizer(this.engine.getWorld(), this.mapGridPane);
         this.mapGridPane.setAlignment(Pos.CENTER);
 
-        this.seriesA.setName("Day");
-        this.seriesB.setName("Day");
+        this.populationData.setName("Day");
+        this.grassData.setName("Day");
 
-        this.populationChart.getData().add(this.seriesA);
-        this.plantsChart.getData().add(this.seriesB);
+        this.populationChart.getData().add(this.populationData);
+        this.plantsChart.getData().add(this.grassData);
 
         this.plantsChart.setStyle("-fx-stroke: green;");
 
@@ -167,7 +167,7 @@ public class SimulationSceneController implements IGuiObserver {
 
     private void updateCharts() {
         Integer day = this.engine.getWorld().getStatistics().day;
-        seriesA.getData().add(new XYChart.Data<>(Integer.toString(day), this.engine.getWorld().getStatistics().animalCount));
-        seriesB.getData().add(new XYChart.Data<>(Integer.toString(day), this.engine.getWorld().getStatistics().grassCount));
+        populationData.getData().add(new XYChart.Data<>(Integer.toString(day), this.engine.getWorld().getStatistics().animalCount));
+        grassData.getData().add(new XYChart.Data<>(Integer.toString(day), this.engine.getWorld().getStatistics().grassCount));
     }
 }

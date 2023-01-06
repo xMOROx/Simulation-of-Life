@@ -46,6 +46,15 @@ public class JungleSpawner extends Spawner {
     }
 
     @Override
+    public void spawnFirstPopulation() {
+        for (int i = 0; i < this.config.firstPopulationSpawnRate; i++) {
+            if(!tryTosSpawn()) {
+                break;
+            }
+        }
+    }
+
+    @Override
     public boolean canSpawn(Cell cell) {
         return Cell.isCellEmpty(cell);
     }
@@ -60,6 +69,7 @@ public class JungleSpawner extends Spawner {
         protected int xMin = 20, xMax = 60;
         protected int yMin = 20, yMax = 60;
         protected int spawnRate = 50;
+        protected int firstPopulationSpawnRate = 100;
         protected int nutritionValue = 50;
     }
 }

@@ -59,8 +59,8 @@ public class MainSceneController implements Initializable {
         SimulationSceneController simulationSceneController = fxmlLoader.getController();
         simulationSceneController.setMainSceneController(this);
 
-        Builder.register(GrassSpawner.class, GrassSpawner::fromConfig);
-        Builder.register(AnimalSpawner.class, AnimalSpawner::fromConfig);
+//        Builder.register(GrassSpawner.class, GrassSpawner::fromConfig);
+//        Builder.register(AnimalSpawner.class, AnimalSpawner::fromConfig);
 
         WorldMap worldMap = SimulationEngine.fromConfig(parameters);
 

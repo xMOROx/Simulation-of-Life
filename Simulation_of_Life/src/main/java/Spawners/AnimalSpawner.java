@@ -58,6 +58,13 @@ public class AnimalSpawner extends Spawner {
     }
 
     @Override
+    public void spawnFirstPopulation() {
+        for (int i = 0; i < config.initialPopulation; i++) {
+            this.trySpawnOne(120);
+        }
+    }
+
+    @Override
     public boolean canSpawn(Cell cell) {
         return Cell.isCellEmpty(cell);
     }
