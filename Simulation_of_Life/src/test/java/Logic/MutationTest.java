@@ -11,9 +11,10 @@ class MutationTest {
     @Test
     void normalMutation() {
         Genome genome = new Genome(List.of(0, 1, 2, 3, 4, 5, 6, 7), new Mutation(new Mutation.DefaultConfiguration() {{
-            numberOfMinimumGenes = 2;
-            numberOfMaximumGenes = 5;
+            numberOfMinimumGenes = 0;
+            numberOfMaximumGenes = 19;
         }}));
+
         Genome mutatedGenome = genome.getMutator().normalMutation(genome);
         assertNotEquals(genome, mutatedGenome);
     }

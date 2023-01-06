@@ -53,6 +53,8 @@ public class SimulationEngine extends Thread {
           this.energyToReproduce = parameters.getEnergyRequiredForReproduction();
           this.energyConsumedWhenReproducing =  parameters.getEnergyUsedForReproduction();
           this.mutationVariant = parameters.getMutationVariant();
+          this.minimumMutations = parameters.getMinimumMutations();
+          this.maximumMutations = parameters.getMaximumMutations();
           this.animalBehaviorVariant = parameters.getBehaviourVariant();
           this.genomeLength = parameters.getGenomeLength();
         }});

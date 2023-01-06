@@ -9,7 +9,6 @@ import java.util.Random;
 public class Mutation
 {
     private final DefaultConfiguration config;
-    private final Random random = new Random();
     public Mutation(DefaultConfiguration config) {
         this.config = config;
     }
@@ -19,11 +18,14 @@ public class Mutation
         public int numberOfMaximumGenes = 2;
     }
 
+    public DefaultConfiguration getConfig() {
+        return this.config;
+    }
     public Genome normalMutation(Genome genome) {
+        Random random = new Random();
         List<Integer> genes = genome.getGenes();
         int[] newGenes = genes.stream().mapToInt(Integer::intValue).toArray();
         int numberOfMutations = random.nextInt(this.config.numberOfMinimumGenes, this.config.numberOfMaximumGenes + 1);
-        System.out.println("Number of mutations: " + numberOfMutations);
         for (int i = 0; i < numberOfMutations; i++) {
             int geneIndex = random.nextInt(genes.size());
             int geneValue = random.nextInt(8);
@@ -33,6 +35,7 @@ public class Mutation
     }
 
     public Genome controlMutation(Genome genome) {
+        Random random = new Random();
         List<Integer> genes = genome.getGenes();
         int[] newGenes = genome.getGenes().stream().mapToInt(Integer::intValue).toArray();
         int numberOfMutations = random.nextInt(this.config.numberOfMinimumGenes, this.config.numberOfMaximumGenes + 1);

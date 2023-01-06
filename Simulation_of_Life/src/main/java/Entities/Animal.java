@@ -93,13 +93,10 @@ public class Animal extends StatefulObject<Animal.State> implements
 
         Genome childGenome =  firstGenome.crossGenomes(secondGenome);
 
-        System.out.println("Child genome before mutation: " + childGenome.getGenes().toString());
 
         if(mutationVariant == MutationVariant.FULL_RANDOM) {
-            System.out.println("Mutation variant: FULL_RANDOM");
             childGenome =  childGenome.getMutator().normalMutation(childGenome);
         } else {
-            System.out.println("Mutation variant: Controlled");
             childGenome =  childGenome.getMutator().controlMutation(childGenome);
         }
 
@@ -108,10 +105,6 @@ public class Animal extends StatefulObject<Animal.State> implements
         child.getState().setEnergy(this.energyConsumedWhenReproducing * 2);
         this.childCount++;
         secondParent.childCount++;
-
-        System.out.println("Child created");
-        System.out.println("Child genome: " + child.getGenome().getGenes().toString());
-        System.out.println("Genome same: " + child.getGenome().equals(childGenome));
 
         this.notify(reproduced);
         secondParent.notify(reproduced);
