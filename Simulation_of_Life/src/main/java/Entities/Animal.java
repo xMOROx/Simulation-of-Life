@@ -30,7 +30,7 @@ public class Animal extends StatefulObject<Animal.State> implements
     private final AnimalBrain brain;
     private final MutationVariant mutationVariant;
     private final AnimalBehaviorVariant animalBehaviorVariant;
-    public int genomeLength = 32;
+    public int genomeLength;
     private int currentGeneIndex = 0;
 
 
@@ -159,6 +159,7 @@ public class Animal extends StatefulObject<Animal.State> implements
         return this.getState().getEnergy();
     }
 
+    @Override
     public WorldMap getWorld() {
         return world;
     }

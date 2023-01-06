@@ -9,6 +9,9 @@ public interface IWorldElement extends isRenderableInsideCell {
     Vector2D getPosition();
     default void setWorld(WorldMap world) {
     }
+    default WorldMap getWorld() {
+        return null;
+    }
 
     String toString();
 

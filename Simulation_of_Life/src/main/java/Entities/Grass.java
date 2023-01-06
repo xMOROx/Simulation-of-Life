@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 public class Grass extends StatefulObject<Grass.State> implements IsAlive<Grass.State, Grass> {
 
     protected Vector2D position;
-
+    protected WorldMap world;
     public Grass(Vector2D position, int grassNutritionValue) {
         super(new State()
             {{
@@ -27,8 +27,10 @@ public class Grass extends StatefulObject<Grass.State> implements IsAlive<Grass.
 
     @Override
     public void setWorld(WorldMap world) {
-        super.setWorld(world);
+        this.world = world;
     }
+
+
 
     @Override
     public VBox render() {
