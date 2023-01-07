@@ -5,6 +5,7 @@ import Entities.Abstractions.StatefulObject;
 import Misc.LoadImages;
 import Misc.Vector2D;
 import World.Maps.WorldMap;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -36,7 +37,10 @@ public class Grass extends StatefulObject<Grass.State> implements IsAlive<Grass.
 
     @Override
     public VBox render(int size, LoadImages images) {
-        return new VBox(new ImageView(images.getRandomGrassImage()));
+        Label energyLabel = new Label("" + this.getState().getEnergy());
+        energyLabel.setPrefSize(size, 5);
+        energyLabel.setAlignment(Pos.CENTER);
+        return new VBox(new ImageView(images.getRandomGrassImage()), energyLabel);
     }
 
     public static class State implements IsAlive.State {

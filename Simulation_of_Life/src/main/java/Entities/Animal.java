@@ -10,6 +10,8 @@ import Misc.Vector2D;
 import Settings.Variants.AnimalBehaviorVariant;
 import Settings.Variants.MutationVariant;
 import World.Maps.WorldMap;
+import javafx.beans.binding.Bindings;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -194,7 +196,15 @@ public class Animal extends StatefulObject<Animal.State> implements
 
     @Override
     public VBox render(int size, LoadImages images) {
-        return new VBox(new ImageView(images.getRandomAnimalImage()));
+        Label energyLabel = new Label(""+this.getEnergy());
+        Label positionLabel = new Label(""+this.getPosition());
+
+        energyLabel.setPrefSize(size, 5);
+        positionLabel.setPrefSize(size, 5);
+
+        energyLabel.alignmentProperty().setValue(Pos.CENTER);
+        positionLabel.alignmentProperty().setValue(Pos.CENTER);
+        return new VBox(new ImageView(images.getRandomAnimalImage()), energyLabel, positionLabel);
     }
 
     public static class DefaultConfiguration  {
