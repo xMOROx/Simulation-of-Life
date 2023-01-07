@@ -2,11 +2,8 @@ package World.Maps;
 
 import Entities.Abstractions.*;
 import Entities.Animal;
-import Entities.EmptyEntity;
 import Entities.Grass;
 import Logic.Interactions.InteractionResolver;
-import Spawners.AnimalSpawner;
-import Spawners.EmptyCellSpawner;
 import gui.render.World.Cell;
 import Misc.Vector2D;
 import Spawners.Spawner;
@@ -159,14 +156,12 @@ public abstract class WorldMap {
         if(entity instanceof Grass) this.statistics.grassCount--;
     }
 
-    private int countEmptyCell() {
-        return this.width * this.height - this.countCellWithEmptyEntity();
-    }
-
     private int countCellWithEmptyEntity() {
         int count = 0;
-        for(var cell : this.objects.values()) {
-            if(cell.isEmpty()) count++;
+        for(Cell cell : this.objects.values()) {
+            if(cell.isEmpty()){
+                count++;
+            }
         }
         return count;
     }
@@ -174,7 +169,9 @@ public abstract class WorldMap {
     public void UpdateStatistics() {
         this.statistics.day++;
 
-        this.statistics.emptyFieldsCount = this.countEmptyCell();
+
+        this.statistics.emptyFieldsCount = this.countCellWithEmptyEntity();
+        this.statistics.occupiedFieldsCount = this.objects.size() - this.statistics.emptyFieldsCount;
 
         this.statistics.avgLifespan = this.animalDead == 0 ? 0 : (double) this.animalLifespanSum / this.animalDead;
         int energySum = 0;
@@ -184,15 +181,11 @@ public abstract class WorldMap {
             for(IWorldElement entity : cell.getObjects()) {
                 if(entity instanceof Animal animal) {
                     energySum += animal.getEnergy();
-                    childrenSum += animal.getChildrenCount();
+                    childrenSum += animal.getChildren();
                 }
             }
 
-            if(cell.isEmpty()) {
-                this.statistics.emptyFieldsCount++;
-            }
         }
-
         this.statistics.theMostPopularGenes = this.genoTypes.lastKey();
 
         this.statistics.avgEnergy = this.statistics.animalCount == 0 ? 0 : (double) energySum / this.statistics.animalCount;
@@ -203,7 +196,6 @@ public abstract class WorldMap {
         this.avgStats.avgChildren = (this.avgStats.avgChildren + this.statistics.avgChildren) / 2;
         this.avgStats.animalCount = (this.avgStats.animalCount + this.statistics.animalCount) / 2;
         this.avgStats.grassCount = (this.avgStats.grassCount + this.statistics.grassCount) / 2;
-
     }
 
 
@@ -234,6 +226,7 @@ public abstract class WorldMap {
         public int animalCount = 0;
         public int grassCount = 0;
         public int emptyFieldsCount = 0;
+        public int occupiedFieldsCount = 0;
         public double avgEnergy = 0;
         public double avgChildren = 0;
         public double avgLifespan = 0;

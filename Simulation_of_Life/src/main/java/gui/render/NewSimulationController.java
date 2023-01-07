@@ -209,7 +209,14 @@ public class NewSimulationController implements Initializable {
                 && validateTwoArguments(minimumMutationLabel, minimumMutationTextField, maximumMutationLabel, maximumMutationTextField)
                 && validateTwoArguments(energyUsedToCopulationLabel, energyUsedToCopulationTextField, minEnergyToCopulationLabel, minEnergyToCopulationTextField);
     }
-
+    private boolean isIntegerValue(String value) {
+        try {
+            Integer.parseInt(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
     private boolean validateArgument(Label argumentLabel, TextField argumentTextField, int minValue, int maxValue) {
         String stringUserArgument = argumentTextField.getText();
         if (stringUserArgument.length() == 0) {
@@ -217,11 +224,11 @@ public class NewSimulationController implements Initializable {
             errorMessagesLabel.setText("ERROR: The " + argumentLabel.getText() + " value cannot be a empty!");
             return false;
         }
-//        if (!Static.isStringInt(stringUserArgument)) {
-//            argumentLabel.setTextFill(Color.RED);
-//            errorMessagesLabel.setText("ERROR: The " + argumentLabel.getText() + " value must be an integer!");
-//            return false;
-//        }
+        if (!isIntegerValue(stringUserArgument)) {
+            argumentLabel.setTextFill(Color.RED);
+            errorMessagesLabel.setText("ERROR: The " + argumentLabel.getText() + " value must be an integer!");
+            return false;
+        }
 
         int intUserArgument = Integer.parseInt(stringUserArgument);
         if (intUserArgument < minValue || intUserArgument > maxValue) {

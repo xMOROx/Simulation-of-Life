@@ -25,19 +25,19 @@ public class MapVisualizer {
     private void calculateColumnsAndRowsSize() {
         int squareHeight = (int) Math.ceil(1.0 * Constants.GRID_PANE_HEIGHT_PX / map.getHeight());
         int squareWidth  = (int) Math.ceil(1.0 * Constants.GRID_PANE_WIDTH_PX / map.getWidth());
-        this.sideLengthOfSquarePx = Math.max(40, Math.max(squareWidth, squareHeight));
-        gridPane.getColumnConstraints().add(new ColumnConstraints(sideLengthOfSquarePx));
-        gridPane.getRowConstraints().add(new RowConstraints(sideLengthOfSquarePx));
+        this.sideLengthOfSquarePx = Math.max(60, Math.max(squareWidth, squareHeight));
+        this.gridPane.getColumnConstraints().add(new ColumnConstraints(this.sideLengthOfSquarePx));
+        this.gridPane.getRowConstraints().add(new RowConstraints(this.sideLengthOfSquarePx));
     }
 
     public void visualizeMap() {
-        gridPane.getChildren().clear();
-        for (int x = 0; x < map.getWidth(); x++) {
-            for (int y = 0; y < map.getHeight(); y++) {
+        this.gridPane.getChildren().clear();
+        for (int x = 0; x < this.map.getWidth(); x++) {
+            for (int y = 0; y < this.map.getHeight(); y++) {
                 Vector2D position = new Vector2D(x, y);
                 Cell cell = this.map.cellOrNullAt(position);
                 GridPane cellGrid = cell.render(this.sideLengthOfSquarePx, 5);
-                gridPane.add(cellGrid, x, y);
+                this.gridPane.add(cellGrid, x, y);
             }
         }
     }

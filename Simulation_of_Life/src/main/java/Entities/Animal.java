@@ -20,8 +20,7 @@ public class Animal extends StatefulObject<Animal.State> implements
         IsAlive<Animal.State, Animal>,
         ICanReproduce, ICanDecide
 {
-    private int age = 0;
-    private int childCount = 0;
+
     private WorldMap world;
     private final Genome genome;
     private final DefaultConfiguration config;
@@ -103,8 +102,9 @@ public class Animal extends StatefulObject<Animal.State> implements
         Vector2D childPosition = this.getState().getPosition();
         Animal child = new Animal(childGenome, childPosition, this.config);
         child.getState().setEnergy(this.energyConsumedWhenReproducing * 2);
-        this.childCount++;
-        secondParent.childCount++;
+
+        this.getState().setChildren(this.getState().getChildren() + 1);
+        secondParent.getState().setChildren(secondParent.getState().getChildren() + 1);
 
         this.notify(reproduced);
         secondParent.notify(reproduced);
@@ -123,7 +123,8 @@ public class Animal extends StatefulObject<Animal.State> implements
     public void makeDecision() {
        if(isDead()) return;
 
-       this.age++;
+       this.getState().setAge(this.getState().getAge() + 1);
+
        this.rotate(this.genome.getGene(this.currentGeneIndex % genomeLength));
 
        if(this.animalBehaviorVariant == AnimalBehaviorVariant.FULL_PREDICTABLE) {
@@ -146,11 +147,11 @@ public class Animal extends StatefulObject<Animal.State> implements
     }
 
     public int getAge() {
-        return this.age;
+        return this.getState().getAge();
     }
 
-    public int getChildrenCount() {
-        return this.childCount;
+    public int getChildren() {
+        return this.getState().getChildren();
     }
 
     public int getEnergy() {
@@ -190,10 +191,12 @@ public class Animal extends StatefulObject<Animal.State> implements
 
 
     public static class State implements ICanMove.State, IsAlive.State {
-        int energy;
+        public int energy;
+        public int age = 0;//TODO get age from state and childCount from state
+        public int childCount = 0;
 
-        Vector2D position, previousPosition;
-        MapDirection direction = MapDirection.NORTH;
+        public Vector2D position, previousPosition;
+        public MapDirection direction = MapDirection.NORTH;
         @Override
         public Vector2D getPosition() {
             return this.position;
@@ -223,6 +226,26 @@ public class Animal extends StatefulObject<Animal.State> implements
         @Override
         public int getEnergy() {
             return this.energy;
+        }
+
+        @Override
+        public int getAge() {
+            return this.age;
+        }
+
+        @Override
+        public void setAge(int newAge) {
+            this.age = newAge;
+        }
+
+        @Override
+        public int getChildren() {
+            return this.childCount;
+        }
+
+        @Override
+        public void setChildren(int newChildren) {
+            this.childCount = newChildren;
         }
 
         @Override

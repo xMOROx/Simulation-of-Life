@@ -77,51 +77,51 @@ public class Cell implements isRenderableOnMap {
     private void setStyleBasedOnNumberOfDeathAnimals() {
 
         if(this.deadAnimals <= 5) {
-            cellGrid.setStyle("-fx-background-color: #007f5f");
+            this.cellGrid.setStyle("-fx-background-color: #007f5f");
         }
         else if (this.deadAnimals <= 7) {
-            cellGrid.setStyle("-fx-background-color: #2b9348");
+            this.cellGrid.setStyle("-fx-background-color: #2b9348");
         }
         else if (this.deadAnimals <= 9) {
-            cellGrid.setStyle("-fx-background-color: #55a630");
+            this.cellGrid.setStyle("-fx-background-color: #55a630");
         }
         else if (this.deadAnimals <= 11) {
-            cellGrid.setStyle("-fx-background-color: #80b918");
+            this.cellGrid.setStyle("-fx-background-color: #80b918");
         }
         else if (this.deadAnimals <= 13) {
-            cellGrid.setStyle("-fx-background-color: #aacc00");
+            this.cellGrid.setStyle("-fx-background-color: #aacc00");
         }
         else if (this.deadAnimals <= 15) {
-            cellGrid.setStyle("-fx-background-color: #d6de00");
+            this.cellGrid.setStyle("-fx-background-color: #d6de00");
         }
         else if (this.deadAnimals <= 17) {
-            cellGrid.setStyle("-fx-background-color: #f7f700");
+            this.cellGrid.setStyle("-fx-background-color: #f7f700");
         }
         else if (this.deadAnimals <= 19) {
-            cellGrid.setStyle("-fx-background-color: #ffba00");
+            this.cellGrid.setStyle("-fx-background-color: #ffba00");
         }
         else if (this.deadAnimals <= 21) {
-            cellGrid.setStyle("-fx-background-color: #ff8c00");
+            this.cellGrid.setStyle("-fx-background-color: #ff8c00");
         }
         else if (this.deadAnimals <= 23) {
-            cellGrid.setStyle("-fx-background-color: #ff5e00");
+            this.cellGrid.setStyle("-fx-background-color: #ff5e00");
         }
         else if (this.deadAnimals <= 25) {
-            cellGrid.setStyle("-fx-background-color: #ff3100");
+            this.cellGrid.setStyle("-fx-background-color: #ff3100");
         }
         else if (this.deadAnimals <= 27) {
-            cellGrid.setStyle("-fx-background-color: #ff0300");
+            this.cellGrid.setStyle("-fx-background-color: #ff0300");
         }
         else {
-            cellGrid.setStyle("-fx-background-color: #b20000");
+            this.cellGrid.setStyle("-fx-background-color: #b20000");
         }
     }
 
     public GridPane render(int size, int padding) {
-        cellGrid.getChildren().clear();
+        this.cellGrid.getChildren().clear();
         this.setStyleBasedOnNumberOfDeathAnimals();
         int cellSize = (int) (size * Math.ceil(this.objects.size() / 2.0));
-        cellGrid.setPrefSize(cellSize, cellSize);
+        this.cellGrid.setPrefSize(size*2, cellSize);
         for (int y = 0, i = 0; y < cellSize; y+=size) {
             for (int x = 0; x < size*2; x+=size, i++) {
                 if(i >= this.objects.size()) break;
@@ -133,6 +133,6 @@ public class Cell implements isRenderableOnMap {
 
     public static class Config {
         public double grassSpawnProbability = 0.5;
-        public int size = 10;
+        public int size = 20;
     }
 }

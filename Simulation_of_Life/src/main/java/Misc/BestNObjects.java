@@ -17,32 +17,31 @@ public class BestNObjects<T> {
     }
 
     private void swap(int i, int j) {
-        Object tmp = values[i];
-        values[i] = values[j];
-        values[j] = tmp;
-        int tmp2 = indexes[i];
-        indexes[i] = indexes[j];
-        indexes[j] = tmp2;
+        Object tmp = this.values[i];
+        this.values[i] = this.values[j];
+        this.values[j] = tmp;
+        int tmp2 = this.indexes[i];
+        this.indexes[i] = this.indexes[j];
+        this.indexes[j] = tmp2;
     }
 
     public void add(T object) {
-        Integer value = valueFunction.apply(object);
-        this.indexes[insertIndex] = value;
-        this.values[insertIndex] = object;
-        if(insertIndex < size) {
-            insertIndex++;
+        Integer value = this.valueFunction.apply(object);
+        this.indexes[this.insertIndex] = value;
+        this.values[this.insertIndex] = object;
+        if(this.insertIndex < this.size) {
+            this.insertIndex++;
         }
-        for(int i = insertIndex - 1; i > 0; i--) {
-            if(value > indexes[i - 1]) {
+        for(int i = this.insertIndex - 1; i > 0; i--) {
+            if(value > this.indexes[i - 1]) {
                 swap(i, i - 1);
             } else break;
-
         }
     }
     public T get(int index) {
-        return (T) values[index];
+        return (T) this.values[index];
     }
     public int count() {
-        return insertIndex;
+        return this.insertIndex;
     }
 }

@@ -28,6 +28,18 @@ public interface IsAlive <State extends IsAlive.State, StateObject extends State
     interface State {
         int getEnergy();
         void setEnergy(int newEnergy);
+        default int getAge() {
+            return 0;
+        }
+        default void setAge(int newAge) {
+
+        }
+        default int getChildren() {
+            return 0;
+        }
+        default void setChildren(int newChildren) {
+
+        }
     }
 
     StateEvent died = new StateEvent("died");

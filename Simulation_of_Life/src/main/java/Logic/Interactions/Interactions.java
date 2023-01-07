@@ -18,7 +18,7 @@ public abstract class Interactions<Object1 extends IWorldElement, Object2 extend
             if (object1.getClass() == this.object1) {
                 for (int j = i + 1; j < size; j++) {
                     IWorldElement object2 = cell.getObjects().get(j);
-                    if (object2.getClass() == this.object2) {
+                    if (object2.getClass() == this.object2 && this.canInteract((Object1) object1, (Object2) object2)) {
                         resolveInteraction((Object1) object1, (Object2) object2);
                     }
                 }
@@ -27,6 +27,6 @@ public abstract class Interactions<Object1 extends IWorldElement, Object2 extend
     }
 
     protected boolean canInteract(Object1 object1, Object2 object2) {
-        return object1 != object2;
+        return true;
     }
 }

@@ -3,10 +3,10 @@ package Settings;
 public class Constants {
     //map properties-----------------------------------
 
-    public static final int MIN_MAP_HEIGHT = 10;
-    public static final int MAX_MAP_HEIGHT = 150;
-    public static final int MIN_MAP_WIDTH = 10;
-    public static final int MAX_MAP_WIDTH = 150;
+    public static final int MIN_MAP_HEIGHT = 5;
+    public static final int MAX_MAP_HEIGHT = 100;
+    public static final int MIN_MAP_WIDTH = 5;
+    public static final int MAX_MAP_WIDTH = 100;
 
     //-------------------------------------------------
 
@@ -18,12 +18,12 @@ public class Constants {
     public static final int MAX_MINIMUM_ENERGY_TO_COPULATION = 1000;
     public static final int MIN_ANIMAL_START_ENERGY = 15;
     public static final int MAX_ANIMAL_START_ENERGY = 1000;
-    public static final int MIN_DAILY_ENERGY_COST = 10;
+    public static final int MIN_DAILY_ENERGY_COST = 1;
     public static final int MAX_DAILY_ENERGY_COST = 100;
     public static final int MIN_ENERGY_USED_TO_COPULATION = 10;
     public static final int MAX_ENERGY_USED_TO_COPULATION = 500;
-    public static final int MIN_GENOME_LENGTH = 10;
-    public static final int MAX_GENOME_LENGTH = 100;
+    public static final int MIN_GENOME_LENGTH = 5;
+    public static final int MAX_GENOME_LENGTH = 80;
     //-------------------------------------------------
 
     //spawn properties---------------------------------
@@ -38,7 +38,7 @@ public class Constants {
     //others ------------------------------------------------------
 
     public static final int MIN_REFRESH_TIME = 10;
-    public static final int MAX_REFRESH_TIME = 100;
+    public static final int MAX_REFRESH_TIME = 1000;
     public static final int MIN_MUTATION_NUMBER = 0;
     public static final int MAX_MUTATION_NUMBER = MAX_GENOME_LENGTH;
     //-------------------------------------------------------------

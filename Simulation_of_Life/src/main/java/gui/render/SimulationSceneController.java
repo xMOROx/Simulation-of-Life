@@ -130,9 +130,9 @@ public class SimulationSceneController implements IGuiObserver {
         this.populationChart.getData().add(this.populationData);
         this.plantsChart.getData().add(this.grassData);
 
-        this.plantsChart.setStyle("-fx-stroke: green;");
 
         this.updateGuiMap();
+        this.engine.getWorld().UpdateStatistics();
     }
 
 
