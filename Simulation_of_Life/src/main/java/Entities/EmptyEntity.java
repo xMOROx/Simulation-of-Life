@@ -1,9 +1,11 @@
 package Entities;
 
 import Entities.Abstractions.IWorldElement;
+import Misc.LoadImages;
 import Misc.Vector2D;
 import World.Maps.WorldMap;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 public class EmptyEntity implements IWorldElement {
@@ -24,8 +26,8 @@ public class EmptyEntity implements IWorldElement {
     }
 
     @Override
-    public VBox render() {
-        return new VBox();
+    public VBox render(int size, LoadImages images) {
+        return new VBox(new ImageView(images.getRandomEmptyImage()));
     }
 }
 

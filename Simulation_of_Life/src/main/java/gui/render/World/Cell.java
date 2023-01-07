@@ -5,6 +5,7 @@ import Entities.Abstractions.IWorldElement;
 import Entities.EmptyEntity;
 import Entities.Grass;
 import Misc.CellCategory;
+import Misc.LoadImages;
 import gui.interfaces.IGuiObserver;
 import gui.interfaces.isRenderableOnMap;
 import javafx.application.Platform;
@@ -164,8 +165,8 @@ public class Cell implements isRenderableOnMap {
             this.cellGrid.setStyle("-fx-background-color: #b20000");
         }
     }
-
-    public GridPane render(int size, int padding) {
+    @Override
+    public GridPane render(int size, LoadImages loadImages) {
         this.cellGrid.getChildren().clear();
         this.setStyleBasedOnNumberOfDeathAnimals();
         int cellSize = (int) (size * Math.ceil(this.objects.size() / 2.0));
@@ -173,7 +174,7 @@ public class Cell implements isRenderableOnMap {
         for (int y = 0, i = 0; y < cellSize; y+=size) {
             for (int x = 0; x < size*2; x+=size, i++) {
                 if(i >= this.objects.size()) break;
-                this.cellGrid.add(this.objects.get(i).render(), x, y);
+                this.cellGrid.add(this.objects.get(i).render(size, loadImages), x, y);
             }
         }
         return cellGrid;

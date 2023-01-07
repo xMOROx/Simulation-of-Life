@@ -4,14 +4,18 @@ import Entities.Abstractions.*;
 import Logic.AnimalBrain;
 import Logic.Genome;
 import Logic.Reproduce;
+import Misc.LoadImages;
 import Misc.MapDirection;
 import Misc.Vector2D;
 import Settings.Variants.AnimalBehaviorVariant;
 import Settings.Variants.MutationVariant;
 import World.Maps.WorldMap;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
+import java.util.Objects;
 import java.util.Random;
 
 
@@ -189,12 +193,8 @@ public class Animal extends StatefulObject<Animal.State> implements
     }
 
     @Override
-    public VBox render() {
-        VBox vBox = new VBox(5);
-        Label label = new Label("Zwierzatko" + this.getState().getPosition() + this.getEnergy());
-        vBox.setStyle("-fx-background-color: lightblue");
-        vBox.getChildren().add(label);
-        return vBox;
+    public VBox render(int size, LoadImages images) {
+        return new VBox(new ImageView(images.getRandomAnimalImage()));
     }
 
     public static class DefaultConfiguration  {

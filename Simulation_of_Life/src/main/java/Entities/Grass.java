@@ -2,9 +2,11 @@ package Entities;
 
 import Entities.Abstractions.IsAlive;
 import Entities.Abstractions.StatefulObject;
+import Misc.LoadImages;
 import Misc.Vector2D;
 import World.Maps.WorldMap;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 public class Grass extends StatefulObject<Grass.State> implements IsAlive<Grass.State, Grass> {
@@ -33,13 +35,8 @@ public class Grass extends StatefulObject<Grass.State> implements IsAlive<Grass.
 
 
     @Override
-    public VBox render() {
-        //TODO implement
-        VBox vBox = new VBox(5);
-        Label label = new Label("Trawka" + this.getState().getEnergy() + " " + this.getPosition());
-        vBox.setStyle("-fx-background-color: #00ff00");
-        vBox.getChildren().add(label);
-        return vBox;
+    public VBox render(int size, LoadImages images) {
+        return new VBox(new ImageView(images.getRandomGrassImage()));
     }
 
     public static class State implements IsAlive.State {

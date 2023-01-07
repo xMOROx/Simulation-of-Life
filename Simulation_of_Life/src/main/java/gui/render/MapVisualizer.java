@@ -1,5 +1,6 @@
 package gui.render;
 
+import Misc.LoadImages;
 import Misc.Vector2D;
 import Settings.Constants;
 import World.Maps.WorldMap;
@@ -15,6 +16,7 @@ public class MapVisualizer {
     private final WorldMap map;
     private final GridPane gridPane;
     private int sideLengthOfSquarePx;
+    private LoadImages loadImages;
 
     public MapVisualizer(WorldMap map, GridPane gridPane) {
         this.map = map;
@@ -28,6 +30,7 @@ public class MapVisualizer {
         this.sideLengthOfSquarePx = Math.max(60, Math.max(squareWidth, squareHeight));
         this.gridPane.getColumnConstraints().add(new ColumnConstraints(this.sideLengthOfSquarePx));
         this.gridPane.getRowConstraints().add(new RowConstraints(this.sideLengthOfSquarePx));
+        this.loadImages = new LoadImages(this.sideLengthOfSquarePx);
     }
 
     public void visualizeMap() {
@@ -36,7 +39,7 @@ public class MapVisualizer {
             for (int y = 0; y < this.map.getHeight(); y++) {
                 Vector2D position = new Vector2D(x, y);
                 Cell cell = this.map.cellOrNullAt(position);
-                GridPane cellGrid = cell.render(this.sideLengthOfSquarePx, 5);
+                GridPane cellGrid = cell.render(this.sideLengthOfSquarePx,  this.loadImages);
                 this.gridPane.add(cellGrid, x, y);
             }
         }
