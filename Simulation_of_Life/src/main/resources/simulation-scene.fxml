@@ -89,12 +89,12 @@
             <ChoiceBox fx:id="deadAnimalsChoiceBox" layoutX="85.0" layoutY="147.0" prefHeight="26.0" prefWidth="150.0" />
             <VBox layoutX="12.0" layoutY="451.0" prefHeight="200.0" prefWidth="282.0" spacing="6.0">
                <children>
-                  <Label text="animal's genome:" />
-                  <Label text="active genome:" />
-                  <Label text="animal energy:" />
-                  <Label text="The number of plants eaten:" />
-                  <Label text="Number of children:" />
-                  <Label text="Life expectancy:" />
+                  <Label fx:id="animalGenomeLabel" text="animal's genome:" />
+                  <Label fx:id="animalActiveGeneLabel"  text="active gene:" />
+                  <Label fx:id="animalEnergyLabel" text="animal energy:" />
+                  <Label fx:id="animalNumberOfEatenGrassesLabel" text="The number of plants eaten:" />
+                  <Label fx:id="animalNumberOfChildrenLabel" text="Number of children:" />
+                  <Label fx:id="animalDaysOfLifeLabel" text="Life expectancy:" />
                   <Label text="Date of death:" />
                </children>
                <opaqueInsets>

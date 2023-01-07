@@ -44,17 +44,24 @@ public class LoadImages {
         );
     }
 
-    public Image getRandomAnimalImage() {
-        return this.animalsImages.get((int) (Math.random() * this.animalsImages.size()));
+    public Image getAnimalImage(int index) {
+        return this.animalsImages.get(index);
     }
-    public Image getRandomGrassImage() {
-        return this.grassesImages.get((int) (Math.random() * this.grassesImages.size()));
+    public int getAnimalImageSize() {
+        return this.animalsImages.size();
     }
-    public Image getRandomEmptyImage() {
-        Random random = new Random();
-        if (random.nextInt(100) < 90) {
-            return this.emptiesImages.get(this.emptiesImages.size() - 1);
-        }
-        return this.emptiesImages.get((int) (Math.random() * this.emptiesImages.size() - 1));
+
+    public Image getGrassImage(int index) {
+        return this.grassesImages.get(index);
+    }
+
+    public int getGrassImageSize() {
+        return this.grassesImages.size();
+    }
+    public Image getEmptyImage(int index) {
+        return this.emptiesImages.get(index);
+    }
+    public int getEmptyImageSize() {
+        return this.emptiesImages.size();
     }
 }

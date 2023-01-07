@@ -23,6 +23,7 @@ public abstract class WorldMap {
     protected final List<IWorldElement> newChildrenToAdd = new LinkedList<>();
     protected final InteractionResolver resolver = new InteractionResolver();
     protected GrowthPlantVariant growthPlantVariant = GrowthPlantVariant.EQUATOR;
+    protected Animal selectedAnimal = null;
     protected final SortedMap<List<Integer>, Integer> genoTypes = new TreeMap<>((o1, o2) -> {
         for(int i = 0; i < o1.size(); i++) {
             if(o1.get(i) < o2.get(i)) return -1;
@@ -146,9 +147,11 @@ public abstract class WorldMap {
         this.deadEntities.add(entity);
 
         if(entity instanceof Animal animal) {
-            if(this.genoTypes.getOrDefault(animal.getGenome().getGenes(), null) == null) return null;
             if(this.genoTypes.get(animal.getGenome().getGenes()) > 0)  {
                 this.genoTypes.put(animal.getGenome().getGenes(), this.genoTypes.get(animal.getGenome().getGenes()) - 1);
+                if(this.genoTypes.get(animal.getGenome().getGenes()) <= 0) {
+                    this.genoTypes.remove(animal.getGenome().getGenes());
+                }
             } else {
                 this.genoTypes.remove(animal.getGenome().getGenes());
             }
@@ -199,6 +202,18 @@ public abstract class WorldMap {
         if(entity instanceof Grass) this.statistics.grassCount--;
     }
 
+    public Animal getSelectedAnimal() {
+        return selectedAnimal;
+    }
+
+    public void setSelectedAnimal(Animal selectedAnimal) {
+        if(this.selectedAnimal != null) {
+            this.selectedAnimal.setIsSelected(false);
+        }
+        this.selectedAnimal = selectedAnimal;
+        this.selectedAnimal.setIsSelected(true);
+    }
+
     private int countCellWithEmptyEntity() {
         int count = 0;
         for(Cell cell : this.objects.values()) {
@@ -228,6 +243,7 @@ public abstract class WorldMap {
             }
 
         }
+
         this.statistics.theMostPopularGenes = this.genoTypes.lastKey();
 
         this.statistics.avgEnergy = this.statistics.animalCount == 0 ? 0 : (double) energySum / this.statistics.animalCount;
@@ -240,6 +256,15 @@ public abstract class WorldMap {
         this.avgStats.grassCount = (this.avgStats.grassCount + this.statistics.grassCount) / 2;
     }
 
+    public void noticeAnimals(boolean stoppedSimulation) {
+        for(Cell cell : this.objects.values()) {
+            for(IWorldElement entity : cell.getObjects()) {
+                if(entity instanceof Animal animal) {
+                    animal.notice(stoppedSimulation);
+                }
+            }
+        }
+    }
 
     public int getHeight() {
         return height;

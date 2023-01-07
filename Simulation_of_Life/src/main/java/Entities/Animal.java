@@ -13,11 +13,11 @@ import World.Maps.WorldMap;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
-import java.util.Objects;
 import java.util.Random;
 
 
@@ -37,8 +37,9 @@ public class Animal extends StatefulObject<Animal.State> implements
     private final AnimalBehaviorVariant animalBehaviorVariant;
     public int genomeLength;
     private int currentGeneIndex = 0;
-
-
+    private boolean stoppedSimulation = true;
+    private boolean isSelected = false;
+    private final int imageIndex = new Random().nextInt(0,12);
     public Animal(Genome genome, Vector2D startPosition, DefaultConfiguration configuration) {
             super(new State()
                   {{
@@ -64,6 +65,7 @@ public class Animal extends StatefulObject<Animal.State> implements
         if(isDead()) return;
         var state = getState();
         state.setEnergy(Math.min(state.getEnergy() + energy, config.maximumEnergy));
+        state.setEatenGrass(state.getEatenGrass() + 1);
         notify(eaten);
     }
 
@@ -111,7 +113,7 @@ public class Animal extends StatefulObject<Animal.State> implements
 
         this.getState().setChildren(this.getState().getChildren() + 1);
         secondParent.getState().setChildren(secondParent.getState().getChildren() + 1);
-
+        child.notice(false);
         this.notify(reproduced);
         secondParent.notify(reproduced);
         this.world.addEntity(child);
@@ -123,7 +125,6 @@ public class Animal extends StatefulObject<Animal.State> implements
     public Vector2D getPosition() {
         return this.getState().getPosition();
     }
-
 
     @Override
     public void makeDecision() {
@@ -194,6 +195,19 @@ public class Animal extends StatefulObject<Animal.State> implements
         this.energyConsumedWhenReproducing = energyConsumedWhenReproducing;
     }
 
+    public int getCurrentGeneIndex() {
+        return this.currentGeneIndex;
+    }
+
+    public void setIsSelected(boolean isSelected) {
+        this.isSelected = isSelected;
+    }
+
+    @Override
+    public void notice(boolean stoppedSimulation) {
+        this.stoppedSimulation = stoppedSimulation;
+    }
+
     @Override
     public VBox render(int size, LoadImages images) {
         Label energyLabel = new Label(""+this.getEnergy());
@@ -204,7 +218,27 @@ public class Animal extends StatefulObject<Animal.State> implements
 
         energyLabel.alignmentProperty().setValue(Pos.CENTER);
         positionLabel.alignmentProperty().setValue(Pos.CENTER);
-        return new VBox(new ImageView(images.getRandomAnimalImage()), energyLabel, positionLabel);
+        VBox animal = new VBox(new ImageView(images.getAnimalImage(imageIndex)), energyLabel, positionLabel);
+
+        if(this.stoppedSimulation){
+            animal.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                animal.requestFocus();
+                this.world.setSelectedAnimal(this);
+            });
+        } else {
+            animal.removeEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                animal.requestFocus();
+            });
+        }
+
+        animal.borderProperty()
+                .bind(Bindings.when(animal.focusedProperty().or(Bindings.createBooleanBinding(() -> this.isSelected)))
+                        .then(new Border(new BorderStroke(Color.rgb(238, 75, 43), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)))
+                        .otherwise(new Border(new BorderStroke(Color.TRANSPARENT, BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.DEFAULT))));
+
+
+
+        return animal;
     }
 
     public static class DefaultConfiguration  {
@@ -224,6 +258,7 @@ public class Animal extends StatefulObject<Animal.State> implements
         public int energy;
         public int age = 0;
         public int childCount = 0;
+        public int eatenGrass = 0;
 
         public Vector2D position, previousPosition;
         public MapDirection direction = MapDirection.NORTH;
@@ -281,6 +316,14 @@ public class Animal extends StatefulObject<Animal.State> implements
         @Override
         public void setEnergy(int newEnergy) {
             this.energy = newEnergy;
+        }
+
+        public int getEatenGrass() {
+            return eatenGrass;
+        }
+
+        public void setEatenGrass(int eatenGrass) {
+            this.eatenGrass = eatenGrass;
         }
     }
 }

@@ -1,10 +1,12 @@
 package gui.render;
 
+import Entities.Animal;
 import Entities.Grass;
 import World.SimulationEngine;
 import gui.interfaces.IGuiObserver;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.geometry.Pos;
@@ -71,6 +73,22 @@ public class SimulationSceneController implements IGuiObserver {
     private final XYChart.Series grassData = new XYChart.Series();
     //------------------------------------------------------
 
+    //selected animal--------------------------------------
+    @FXML
+    public Label animalGenomeLabel;
+    @FXML
+    public Label animalActiveGeneLabel;
+    @FXML
+    public Label animalEnergyLabel;
+    @FXML
+    public Label animalNumberOfEatenGrassesLabel;
+    @FXML
+    public Label animalNumberOfChildrenLabel;
+    @FXML
+    public Label animalDaysOfLifeLabel;
+    //------------------------------------------------------
+
+
     //simulation--------------------------------------------
     private SimulationEngine engine;
     private MapVisualizer mapVisualizer;
@@ -78,7 +96,7 @@ public class SimulationSceneController implements IGuiObserver {
 
     //------------------------------------------------------
     private boolean firstStart = true;
-
+    private int refreshRate = 200;
 
     public void onDeleteSimulationButtonClicked() {
         this.mainSceneController.removeTab(this);
@@ -88,13 +106,15 @@ public class SimulationSceneController implements IGuiObserver {
         this.mainSceneController = mainSceneController;
     }
 
-    public void onStartButtonClicked() {
+    public void onStartButtonClicked() throws InterruptedException {
         this.startSimulation();
         this.deleteSimulationButton.setDisable(true);
         this.startButton.setDisable(true);
         this.stopButton.setDisable(false);
         this.liveAnimalsChoiceBox.setDisable(true);
         this.deadAnimalsChoiceBox.setDisable(true);
+        this.updateGuiCharts();
+        this.engine.getWorld().noticeAnimals(false);
     }
 
     public void onStopButtonClicked() throws InterruptedException {
@@ -103,10 +123,23 @@ public class SimulationSceneController implements IGuiObserver {
         this.stopButton.setDisable(true);
         this.liveAnimalsChoiceBox.setDisable(false);
         this.deadAnimalsChoiceBox.setDisable(false);
+        this.engine.getWorld().noticeAnimals(true);
+        this.updateGuiMap();
         this.pauseSimulation();
     }
 
-    private void startSimulation() {
+    private void setSelectedAnimalStatistics() {
+        Animal selectedAnimal = this.engine.getWorld().getSelectedAnimal();
+        if (selectedAnimal == null) return;
+        this.animalGenomeLabel.setText("animal's genome: " + selectedAnimal.getGenome().getGenes().toString());
+        this.animalActiveGeneLabel.setText("active gene: " + (selectedAnimal.getGenome().getGene(selectedAnimal.getCurrentGeneIndex() % selectedAnimal.genomeLength)));
+        this.animalEnergyLabel.setText("animal energy: " + (selectedAnimal.getEnergy()));
+        this.animalNumberOfEatenGrassesLabel.setText("The number of plants eaten: " +(selectedAnimal.getState().getEatenGrass()));
+        this.animalNumberOfChildrenLabel.setText("Number of children: " + (selectedAnimal.getState().getChildren()));
+        this.animalDaysOfLifeLabel.setText("Life expectancy: " + (selectedAnimal.getState().getAge()));
+    }
+
+    private void startSimulation()  {
         if (this.firstStart) {
             this.thread.start();
             this.firstStart = false;
@@ -115,8 +148,12 @@ public class SimulationSceneController implements IGuiObserver {
         }
     }
 
-    private void pauseSimulation() throws InterruptedException {
+    private void pauseSimulation(){
         this.thread.suspend();
+    }
+
+    public void setRefreshRate(int refreshRate) {
+        this.refreshRate = refreshRate;
     }
 
     public void setWorld(SimulationEngine engine) {
@@ -153,7 +190,8 @@ public class SimulationSceneController implements IGuiObserver {
         try {
             Platform.runLater(this::updateMap);
             Platform.runLater(this::updateGeneralStatistics);
-            Thread.sleep(100);
+            Platform.runLater(this::setSelectedAnimalStatistics);
+            Thread.sleep(this.refreshRate);
         } catch (InterruptedException ex) {
             System.out.println(Arrays.toString(ex.getStackTrace()));
         }

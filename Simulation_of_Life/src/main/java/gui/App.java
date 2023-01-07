@@ -23,7 +23,6 @@ public class App extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/main-scene.fxml"));
         Scene scene = new Scene(loader.load(), 1530, 790);
         primaryStage.setResizable(true);
-        primaryStage.setMaximized(true);
         primaryStage.setTitle("Simulation of life!");
         primaryStage.setScene(scene);
         primaryStage.show();

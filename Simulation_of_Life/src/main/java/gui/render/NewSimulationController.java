@@ -185,7 +185,7 @@ public class NewSimulationController implements Initializable {
                 this.numberOfPlantGrowingDaily = Integer.parseInt(plantEachDaySpawningTextField.getText());
 
                 this.genomeLength = Integer.parseInt(genomeLengthTextField.getText());
-
+                this.refreshRate = Integer.parseInt(refreshTimeTextField.getText());
                 this.saveToCSV = saveCSVCheckBox.isSelected();
             }}));
         }

@@ -2,9 +2,7 @@ package gui.render;
 
 
 import Settings.Parameters;
-import Spawners.AnimalSpawner;
-import Spawners.Builder;
-import Spawners.GrassSpawner;
+
 import World.Maps.WorldMap;
 import World.SimulationEngine;
 import javafx.fxml.FXML;
@@ -12,8 +10,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -29,6 +29,9 @@ public class MainSceneController implements Initializable {
     private NewSimulationController newSimulationController;
     @FXML
     private final List<SimulationSceneController> simulationSceneControllerList = new ArrayList<>();
+    @FXML
+    public Label introduceText;
+
     //---------------------------------------------------
 
     private int simulationNumber = 1;
@@ -36,7 +39,7 @@ public class MainSceneController implements Initializable {
     private TabPane tabPane;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        this.introduceText.setStyle("-fx-font-size: 56px;");
     }
 
     @FXML
@@ -62,6 +65,7 @@ public class MainSceneController implements Initializable {
         WorldMap worldMap = SimulationEngine.fromConfig(parameters);
 
         simulationSceneController.setWorld(new SimulationEngine(worldMap));
+        simulationSceneController.setRefreshRate(parameters.getRefreshRate());
         simulationSceneControllerList.add(simulationSceneController);
         Tab tab = new Tab("Simulation " + simulationNumber);
         simulationNumber += 1;
