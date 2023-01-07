@@ -12,14 +12,12 @@ public class JungleSpawner extends Spawner {
         this.config = config;
     }
 
-
     @Override
     protected Vector2D getRandomPosition(){
         return new Vector2D(
                 random.nextInt(this.config.xMax - this.config.xMin) + this.config.xMin,
                 random.nextInt(this.config.yMax - this.config.yMin) + this.config.yMin);
     }
-
 
     @Override
     protected boolean tryToSpawn(int attempts) {

@@ -24,8 +24,8 @@ public class Animal extends StatefulObject<Animal.State> implements
     private WorldMap world;
     private final Genome genome;
     private final DefaultConfiguration config;
-    private final int energyToReproduce;
-    private final int energyConsumedWhenReproducing;
+    private int energyToReproduce;
+    private int energyConsumedWhenReproducing;
     private final AnimalBrain brain;
     private final MutationVariant mutationVariant;
     private final AnimalBehaviorVariant animalBehaviorVariant;
@@ -169,6 +169,26 @@ public class Animal extends StatefulObject<Animal.State> implements
     }
 
     @Override
+    public int getEnergyToReproduce() {
+        return this.energyToReproduce;
+    }
+
+    @Override
+    public int getEnergyConsumedWhenReproducing() {
+        return this.energyConsumedWhenReproducing;
+    }
+
+    @Override
+    public void setEnergyToReproduce(int energyToReproduce) {
+        this.energyToReproduce = energyToReproduce;
+    }
+
+    @Override
+    public void setEnergyConsumedWhenReproducing(int energyConsumedWhenReproducing) {
+        this.energyConsumedWhenReproducing = energyConsumedWhenReproducing;
+    }
+
+    @Override
     public VBox render() {
         VBox vBox = new VBox(5);
         Label label = new Label("Zwierzatko" + this.getState().getPosition() + this.getEnergy());
@@ -192,7 +212,7 @@ public class Animal extends StatefulObject<Animal.State> implements
 
     public static class State implements ICanMove.State, IsAlive.State {
         public int energy;
-        public int age = 0;//TODO get age from state and childCount from state
+        public int age = 0;
         public int childCount = 0;
 
         public Vector2D position, previousPosition;

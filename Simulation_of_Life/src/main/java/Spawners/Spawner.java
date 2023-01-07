@@ -26,7 +26,7 @@ public abstract class Spawner {
     public abstract boolean canSpawn(Cell cell);
 
     protected Vector2D getRandomPosition() {
-        return new Vector2D(random.nextInt(world.getWidth()), random.nextInt(world.getHeight()));
+        return Vector2D.randomVector(new Vector2D(0, 0), new Vector2D(this.world.getWidth(), this.world.getHeight()));
     }
 
     protected Vector2D findValidPosition(int attempts) {
@@ -35,7 +35,6 @@ public abstract class Spawner {
             if(canSpawn(world.cellOrNullAt(newPosition))) {
                 return newPosition;
             }
-            //TODO add limit to spawn for grass
         }
         return null;
     }

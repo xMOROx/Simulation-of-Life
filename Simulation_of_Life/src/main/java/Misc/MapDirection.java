@@ -19,6 +19,9 @@ public enum MapDirection {
     public MapDirection previous() {
         return getMapDirection(NORTHWEST, NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST);
     }
+    public MapDirection opposite() {
+        return getMapDirection(SOUTH, SOUTHWEST, WEST, NORTHWEST, NORTH, NORTHEAST, EAST, SOUTHEAST);
+    }
 
     private MapDirection getMapDirection(MapDirection northwest, MapDirection north, MapDirection northeast, MapDirection east, MapDirection southeast, MapDirection south, MapDirection southwest, MapDirection west) {
         return switch (this) {

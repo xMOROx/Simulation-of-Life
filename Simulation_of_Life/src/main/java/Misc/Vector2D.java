@@ -1,6 +1,7 @@
 package Misc;
 
 import java.util.Objects;
+import java.util.Random;
 
 public class Vector2D {
     private final int x;
@@ -57,6 +58,13 @@ public class Vector2D {
 
     public Vector2D lowerLeft(Vector2D other) {
         return new Vector2D(Math.min(this.x, other.x), Math.max(this.y, other.y));
+    }
+
+    public static Vector2D randomVector(Vector2D min, Vector2D max) {
+        Random random = new Random();
+        int x = random.nextInt(min.x, max.x);
+        int y = random.nextInt(min.y, max.y);
+        return new Vector2D(x, y);
     }
     @Override
     public String toString() {

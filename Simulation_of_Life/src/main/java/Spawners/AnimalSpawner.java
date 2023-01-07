@@ -25,6 +25,7 @@ public class AnimalSpawner extends Spawner {
             this.energyToReproduce = config.energyToReproduce;
             this.energyConsumedWhenReproducing = config.energyConsumedWhenReproducing;
             this.genomeLength = config.genomeLength;
+            this.maximumEnergy = config.maximumEnergy;
         }};
     }
 
@@ -72,6 +73,7 @@ public class AnimalSpawner extends Spawner {
         protected int dailyEnergyLoss = 100;
         protected int initialPopulation = 100;
         protected  int energyToReproduce = 80;
+        protected int maximumEnergy = 300;
         protected  int energyConsumedWhenReproducing = 50;
         protected int genomeLength = 32;
         protected MutationVariant mutationVariant = MutationVariant.FULL_RANDOM;

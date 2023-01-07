@@ -3,6 +3,7 @@ package gui.render.World;
 
 import Entities.Abstractions.IWorldElement;
 import Entities.EmptyEntity;
+import Entities.Grass;
 import gui.interfaces.IGuiObserver;
 import gui.interfaces.isRenderableOnMap;
 import javafx.application.Platform;
@@ -25,6 +26,14 @@ public class Cell implements isRenderableOnMap {
         this.cellGrid = new GridPane();
     }
 
+    public IWorldElement getObjectEqualTo(IWorldElement object) {
+        for (IWorldElement o : objects) {
+            if (o.equals(object)) {
+                return o;
+            }
+        }
+        return null;
+    }
 
     public Cell() {
         this(new Config());
@@ -79,37 +88,37 @@ public class Cell implements isRenderableOnMap {
         if(this.deadAnimals <= 5) {
             this.cellGrid.setStyle("-fx-background-color: #007f5f");
         }
-        else if (this.deadAnimals <= 7) {
+        else if (this.deadAnimals <= 10) {
             this.cellGrid.setStyle("-fx-background-color: #2b9348");
         }
-        else if (this.deadAnimals <= 9) {
+        else if (this.deadAnimals <= 15) {
             this.cellGrid.setStyle("-fx-background-color: #55a630");
         }
-        else if (this.deadAnimals <= 11) {
+        else if (this.deadAnimals <= 20) {
             this.cellGrid.setStyle("-fx-background-color: #80b918");
         }
-        else if (this.deadAnimals <= 13) {
+        else if (this.deadAnimals <= 25) {
             this.cellGrid.setStyle("-fx-background-color: #aacc00");
         }
-        else if (this.deadAnimals <= 15) {
+        else if (this.deadAnimals <= 30) {
             this.cellGrid.setStyle("-fx-background-color: #d6de00");
         }
-        else if (this.deadAnimals <= 17) {
+        else if (this.deadAnimals <= 33) {
             this.cellGrid.setStyle("-fx-background-color: #f7f700");
         }
-        else if (this.deadAnimals <= 19) {
+        else if (this.deadAnimals <= 36) {
             this.cellGrid.setStyle("-fx-background-color: #ffba00");
         }
-        else if (this.deadAnimals <= 21) {
+        else if (this.deadAnimals <= 39) {
             this.cellGrid.setStyle("-fx-background-color: #ff8c00");
         }
-        else if (this.deadAnimals <= 23) {
+        else if (this.deadAnimals <= 41) {
             this.cellGrid.setStyle("-fx-background-color: #ff5e00");
         }
-        else if (this.deadAnimals <= 25) {
+        else if (this.deadAnimals <= 43) {
             this.cellGrid.setStyle("-fx-background-color: #ff3100");
         }
-        else if (this.deadAnimals <= 27) {
+        else if (this.deadAnimals <= 45) {
             this.cellGrid.setStyle("-fx-background-color: #ff0300");
         }
         else {

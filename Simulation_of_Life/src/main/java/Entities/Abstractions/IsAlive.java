@@ -32,7 +32,6 @@ public interface IsAlive <State extends IsAlive.State, StateObject extends State
             return 0;
         }
         default void setAge(int newAge) {
-
         }
         default int getChildren() {
             return 0;

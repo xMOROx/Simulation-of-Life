@@ -15,7 +15,7 @@ public class GrassSpawner extends Spawner {
 
     @Override
     public boolean canSpawn(Cell cell) {
-        return Cell.isCellEmpty(cell);
+        return Cell.isCellEmpty(cell) && !Cell.containsObject(cell, Grass.class);
     }
 
     @Override

@@ -15,8 +15,6 @@ public interface ICanMove<State extends ICanMove.State, StateObject extends Stat
         stateObject.notify(moved);
     }
 
-
-
     default void rotate(int i) {
         var stateObject = (StateObject)this;
         State state = stateObject.getState();

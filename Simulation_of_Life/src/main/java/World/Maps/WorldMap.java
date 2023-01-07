@@ -146,11 +146,11 @@ public abstract class WorldMap {
         Vector2D position = entity.getPosition();
         Cell cell = this.getCellAt(position);
         cell.removeObject(entity);
-        cell.incrementDeadAnimals(1);
         if(entity instanceof Animal animal) {
             this.animalLifespanSum += animal.getAge();
             this.animalDead++;
             this.statistics.animalCount--;
+            cell.incrementDeadAnimals(1);
         }
 
         if(entity instanceof Grass) this.statistics.grassCount--;

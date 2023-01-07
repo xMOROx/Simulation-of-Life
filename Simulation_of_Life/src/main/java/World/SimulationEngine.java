@@ -1,6 +1,7 @@
 package World;
 
 import Settings.Config;
+import Settings.Constants;
 import Settings.Parameters;
 import Settings.SimpleConfig;
 import Settings.Variants.MapVariants;
@@ -57,6 +58,7 @@ public class SimulationEngine extends Thread {
           this.maximumMutations = parameters.getMaximumMutations();
           this.animalBehaviorVariant = parameters.getBehaviourVariant();
           this.genomeLength = parameters.getGenomeLength();
+          this.maximumEnergy = parameters.getInitialAnimalsEnergy() * 2;
         }});
 
         map.registerSpawners(animalSpawner);
