@@ -50,6 +50,9 @@ public abstract class WorldMap {
             this.removeEntity(entity);
         }
         deadEntities.clear();
+        if(GrowthPlantVariant.TOXIC_CORPSES == this.growthPlantVariant) {
+            this.setCategoryForCells();
+        }
     }
 
     public void entitiesMove() {
@@ -100,8 +103,17 @@ public abstract class WorldMap {
                     this.objects.get(this.mapCoords(x, y)).setSpawnProbability(1);
                 }
             }
-
         } else if(this.growthPlantVariant == GrowthPlantVariant.TOXIC_CORPSES) {
+            List<Cell> cells = new LinkedList<>(objects.values());
+            cells.stream().sorted(Comparator.comparingInt(Cell::getDeadAnimals).reversed()).limit(this.numberOfFirstCategoryCells).forEach(cell -> {
+                cell.setCategory(CellCategory.FIRST);
+                cell.setSpawnProbability(1);
+            });
+            cells.stream().sorted(Comparator.comparingInt(Cell::getDeadAnimals).reversed()).skip(this.numberOfFirstCategoryCells).limit((long) this.height * this.width).forEach(cell -> {
+                cell.setCategory(CellCategory.SECOND);
+                cell.setSpawnProbability(0.7);
+            });
+        } else {
             List<Cell> cells = new LinkedList<>(objects.values());
             Collections.shuffle(cells);
             for(int i = 0; i < numberOfFirstCategoryCells; i++) {
@@ -199,7 +211,6 @@ public abstract class WorldMap {
 
     public void UpdateStatistics() {
         this.statistics.day++;
-
 
         this.statistics.emptyFieldsCount = this.countCellWithEmptyEntity();
         this.statistics.occupiedFieldsCount = this.objects.size() - this.statistics.emptyFieldsCount;

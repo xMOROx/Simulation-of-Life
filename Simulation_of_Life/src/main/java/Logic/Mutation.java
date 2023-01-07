@@ -28,7 +28,7 @@ public class Mutation
         int numberOfMutations = random.nextInt(this.config.numberOfMinimumGenes, this.config.numberOfMaximumGenes + 1);
         for (int i = 0; i < numberOfMutations; i++) {
             int geneIndex = random.nextInt(genes.size());
-            int geneValue = random.nextInt(8);
+            int geneValue = random.nextInt(7);
             newGenes[geneIndex] = geneValue;
         }
         return new Genome(Arrays.stream(newGenes).boxed().toList(), genome.getMutator());
@@ -40,9 +40,13 @@ public class Mutation
         int[] newGenes = genome.getGenes().stream().mapToInt(Integer::intValue).toArray();
         int numberOfMutations = random.nextInt(this.config.numberOfMinimumGenes, this.config.numberOfMaximumGenes + 1);
         for (int i = 0; i < numberOfMutations; i++) {
-
             int geneIndex = random.nextInt(genes.size());
             int geneValue = List.of(genes.get(geneIndex) + 1, genes.get(geneIndex) - 1).get(random.nextInt(2));
+            if(geneValue < 0) {
+                geneValue = 7;
+            } else if(geneValue > 7) {
+                geneValue = 0;
+            }
             newGenes[geneIndex] = geneValue;
         }
         return new Genome(Arrays.stream(newGenes).boxed().toList(), genome.getMutator());

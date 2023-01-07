@@ -32,10 +32,10 @@ public class HellPortal extends WorldMap {
         Cell cell = objects.get(oldPosition);
 
         if(cell == null) return null;
-        if(!oldPosition.add(entity.getState().getDirection().toUnitVector()).equals(newPosition)) {
-            Animal animal = (Animal) cell.getObjectEqualTo(entity);
-            animal.consumeEnergy(animal.getEnergyConsumedWhenReproducing());
-        }
+//        if(!oldPosition.add(entity.getState().getDirection().toUnitVector()).equals(newPosition)) {
+//            Animal animal = (Animal) cell.getObjectEqualTo(entity);
+//            animal.consumeEnergy(animal.getEnergyConsumedWhenReproducing());
+//        }
 
         cell.removeObject(entity);
         return null;
