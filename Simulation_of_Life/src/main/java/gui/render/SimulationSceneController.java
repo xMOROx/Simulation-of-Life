@@ -52,6 +52,8 @@ public class SimulationSceneController implements IGuiObserver {
     @FXML
     public Label numberOfFreeFieldLabel;
     @FXML
+    public Label numberOfOccupiedFieldLabel1;
+    @FXML
     public Label theMostPopularGenomeLabel;
     @FXML
     public Label averageEnergyLevelLabel;
@@ -140,6 +142,7 @@ public class SimulationSceneController implements IGuiObserver {
         this.numberOfAllAnimalsLabel.setText("Number of all animals: " + this.engine.getWorld().getStatistics().animalCount);
         this.numberOfAllPlantsLabel.setText("Number of all plants: " + this.engine.getWorld().getStatistics().grassCount);
         this.numberOfFreeFieldLabel.setText("Number of free field: " + this.engine.getWorld().getStatistics().emptyFieldsCount);
+        this.numberOfOccupiedFieldLabel1.setText("Number of occupied field: " + this.engine.getWorld().getStatistics().occupiedFieldsCount);
         this.theMostPopularGenomeLabelOutPut.setText(engine.getWorld().getStatistics().theMostPopularGenes.toString());
         this.averageEnergyLevelLabel.setText("Average energy level: " + Math.round(this.engine.getWorld().getAvgStats().avgEnergy * 100.0) / 100.0);
         this.lifeExpectancyLabel.setText("Life expectancy: " + Math.round(this.engine.getWorld().getAvgStats().avgLifespan * 100.0) / 100.0);

@@ -45,11 +45,11 @@
                </font>
             </Label>
             <Label fx:id="numberOfFreeFieldLabel" layoutX="52.0" layoutY="502.0" text="number of free fields:" />
-            <Label fx:id="theMostPopularGenomeLabel" layoutX="117.0" layoutY="525.0" text="most popular genotype" />
-            <Label fx:id="averageEnergyLevelLabel" layoutX="54.0" layoutY="609.0" text="average energy level:" />
-            <Label fx:id="lifeExpectancyLabel" layoutX="53.0" layoutY="637.0" text="life expectancy:" />
-            <Label fx:id="dayLabel" layoutX="53.0" layoutY="662.0" text="day:" />
-            <ScrollPane layoutX="52.0" layoutY="549.0" prefHeight="42.0" prefWidth="275.0" vbarPolicy="NEVER">
+            <Label fx:id="theMostPopularGenomeLabel" layoutX="117.0" layoutY="556.0" text="most popular genotype" />
+            <Label fx:id="averageEnergyLevelLabel" layoutX="54.0" layoutY="632.0" text="average energy level:" />
+            <Label fx:id="lifeExpectancyLabel" layoutX="53.0" layoutY="660.0" text="life expectancy:" />
+            <Label fx:id="dayLabel" layoutX="53.0" layoutY="685.0" text="day:" />
+            <ScrollPane layoutX="52.0" layoutY="579.0" prefHeight="42.0" prefWidth="275.0" vbarPolicy="NEVER">
               <content>
                 <AnchorPane maxHeight="520.0" minHeight="0.0" minWidth="0.0" prefHeight="42.0" prefWidth="275.0">
                      <children>
@@ -62,6 +62,7 @@
                   </AnchorPane>
               </content>
             </ScrollPane>
+            <Label fx:id="numberOfOccupiedFieldLabel1" layoutX="52.0" layoutY="526.0" text="number of occupied fields:" />
          </children>
       </AnchorPane>
       <ScrollPane prefHeight="716.0" prefWidth="857.0">
