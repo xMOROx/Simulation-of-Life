@@ -16,7 +16,10 @@ public interface IsAlive <State extends IsAlive.State, StateObject extends State
         var state = stateObject.getState();
         state.setEnergy(state.getEnergy() - consumedEnergyValue);
         stateObject.notify(consumedEnergy);
-        if(isDead()) stateObject.notify(died);
+        if(isDead()) {
+            state.setDayOfDeath(state.getAge());
+            stateObject.notify(died);
+        }
     }
 
     default void eat(int energy) {
@@ -37,6 +40,9 @@ public interface IsAlive <State extends IsAlive.State, StateObject extends State
             return 0;
         }
         default void setChildren(int newChildren) {
+
+        }
+        default void setDayOfDeath(int newDayOfDeath) {
 
         }
     }

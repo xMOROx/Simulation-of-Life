@@ -69,6 +69,8 @@ public class Animal extends StatefulObject<Animal.State> implements
         notify(eaten);
     }
 
+
+
     @Override
     public boolean canReproduceWith(ICanReproduce other) {
         if(!(other instanceof Animal otherAnimal)) return false;
@@ -259,6 +261,7 @@ public class Animal extends StatefulObject<Animal.State> implements
         public int age = 0;
         public int childCount = 0;
         public int eatenGrass = 0;
+        public int dayOfDeath = -1;
 
         public Vector2D position, previousPosition;
         public MapDirection direction = MapDirection.NORTH;
@@ -281,6 +284,15 @@ public class Animal extends StatefulObject<Animal.State> implements
         public void setPosition(Vector2D position) {
             this.previousPosition = this.position;
             this.position = position;
+        }
+
+        @Override
+        public void setDayOfDeath(int dayOfDeath) {
+            this.dayOfDeath = dayOfDeath;
+        }
+
+        public int getDayOfDeath() {
+            return this.dayOfDeath;
         }
 
         @Override

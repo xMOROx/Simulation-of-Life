@@ -91,9 +91,6 @@ public abstract class WorldMap {
     public void setGrowthPlantVariant(GrowthPlantVariant growthPlantVariant) {
         this.growthPlantVariant = growthPlantVariant;
     }
-    public GrowthPlantVariant getGrowthPlantVariant() {
-        return this.growthPlantVariant;
-    }
     public void setCategoryForCells(){
         if(this.growthPlantVariant == GrowthPlantVariant.EQUATOR) {
             int middle = this.width / 2;
@@ -244,7 +241,9 @@ public abstract class WorldMap {
 
         }
 
-        this.statistics.theMostPopularGenes = this.genoTypes.lastKey();
+        if(!this.genoTypes.isEmpty()) {
+            this.statistics.theMostPopularGenes = this.genoTypes.lastKey();
+        }
 
         this.statistics.avgEnergy = this.statistics.animalCount == 0 ? 0 : (double) energySum / this.statistics.animalCount;
         this.statistics.avgChildren = this.statistics.animalCount == 0 ? 0 : (double) childrenSum / this.statistics.animalCount;

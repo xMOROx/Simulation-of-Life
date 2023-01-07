@@ -24,6 +24,7 @@ import java.util.List;
 public class SimulationSceneController implements IGuiObserver {
 
 
+
     //FXML---------------------------------------------------
     @FXML
     private MainSceneController mainSceneController;
@@ -86,6 +87,8 @@ public class SimulationSceneController implements IGuiObserver {
     public Label animalNumberOfChildrenLabel;
     @FXML
     public Label animalDaysOfLifeLabel;
+    @FXML
+    public Label animalDayOfDeathLabel;
     //------------------------------------------------------
 
 
@@ -137,6 +140,7 @@ public class SimulationSceneController implements IGuiObserver {
         this.animalNumberOfEatenGrassesLabel.setText("The number of plants eaten: " +(selectedAnimal.getState().getEatenGrass()));
         this.animalNumberOfChildrenLabel.setText("Number of children: " + (selectedAnimal.getState().getChildren()));
         this.animalDaysOfLifeLabel.setText("Life expectancy: " + (selectedAnimal.getState().getAge()));
+        this.animalDayOfDeathLabel.setText("Day of death: " + (selectedAnimal.getState().getDayOfDeath()));
     }
 
     private void startSimulation()  {
@@ -188,9 +192,9 @@ public class SimulationSceneController implements IGuiObserver {
 
     public void updateGuiMap() {
         try {
+            Platform.runLater(this::setSelectedAnimalStatistics);
             Platform.runLater(this::updateMap);
             Platform.runLater(this::updateGeneralStatistics);
-            Platform.runLater(this::setSelectedAnimalStatistics);
             Thread.sleep(this.refreshRate);
         } catch (InterruptedException ex) {
             System.out.println(Arrays.toString(ex.getStackTrace()));

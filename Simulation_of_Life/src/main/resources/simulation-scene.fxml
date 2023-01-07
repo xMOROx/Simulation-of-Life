@@ -95,7 +95,7 @@
                   <Label fx:id="animalNumberOfEatenGrassesLabel" text="The number of plants eaten:" />
                   <Label fx:id="animalNumberOfChildrenLabel" text="Number of children:" />
                   <Label fx:id="animalDaysOfLifeLabel" text="Life expectancy:" />
-                  <Label text="Date of death:" />
+                  <Label fx:id="animalDayOfDeathLabel" text="Date of death:" />
                </children>
                <opaqueInsets>
                   <Insets />
