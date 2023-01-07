@@ -4,6 +4,8 @@ import Entities.Abstractions.*;
 import Entities.Animal;
 import Entities.Grass;
 import Logic.Interactions.InteractionResolver;
+import Misc.CellCategory;
+import Settings.Variants.GrowthPlantVariant;
 import gui.render.World.Cell;
 import Misc.Vector2D;
 import Spawners.Spawner;
@@ -13,12 +15,14 @@ import java.util.*;
 public abstract class WorldMap {
     protected int width;
     protected int height;
-
+    protected final int numberOfFirstCategoryCells;
+    protected final int numberOfSecondCategoryCells;
     protected final List<ICanDecide> canDecidesEntities = new LinkedList<>();
     protected final Map<Vector2D, Cell> objects = new HashMap<>();
     protected final List<IWorldElement> deadEntities = new LinkedList<>();
     protected final List<IWorldElement> newChildrenToAdd = new LinkedList<>();
     protected final InteractionResolver resolver = new InteractionResolver();
+    protected GrowthPlantVariant growthPlantVariant = GrowthPlantVariant.EQUATOR;
     protected final SortedMap<List<Integer>, Integer> genoTypes = new TreeMap<>((o1, o2) -> {
         for(int i = 0; i < o1.size(); i++) {
             if(o1.get(i) < o2.get(i)) return -1;
@@ -37,6 +41,8 @@ public abstract class WorldMap {
     public WorldMap(int width, int height) {
         this.width = width;
         this.height = height;
+        this.numberOfFirstCategoryCells = (int) (this.width * this.height * 0.2);
+        this.numberOfSecondCategoryCells = this.width * this.height - this.numberOfFirstCategoryCells;
     }
 
     public void removeDeadEntities() {
@@ -78,6 +84,31 @@ public abstract class WorldMap {
         return objects.getOrDefault(this.mapCoords(coords), null);
     }
 
+    public void setGrowthPlantVariant(GrowthPlantVariant growthPlantVariant) {
+        this.growthPlantVariant = growthPlantVariant;
+    }
+    public GrowthPlantVariant getGrowthPlantVariant() {
+        return this.growthPlantVariant;
+    }
+    public void setCategoryForCells(){
+        if(this.growthPlantVariant == GrowthPlantVariant.EQUATOR) {
+            int middle = this.width / 2;
+            int howManyRows = (int) Math.ceil(this.numberOfFirstCategoryCells / (double) this.width);
+            for(int y = middle; y < howManyRows + middle; y++) {
+                for(int x = 0; x < (this.numberOfFirstCategoryCells / howManyRows) ; x++) {
+                    this.objects.get(this.mapCoords(x, y)).setCategory(CellCategory.FIRST);
+                    this.objects.get(this.mapCoords(x, y)).setSpawnProbability(1);
+                }
+            }
+
+        } else if(this.growthPlantVariant == GrowthPlantVariant.TOXIC_CORPSES) {
+            List<Cell> cells = new LinkedList<>(objects.values());
+            Collections.shuffle(cells);
+            for(int i = 0; i < numberOfFirstCategoryCells; i++) {
+                cells.get(i).setCategory(CellCategory.FIRST);
+            }
+        }
+    }
 
     protected Cell getCellAt(Vector2D coords) {
         Cell cell = this.cellOrNullAt(coords);

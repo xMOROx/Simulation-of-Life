@@ -62,6 +62,9 @@ public class SimulationEngine extends Thread {
         }});
 
         map.registerSpawners(animalSpawner);
+        map.setGrowthPlantVariant(parameters.getTerrainVariant());
+
+        map.setCategoryForCells();
 
         return map;
     }

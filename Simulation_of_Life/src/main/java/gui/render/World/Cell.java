@@ -4,6 +4,7 @@ package gui.render.World;
 import Entities.Abstractions.IWorldElement;
 import Entities.EmptyEntity;
 import Entities.Grass;
+import Misc.CellCategory;
 import gui.interfaces.IGuiObserver;
 import gui.interfaces.isRenderableOnMap;
 import javafx.application.Platform;
@@ -18,11 +19,12 @@ public class Cell implements isRenderableOnMap {
     private int deadAnimals = 0;
     private final int size;
     private final GridPane cellGrid;
-
-    public final double spawnProbability;
+    private CellCategory category;
+    public double spawnProbability;
     public Cell(Config config) {
         this.size = config.size;
         this.spawnProbability = config.grassSpawnProbability;
+        this.category = config.category;
         this.cellGrid = new GridPane();
     }
 
@@ -33,6 +35,12 @@ public class Cell implements isRenderableOnMap {
             }
         }
         return null;
+    }
+    public void setCategory(CellCategory category) {
+        this.category = category;
+    }
+    public CellCategory getCategory() {
+        return this.category;
     }
 
     public Cell() {
@@ -54,6 +62,13 @@ public class Cell implements isRenderableOnMap {
         return this.objects;
     }
 
+    public double getSpawnProbability() {
+        return this.spawnProbability;
+    }
+
+    public void setSpawnProbability(double spawnProbability) {
+        this.spawnProbability = spawnProbability;
+    }
     public int getDeadAnimals() {
         return this.deadAnimals;
     }
@@ -86,22 +101,46 @@ public class Cell implements isRenderableOnMap {
     private void setStyleBasedOnNumberOfDeathAnimals() {
 
         if(this.deadAnimals <= 5) {
-            this.cellGrid.setStyle("-fx-background-color: #007f5f");
+            if(category == CellCategory.FIRST) {
+                this.cellGrid.setStyle("-fx-background-color: #00b300");
+            } else {
+                this.cellGrid.setStyle("-fx-background-color: #007f5f");
+            }
         }
         else if (this.deadAnimals <= 10) {
-            this.cellGrid.setStyle("-fx-background-color: #2b9348");
+            if(category == CellCategory.FIRST) {
+                this.cellGrid.setStyle("-fx-background-color: #00cc00");
+            } else {
+                this.cellGrid.setStyle("-fx-background-color: #2b9348");
+            }
         }
         else if (this.deadAnimals <= 15) {
-            this.cellGrid.setStyle("-fx-background-color: #55a630");
+            if (category == CellCategory.FIRST) {
+                this.cellGrid.setStyle("-fx-background-color: #00e600");
+            } else {
+                this.cellGrid.setStyle("-fx-background-color: #55a630");
+            }
         }
         else if (this.deadAnimals <= 20) {
-            this.cellGrid.setStyle("-fx-background-color: #80b918");
+            if(category == CellCategory.FIRST) {
+                this.cellGrid.setStyle("-fx-background-color: #b3b300");
+            } else {
+                this.cellGrid.setStyle("-fx-background-color: #80b918");
+            }
         }
         else if (this.deadAnimals <= 25) {
-            this.cellGrid.setStyle("-fx-background-color: #aacc00");
+            if(category == CellCategory.FIRST) {
+                this.cellGrid.setStyle("-fx-background-color: #b38c00");
+            } else {
+                this.cellGrid.setStyle("-fx-background-color: #aacc00");
+            }
         }
         else if (this.deadAnimals <= 30) {
-            this.cellGrid.setStyle("-fx-background-color: #d6de00");
+            if(category == CellCategory.FIRST) {
+              this.cellGrid.setStyle("-fx-background-color: #b35e00");
+            } else {
+                this.cellGrid.setStyle("-fx-background-color: #d6de00");
+            }
         }
         else if (this.deadAnimals <= 33) {
             this.cellGrid.setStyle("-fx-background-color: #f7f700");
@@ -134,14 +173,15 @@ public class Cell implements isRenderableOnMap {
         for (int y = 0, i = 0; y < cellSize; y+=size) {
             for (int x = 0; x < size*2; x+=size, i++) {
                 if(i >= this.objects.size()) break;
-                cellGrid.add(this.objects.get(i).render(), x, y);
+                this.cellGrid.add(this.objects.get(i).render(), x, y);
             }
         }
         return cellGrid;
     }
 
     public static class Config {
-        public double grassSpawnProbability = 0.5;
+        public double grassSpawnProbability = 0.7;
         public int size = 20;
+        public CellCategory category = CellCategory.SECOND;
     }
 }

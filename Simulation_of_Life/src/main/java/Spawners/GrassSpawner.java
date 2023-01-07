@@ -3,8 +3,9 @@ package Spawners;
 import Entities.Grass;
 import gui.render.World.Cell;
 import Misc.Vector2D;
-import World.Maps.WorldMap;
 import com.google.gson.JsonElement;
+
+import java.util.Random;
 
 public class GrassSpawner extends Spawner {
     public final Config config;
@@ -15,7 +16,9 @@ public class GrassSpawner extends Spawner {
 
     @Override
     public boolean canSpawn(Cell cell) {
-        return Cell.isCellEmpty(cell) && !Cell.containsObject(cell, Grass.class);
+        Random random = new Random();
+        double spawnProbability = random.nextInt(101) / 100.0;
+        return Cell.isCellEmpty(cell) && spawnProbability <= cell.getSpawnProbability() && !Cell.containsObject(cell, Grass.class);
     }
 
     @Override
