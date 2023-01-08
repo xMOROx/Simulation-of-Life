@@ -96,7 +96,7 @@ public abstract class WorldMap {
             int middle = this.width / 2;
             int howManyRows = (int) Math.ceil(this.numberOfFirstCategoryCells / (double) this.width);
             for(int y = middle; y < howManyRows + middle; y++) {
-                for(int x = 0; x < (this.numberOfFirstCategoryCells / howManyRows) ; x++) {
+                for(int x = 0; x <= this.width ; x++) {
                     this.objects.get(this.mapCoords(x, y)).setCategory(CellCategory.FIRST);
                     this.objects.get(this.mapCoords(x, y)).setSpawnProbability(1);
                 }
@@ -144,7 +144,7 @@ public abstract class WorldMap {
         this.deadEntities.add(entity);
 
         if(entity instanceof Animal animal) {
-            if(this.genoTypes.get(animal.getGenome().getGenes()) > 0)  {
+            if(this.genoTypes.getOrDefault(animal.getGenome().getGenes(), 0) > 0)  {
                 this.genoTypes.put(animal.getGenome().getGenes(), this.genoTypes.get(animal.getGenome().getGenes()) - 1);
                 if(this.genoTypes.get(animal.getGenome().getGenes()) <= 0) {
                     this.genoTypes.remove(animal.getGenome().getGenes());
