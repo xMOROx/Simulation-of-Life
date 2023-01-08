@@ -77,20 +77,6 @@ public class SimulationEngine extends Thread {
         }});
         map.registerSpawners(grassSpawner);
 
-        int jungleWidth = (int) (config.width * config.jungleRatio);
-        int jungleHeight = (int) (config.height * config.jungleRatio);
-
-        Spawner jungleSpawner = new JungleSpawner(new JungleSpawner.Config(){{
-            this.nutritionValue = config.plantEnergy;
-            this.spawnRate = 1;
-            this.xMin = (config.width - jungleWidth) / 2;
-            this.yMin = (config.height - jungleHeight) / 2;
-            this.xMax = this.xMin + jungleWidth;
-            this.yMax = this.yMin + jungleHeight;
-        }});
-
-        map.registerSpawners(jungleSpawner);
-
         Spawner animalSpawner = new Spawners.AnimalSpawner(new Spawners.AnimalSpawner.Config(){{
             this.startEnergy = config.startEnergy;
             this.dailyEnergyLoss = config.moveEnergy;;

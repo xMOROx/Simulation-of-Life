@@ -15,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -39,10 +40,6 @@ public class SimulationSceneController implements IGuiObserver {
     private Button deleteSimulationButton;
     @FXML
     private Pane simulationPane;
-    @FXML
-    private ChoiceBox liveAnimalsChoiceBox;
-    @FXML
-    private ChoiceBox deadAnimalsChoiceBox;
     @FXML
     private GridPane mapGridPane;
     @FXML
@@ -92,6 +89,10 @@ public class SimulationSceneController implements IGuiObserver {
     public Label animalDaysOfLifeLabel;
     @FXML
     public Label animalDayOfDeathLabel;
+    @FXML
+    public Label selectedAnimalNameLabel;
+    @FXML
+    public ImageView selectedAnimalPictureView;
     //------------------------------------------------------
 
 
@@ -110,7 +111,9 @@ public class SimulationSceneController implements IGuiObserver {
 
 
     public void onDeleteSimulationButtonClicked() throws IOException {
-        csvWriter.writeData(data);
+        if(this.csvWriter != null){
+            this.csvWriter.writeData(data);
+        }
         this.mainSceneController.removeTab(this);
     }
 
@@ -123,8 +126,6 @@ public class SimulationSceneController implements IGuiObserver {
         this.deleteSimulationButton.setDisable(true);
         this.startButton.setDisable(true);
         this.stopButton.setDisable(false);
-        this.liveAnimalsChoiceBox.setDisable(true);
-        this.deadAnimalsChoiceBox.setDisable(true);
         this.updateGuiCharts();
         this.engine.getWorld().noticeAnimals(false);
     }
@@ -133,8 +134,6 @@ public class SimulationSceneController implements IGuiObserver {
         this.deleteSimulationButton.setDisable(false);
         this.startButton.setDisable(false);
         this.stopButton.setDisable(true);
-        this.liveAnimalsChoiceBox.setDisable(false);
-        this.deadAnimalsChoiceBox.setDisable(false);
         this.engine.getWorld().noticeAnimals(true);
         this.updateGuiMap();
         this.pauseSimulation();
@@ -150,6 +149,8 @@ public class SimulationSceneController implements IGuiObserver {
         this.animalNumberOfChildrenLabel.setText("Number of children: " + (selectedAnimal.getState().getChildren()));
         this.animalDaysOfLifeLabel.setText("Life expectancy: " + (selectedAnimal.getState().getAge()));
         this.animalDayOfDeathLabel.setText("Day of death: " + (selectedAnimal.getState().getDayOfDeath()));
+        this.selectedAnimalNameLabel.setText("Animal name: " + (selectedAnimal.getName()));
+        this.selectedAnimalPictureView.setImage(selectedAnimal.getAnimalImage());
     }
 
     private void startSimulation()  {

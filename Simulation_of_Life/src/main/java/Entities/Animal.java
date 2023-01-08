@@ -13,6 +13,7 @@ import World.Maps.WorldMap;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -40,6 +41,8 @@ public class Animal extends StatefulObject<Animal.State> implements
     private boolean stoppedSimulation = true;
     private boolean isSelected = false;
     private final int imageIndex = new Random().nextInt(0,12);
+    private final String name;
+    private Image animalImage;
     public Animal(Genome genome, Vector2D startPosition, DefaultConfiguration configuration) {
             super(new State()
                   {{
@@ -58,7 +61,8 @@ public class Animal extends StatefulObject<Animal.State> implements
             this.energyConsumedWhenReproducing = configuration.energyConsumedWhenReproducing;
             getState().setDirection(MapDirection.getRandomDirection());
             getState().setEnergy(configuration.initialEnergy);
-        }
+            this.name = "Animal" + this.hashCode();
+    }
 
     @Override
     public void eat(int energy) {
@@ -167,6 +171,13 @@ public class Animal extends StatefulObject<Animal.State> implements
         return this.getState().getEnergy();
     }
 
+    public String getName() {
+        return name;
+    }
+    public Image getAnimalImage() {
+        return animalImage;
+    }
+
     @Override
     public WorldMap getWorld() {
         return world;
@@ -220,27 +231,30 @@ public class Animal extends StatefulObject<Animal.State> implements
 
         energyLabel.alignmentProperty().setValue(Pos.CENTER);
         positionLabel.alignmentProperty().setValue(Pos.CENTER);
-        VBox animal = new VBox(new ImageView(images.getAnimalImage(imageIndex)), energyLabel, positionLabel);
+
+        this.animalImage = images.getAnimalImage(imageIndex);
+
+        VBox animalImageBox = new VBox(new ImageView(this.animalImage), energyLabel, positionLabel);
 
         if(this.stoppedSimulation){
-            animal.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-                animal.requestFocus();
+            animalImageBox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                animalImageBox.requestFocus();
                 this.world.setSelectedAnimal(this);
             });
         } else {
-            animal.removeEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-                animal.requestFocus();
+            animalImageBox.removeEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                animalImageBox.requestFocus();
             });
         }
 
-        animal.borderProperty()
-                .bind(Bindings.when(animal.focusedProperty().or(Bindings.createBooleanBinding(() -> this.isSelected)))
+        animalImageBox.borderProperty()
+                .bind(Bindings.when(animalImageBox.focusedProperty().or(Bindings.createBooleanBinding(() -> this.isSelected)))
                         .then(new Border(new BorderStroke(Color.rgb(238, 75, 43), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)))
                         .otherwise(new Border(new BorderStroke(Color.TRANSPARENT, BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.DEFAULT))));
 
 
 
-        return animal;
+        return animalImageBox;
     }
 
     public static class DefaultConfiguration  {
