@@ -27,6 +27,7 @@ dependencies {
     implementation('com.github.almasb:fxgl:17') {
         exclude(group: 'org.openjfx')
     }
+    implementation group: 'com.opencsv', name: 'opencsv', version: '5.7.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     implementation 'com.google.code.gson:gson:2.10'

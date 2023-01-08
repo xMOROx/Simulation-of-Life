@@ -66,6 +66,7 @@ public class MainSceneController implements Initializable {
 
         simulationSceneController.setWorld(new SimulationEngine(worldMap));
         simulationSceneController.setRefreshRate(parameters.getRefreshRate());
+        simulationSceneController.setIsSaveToCSV(parameters.isSaveToCSV());
         simulationSceneControllerList.add(simulationSceneController);
         Tab tab = new Tab("Simulation " + simulationNumber);
         simulationNumber += 1;

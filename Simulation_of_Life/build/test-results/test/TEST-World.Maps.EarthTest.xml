@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="World.Maps.EarthTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-01-07T23:07:26" hostname="DESKTOP-KQGARON" time="0.005">
+  <properties/>
+  <testcase name="mapCoords()" classname="World.Maps.EarthTest" time="0.005"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

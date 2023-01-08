@@ -2,6 +2,7 @@ package gui.render;
 
 import Entities.Animal;
 import Entities.Grass;
+import Settings.CsvWriter;
 import World.SimulationEngine;
 import gui.interfaces.IGuiObserver;
 import javafx.application.Platform;
@@ -18,8 +19,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
-import java.util.Arrays;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.*;
 
 public class SimulationSceneController implements IGuiObserver {
 
@@ -100,8 +103,14 @@ public class SimulationSceneController implements IGuiObserver {
     //------------------------------------------------------
     private boolean firstStart = true;
     private int refreshRate = 200;
+    private boolean isSaveToCSV = false;
+    CsvWriter csvWriter = null;
+    List<String[]> data = new ArrayList<>();
 
-    public void onDeleteSimulationButtonClicked() {
+
+
+    public void onDeleteSimulationButtonClicked() throws IOException {
+        csvWriter.writeData(data);
         this.mainSceneController.removeTab(this);
     }
 
@@ -109,7 +118,7 @@ public class SimulationSceneController implements IGuiObserver {
         this.mainSceneController = mainSceneController;
     }
 
-    public void onStartButtonClicked() throws InterruptedException {
+    public void onStartButtonClicked()  {
         this.startSimulation();
         this.deleteSimulationButton.setDisable(true);
         this.startButton.setDisable(true);
@@ -145,6 +154,15 @@ public class SimulationSceneController implements IGuiObserver {
 
     private void startSimulation()  {
         if (this.firstStart) {
+            if(this.isSaveToCSV){
+                try {
+                    LocalDate date = LocalDate.now();
+                    this.csvWriter = new CsvWriter(Objects.requireNonNull(getClass().getResource("")).getPath() + "/statistics_"+ date.getYear() + "_" + date.getMonth()+"_"+ date.getDayOfMonth() + ".csv");
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             this.thread.start();
             this.firstStart = false;
         } else {
@@ -158,6 +176,10 @@ public class SimulationSceneController implements IGuiObserver {
 
     public void setRefreshRate(int refreshRate) {
         this.refreshRate = refreshRate;
+    }
+
+    public void setIsSaveToCSV(boolean isSaveToCSV) {
+        this.isSaveToCSV = isSaveToCSV;
     }
 
     public void setWorld(SimulationEngine engine) {
@@ -188,9 +210,14 @@ public class SimulationSceneController implements IGuiObserver {
         this.averageEnergyLevelLabel.setText("Average energy level: " + Math.round(this.engine.getWorld().getAvgStats().avgEnergy * 100.0) / 100.0);
         this.lifeExpectancyLabel.setText("Life expectancy: " + Math.round(this.engine.getWorld().getAvgStats().avgLifespan * 100.0) / 100.0);
         this.dayLabel.setText("Day: " + this.engine.getWorld().getStatistics().day);
+        if(this.isSaveToCSV) {
+            System.out.println(Objects.requireNonNull(getClass().getResource("")).getPath());
+            String[] dataToSave = {this.engine.getWorld().getStatistics().day.toString(), Integer.toString(this.engine.getWorld().getStatistics().animalCount), Integer.toString(this.engine.getWorld().getStatistics().grassCount), Integer.toString(this.engine.getWorld().getStatistics().emptyFieldsCount), Integer.toString(this.engine.getWorld().getStatistics().occupiedFieldsCount),Double.toString(this.engine.getWorld().getAvgStats().avgEnergy), Double.toString(this.engine.getWorld().getAvgStats().avgLifespan) ,this.engine.getWorld().getStatistics().theMostPopularGenes.toString()};
+            this.data.add(dataToSave);
+        }
     }
 
-    public void updateGuiMap() {
+    public void updateGuiMap()  {
         try {
             Platform.runLater(this::setSelectedAnimalStatistics);
             Platform.runLater(this::updateMap);
