@@ -13,6 +13,7 @@ import World.Maps.WorldMap;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -223,18 +224,31 @@ public class Animal extends StatefulObject<Animal.State> implements
 
     @Override
     public VBox render(int size, LoadImages images) {
-        Label energyLabel = new Label(""+this.getEnergy());
         Label positionLabel = new Label(""+this.getPosition());
+        ProgressBar energyBar = new ProgressBar();
 
-        energyLabel.setPrefSize(size, 5);
+        double value = (double) this.getEnergy() / (double) this.config.maximumEnergy;
+        energyBar.setProgress(value);
+        energyBar.setPrefWidth(size);
+        energyBar.setMinHeight(15.0);
+        energyBar.setPrefHeight(15.0);
+        energyBar.setMaxHeight(15.0);
+
+        if(value < 0.3) {
+            energyBar.setStyle("-fx-accent: red;");
+        } else if(value < 0.6) {
+            energyBar.setStyle("-fx-accent: orange;");
+        } else {
+            energyBar.setStyle("-fx-accent: green;");
+        }
+
         positionLabel.setPrefSize(size, 5);
 
-        energyLabel.alignmentProperty().setValue(Pos.CENTER);
         positionLabel.alignmentProperty().setValue(Pos.CENTER);
 
         this.animalImage = images.getAnimalImage(imageIndex);
 
-        VBox animalImageBox = new VBox(new ImageView(this.animalImage), energyLabel, positionLabel);
+        VBox animalImageBox = new VBox(new ImageView(this.animalImage), energyBar, positionLabel);
 
         if(this.stoppedSimulation){
             animalImageBox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {

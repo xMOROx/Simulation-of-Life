@@ -33,8 +33,8 @@ public class EmptyCellSpawner extends Spawner{
 
     @Override
     protected void spawnFirstPopulation() {
-            for (int y = 0; y < config.mapHeight; y++) {
-                for (int x = 0; x < config.mapWidth; x++) {
+            for (int y = 0; y <= config.mapHeight; y++) {
+                for (int x = 0; x <= config.mapWidth; x++) {
                 Vector2D position = new Vector2D(x, y);
                 EmptyEntity emptyEntity = new EmptyEntity(position);
                 this.world.addEntity(emptyEntity);

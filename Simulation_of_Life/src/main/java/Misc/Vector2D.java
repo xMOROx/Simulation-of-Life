@@ -62,8 +62,8 @@ public class Vector2D {
 
     public static Vector2D randomVector(Vector2D min, Vector2D max) {
         Random random = new Random();
-        int x = random.nextInt(min.x, max.x);
-        int y = random.nextInt(min.y, max.y);
+        int x = random.nextInt(min.x, max.x + 1);
+        int y = random.nextInt(min.y, max.y + 1);
         return new Vector2D(x, y);
     }
     @Override

@@ -22,17 +22,17 @@ public class Constants {
     public static final int MAX_DAILY_ENERGY_COST = 100;
     public static final int MIN_ENERGY_USED_TO_COPULATION = 10;
     public static final int MAX_ENERGY_USED_TO_COPULATION = 500;
-    public static final int MIN_GENOME_LENGTH = 5;
-    public static final int MAX_GENOME_LENGTH = 80;
+    public static final int MIN_GENOME_LENGTH = 2;
+    public static final int MAX_GENOME_LENGTH = 100;
     //-------------------------------------------------
 
     //spawn properties---------------------------------
     public static final int MIN_ANIMALS_SPAWNING_AT_START = 1;
-    public static final int MAX_ANIMALS_SPAWNING_AT_START = 200;
+    public static final int MAX_ANIMALS_SPAWNING_AT_START = 500;
     public static final int MIN_PLANTS_SPAWNING_AT_THE_START = 1;
-    public static final int MAX_PLANTS_SPAWNING_AT_THE_START = 200;
-    public static final int MIN_PLANTS_SPAWNED_AT_EACH_DAY = 5;
-    public static final int MAX_PLANTS_SPAWNED_AT_EACH_DAY = 200;
+    public static final int MAX_PLANTS_SPAWNING_AT_THE_START = 500;
+    public static final int MIN_PLANTS_SPAWNED_AT_EACH_DAY = 1;
+    public static final int MAX_PLANTS_SPAWNED_AT_EACH_DAY = 100;
     //-------------------------------------------------------------
 
     //others ------------------------------------------------------
@@ -47,7 +47,5 @@ public class Constants {
     public static final int GRID_PANE_HEIGHT_PX = 715;
     public static final int GRID_PANE_WIDTH_PX = 867;
 
-    //-------------------------------------------------------------
-    public static final String FILE_NAME = "";
 
 }

@@ -56,7 +56,7 @@ public class Cell implements isRenderableOnMap {
     }
 
     private boolean containOnlyEmptyEntities() {
-        return objects.stream().allMatch(object -> object instanceof EmptyEntity);
+        return this.objects.stream().allMatch(object -> object instanceof EmptyEntity);
     }
 
     public List<IWorldElement> getObjects() {
@@ -169,7 +169,8 @@ public class Cell implements isRenderableOnMap {
     public GridPane render(int size, LoadImages loadImages) {
         this.cellGrid.getChildren().clear();
         this.setStyleBasedOnNumberOfDeathAnimals();
-        int cellSize = (int) (size * Math.ceil(this.objects.size() / 2.0));
+
+        int cellSize = (int) (size * Math.ceil(this.objects.size() / 2.0) + 15.0);
         this.cellGrid.setPrefSize(size*2, cellSize);
         for (int y = 0, i = 0; y < cellSize; y+=size) {
             for (int x = 0; x < size*2; x+=size, i++) {

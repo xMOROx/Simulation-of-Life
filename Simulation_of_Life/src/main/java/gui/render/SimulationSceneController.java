@@ -4,6 +4,7 @@ import Entities.Animal;
 import Entities.Grass;
 import Settings.CsvWriter;
 import World.SimulationEngine;
+import com.sun.tools.javac.Main;
 import gui.interfaces.IGuiObserver;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -159,7 +160,6 @@ public class SimulationSceneController implements IGuiObserver {
                 try {
                     LocalDate date = LocalDate.now();
                     this.csvWriter = new CsvWriter(Objects.requireNonNull(getClass().getResource("")).getPath() + "/statistics_"+ date.getYear() + "_" + date.getMonth()+"_"+ date.getDayOfMonth() + ".csv");
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -239,7 +239,7 @@ public class SimulationSceneController implements IGuiObserver {
 
     private void updateCharts() {
         Integer day = this.engine.getWorld().getStatistics().day;
-        populationData.getData().add(new XYChart.Data<>(Integer.toString(day), this.engine.getWorld().getStatistics().animalCount));
-        grassData.getData().add(new XYChart.Data<>(Integer.toString(day), this.engine.getWorld().getStatistics().grassCount));
+        this.populationData.getData().add(new XYChart.Data<>(Integer.toString(day), this.engine.getWorld().getStatistics().animalCount));
+        this.grassData.getData().add(new XYChart.Data<>(Integer.toString(day), this.engine.getWorld().getStatistics().grassCount));
     }
 }

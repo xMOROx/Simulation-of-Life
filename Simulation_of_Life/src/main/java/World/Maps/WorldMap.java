@@ -280,6 +280,14 @@ public abstract class WorldMap {
         return mapCoords(vector.getX(), vector.getY());
     }
 
+    public List<IWorldElement> getNewChildrenToAdd() {
+        return newChildrenToAdd;
+    }
+
+    public Map<Vector2D, Cell> getObjects() {
+        return objects;
+    }
+
     public Statistics getAvgStats() {
         return avgStats;
     }
@@ -287,6 +295,7 @@ public abstract class WorldMap {
     public Statistics getStatistics() {
         return statistics;
     }
+
 
     public static class Statistics {
         public int animalCount = 0;

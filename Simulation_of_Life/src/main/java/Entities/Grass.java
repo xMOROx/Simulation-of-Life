@@ -39,9 +39,13 @@ public class Grass extends StatefulObject<Grass.State> implements IsAlive<Grass.
     @Override
     public VBox render(int size, LoadImages images) {
         Label energyLabel = new Label("" + this.getState().getEnergy());
+        Label positionLabel = new Label(this.getPosition().toString());
         energyLabel.setPrefSize(size, 5);
+        positionLabel.setPrefSize(size, 5);
+
         energyLabel.setAlignment(Pos.CENTER);
-        return new VBox(new ImageView(images.getGrassImage(this.imageIndex)), energyLabel);
+        positionLabel.setAlignment(Pos.CENTER);
+        return new VBox(new ImageView(images.getGrassImage(this.imageIndex)), positionLabel, energyLabel);
     }
 
     public static class State implements IsAlive.State {
