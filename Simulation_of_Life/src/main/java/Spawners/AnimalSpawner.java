@@ -1,14 +1,13 @@
 package Spawners;
 
 import Entities.Animal;
+import Logic.Genome;
 import Logic.Mutation;
+import Misc.Vector2D;
 import Settings.Variants.AnimalBehaviorVariant;
 import Settings.Variants.MutationVariant;
-import gui.render.World.Cell;
-import Logic.Genome;
-import Misc.Vector2D;
-import World.Maps.WorldMap;
 import com.google.gson.JsonElement;
+import gui.render.World.Cell;
 
 public class AnimalSpawner extends Spawner {
 
@@ -36,7 +35,7 @@ public class AnimalSpawner extends Spawner {
         if (position == null) {
             return false;
         }
-        Animal animal = new Animal(new Genome(defaultConfig.genomeLength, new Mutation(new Mutation.DefaultConfiguration(){{
+        Animal animal = new Animal(new Genome(defaultConfig.genomeLength, new Mutation(new Mutation.DefaultConfiguration() {{
             this.numberOfMinimumGenes = config.minimumMutations;
             this.numberOfMaximumGenes = config.maximumMutations;
         }})), position, defaultConfig);
@@ -72,9 +71,9 @@ public class AnimalSpawner extends Spawner {
         protected int startEnergy = 100;
         protected int dailyEnergyLoss = 100;
         protected int initialPopulation = 100;
-        protected  int energyToReproduce = 80;
+        protected int energyToReproduce = 80;
         protected int maximumEnergy = 300;
-        protected  int energyConsumedWhenReproducing = 50;
+        protected int energyConsumedWhenReproducing = 50;
         protected int genomeLength = 32;
         protected MutationVariant mutationVariant = MutationVariant.FULL_RANDOM;
         protected AnimalBehaviorVariant animalBehaviorVariant = AnimalBehaviorVariant.FULL_PREDICTABLE;

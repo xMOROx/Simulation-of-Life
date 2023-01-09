@@ -19,6 +19,7 @@ public enum MapDirection {
     public MapDirection previous() {
         return getMapDirection(NORTHWEST, NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST);
     }
+
     public MapDirection opposite() {
         return getMapDirection(SOUTH, SOUTHWEST, WEST, NORTHWEST, NORTH, NORTHEAST, EAST, SOUTHEAST);
     }
@@ -54,10 +55,10 @@ public enum MapDirection {
 
     public Vector2D toUnitVector() {
         return switch (this) {
-            case NORTH -> new Vector2D(0,1);
-            case NORTHEAST -> new Vector2D(1,1);
-            case EAST -> new Vector2D(1,0);
-            case SOUTHEAST -> new Vector2D(1,-1);
+            case NORTH -> new Vector2D(0, 1);
+            case NORTHEAST -> new Vector2D(1, 1);
+            case EAST -> new Vector2D(1, 0);
+            case SOUTHEAST -> new Vector2D(1, -1);
             case SOUTH -> new Vector2D(0, -1);
             case SOUTHWEST -> new Vector2D(-1, -1);
             case WEST -> new Vector2D(-1, 0);

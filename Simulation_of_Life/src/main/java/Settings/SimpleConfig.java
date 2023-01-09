@@ -13,7 +13,6 @@ public class SimpleConfig {
     public int startEnergy = 100;
     public int moveEnergy = 1;
     public int plantEnergy = 20;
-    public double jungleRatio = 0.3;
 
     public static SimpleConfig fromFile(String file) throws FileNotFoundException {
         var reader = new FileReader(file);

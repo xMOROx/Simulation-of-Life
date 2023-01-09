@@ -13,16 +13,18 @@ public class EmptyEntity implements IWorldElement {
     protected WorldMap world;
     protected Vector2D position;
     protected final int imageIndex;
+
     public EmptyEntity(Vector2D position) {
-         Random random = new Random();
-         if(random.nextInt(100) < 90) {
-             this.imageIndex = 5;
-         } else {
-             this.imageIndex = random.nextInt(0,5);
-         }
+        Random random = new Random();
+        if (random.nextInt(100) < 90) {
+            this.imageIndex = 5;
+        } else {
+            this.imageIndex = random.nextInt(0, 5);
+        }
 
         this.position = position;
     }
+
     @Override
     public Vector2D getPosition() {
         return this.position;

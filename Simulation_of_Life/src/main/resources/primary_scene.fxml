@@ -41,7 +41,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="790.0" prefWidth="1530.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.render.MainSceneController">
+<VBox prefHeight="790.0" prefWidth="1530.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.render.PrimaryScene">
   <children>
       <AnchorPane prefHeight="51.0" prefWidth="1530.0">
          <children>

@@ -8,6 +8,7 @@ import java.util.TreeMap;
 
 public abstract class BasicInteractions {
     public abstract void resolve(Cell cell);
+
     protected int countAnimalsWithTheHighestSameEnergy(Cell cell) {
         SortedMap<Integer, Integer> energyToCount = new TreeMap<>();
         for (var object : cell.getObjects()) {
@@ -18,13 +19,13 @@ public abstract class BasicInteractions {
                 }
             }
         }
-        if(energyToCount.isEmpty()) {
+        if (energyToCount.isEmpty()) {
             return 0;
         }
         return energyToCount.get(energyToCount.lastKey());
     }
 
-    protected int countAnimalsWithTheHighestSameAge(Cell cell){
+    protected int countAnimalsWithTheHighestSameAge(Cell cell) {
         SortedMap<Integer, Integer> ageToCount = new TreeMap<>();
         for (var object : cell.getObjects()) {
             if (object instanceof Animal animal) {
@@ -34,7 +35,7 @@ public abstract class BasicInteractions {
                 }
             }
         }
-        if(ageToCount.isEmpty()) {
+        if (ageToCount.isEmpty()) {
             return 0;
         }
         return ageToCount.get(ageToCount.lastKey());

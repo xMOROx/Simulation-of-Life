@@ -26,8 +26,7 @@ import java.util.Random;
 public class Animal extends StatefulObject<Animal.State> implements
         ICanMove<Animal.State, Animal>,
         IsAlive<Animal.State, Animal>,
-        ICanReproduce, ICanDecide
-{
+        ICanReproduce, ICanDecide {
 
     private WorldMap world;
     private final Genome genome;
@@ -41,33 +40,33 @@ public class Animal extends StatefulObject<Animal.State> implements
     private int currentGeneIndex = 0;
     private boolean stoppedSimulation = true;
     private boolean isSelected = false;
-    private final int imageIndex = new Random().nextInt(0,12);
+    private final int imageIndex = new Random().nextInt(0, 12);
     private final String name;
     private Image animalImage;
+
     public Animal(Genome genome, Vector2D startPosition, DefaultConfiguration configuration) {
-            super(new State()
-                  {{
-                      this.energy = configuration.initialEnergy;
-                      this.position = startPosition;
-                      this.direction = MapDirection.getRandomDirection();
-                  }}
-            );
-            this.genome = genome;
-            this.genomeLength = configuration.genomeLength;
-            this.config = configuration;
-            this.energyToReproduce = configuration.energyToReproduce;
-            this.brain = new AnimalBrain(genome);
-            this.mutationVariant = configuration.mutationVariant;
-            this.animalBehaviorVariant = configuration.animalBehaviorVariant;
-            this.energyConsumedWhenReproducing = configuration.energyConsumedWhenReproducing;
-            getState().setDirection(MapDirection.getRandomDirection());
-            getState().setEnergy(configuration.initialEnergy);
-            this.name = "Animal" + this.hashCode();
+        super(new State() {{
+                  this.energy = configuration.initialEnergy;
+                  this.position = startPosition;
+                  this.direction = MapDirection.getRandomDirection();
+              }}
+        );
+        this.genome = genome;
+        this.genomeLength = configuration.genomeLength;
+        this.config = configuration;
+        this.energyToReproduce = configuration.energyToReproduce;
+        this.brain = new AnimalBrain(genome);
+        this.mutationVariant = configuration.mutationVariant;
+        this.animalBehaviorVariant = configuration.animalBehaviorVariant;
+        this.energyConsumedWhenReproducing = configuration.energyConsumedWhenReproducing;
+        getState().setDirection(MapDirection.getRandomDirection());
+        getState().setEnergy(configuration.initialEnergy);
+        this.name = "Animal" + this.hashCode();
     }
 
     @Override
     public void eat(int energy) {
-        if(isDead()) return;
+        if (isDead()) return;
         var state = getState();
         state.setEnergy(Math.min(state.getEnergy() + energy, config.maximumEnergy));
         state.setEatenGrass(state.getEatenGrass() + 1);
@@ -75,10 +74,9 @@ public class Animal extends StatefulObject<Animal.State> implements
     }
 
 
-
     @Override
     public boolean canReproduceWith(ICanReproduce other) {
-        if(!(other instanceof Animal otherAnimal)) return false;
+        if (!(other instanceof Animal otherAnimal)) return false;
         return canReproduce() && otherAnimal.canReproduce() && this != otherAnimal;
     }
 
@@ -105,13 +103,13 @@ public class Animal extends StatefulObject<Animal.State> implements
             case RIGHT -> Reproduce.SideOfGenome.LEFT;
         }, this.genomeLength - numberOfGenesOfDominantParent);
 
-        Genome childGenome =  firstGenome.crossGenomes(secondGenome);
+        Genome childGenome = firstGenome.crossGenomes(secondGenome);
 
 
-        if(mutationVariant == MutationVariant.FULL_RANDOM) {
-            childGenome =  childGenome.getMutator().normalMutation(childGenome);
+        if (mutationVariant == MutationVariant.FULL_RANDOM) {
+            childGenome = childGenome.getMutator().normalMutation(childGenome);
         } else {
-            childGenome =  childGenome.getMutator().controlMutation(childGenome);
+            childGenome = childGenome.getMutator().controlMutation(childGenome);
         }
 
         Vector2D childPosition = this.getState().getPosition();
@@ -135,25 +133,25 @@ public class Animal extends StatefulObject<Animal.State> implements
 
     @Override
     public void makeDecision() {
-       if(isDead()) return;
+        if (isDead()) return;
 
-       this.getState().setAge(this.getState().getAge() + 1);
+        this.getState().setAge(this.getState().getAge() + 1);
 
-       this.rotate(this.genome.getGene(this.currentGeneIndex % genomeLength));
+        this.rotate(this.genome.getGene(this.currentGeneIndex % genomeLength));
 
-       if(this.animalBehaviorVariant == AnimalBehaviorVariant.FULL_PREDICTABLE) {
-           this.currentGeneIndex++;
-       } else {
-           Random random = new Random();
-           if(random.nextDouble( 1.0) > 1 - this.animalBehaviorVariant.getNormalMoveProbability()) {
-               this.currentGeneIndex = this.brain.randomGeneActivation();
-           } else {
+        if (this.animalBehaviorVariant == AnimalBehaviorVariant.FULL_PREDICTABLE) {
+            this.currentGeneIndex++;
+        } else {
+            Random random = new Random();
+            if (random.nextDouble(1.0) > 1 - this.animalBehaviorVariant.getNormalMoveProbability()) {
+                this.currentGeneIndex = this.brain.randomGeneActivation();
+            } else {
                 this.currentGeneIndex++;
-           }
-       }
+            }
+        }
 
-       this.move();
-       this.consumeEnergy(config.dailyEnergyLoss);
+        this.move();
+        this.consumeEnergy(config.dailyEnergyLoss);
     }
 
     public Genome getGenome() {
@@ -175,6 +173,7 @@ public class Animal extends StatefulObject<Animal.State> implements
     public String getName() {
         return name;
     }
+
     public Image getAnimalImage() {
         return animalImage;
     }
@@ -224,7 +223,7 @@ public class Animal extends StatefulObject<Animal.State> implements
 
     @Override
     public VBox render(int size, LoadImages images) {
-        Label positionLabel = new Label(""+this.getPosition());
+        Label positionLabel = new Label("" + this.getPosition());
         ProgressBar energyBar = new ProgressBar();
 
         double value = (double) this.getEnergy() / (double) this.config.maximumEnergy;
@@ -234,9 +233,9 @@ public class Animal extends StatefulObject<Animal.State> implements
         energyBar.setPrefHeight(15.0);
         energyBar.setMaxHeight(15.0);
 
-        if(value < 0.3) {
+        if (value < 0.3) {
             energyBar.setStyle("-fx-accent: red;");
-        } else if(value < 0.6) {
+        } else if (value < 0.6) {
             energyBar.setStyle("-fx-accent: orange;");
         } else {
             energyBar.setStyle("-fx-accent: green;");
@@ -250,7 +249,7 @@ public class Animal extends StatefulObject<Animal.State> implements
 
         VBox animalImageBox = new VBox(new ImageView(this.animalImage), energyBar, positionLabel);
 
-        if(this.stoppedSimulation){
+        if (this.stoppedSimulation) {
             animalImageBox.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                 animalImageBox.requestFocus();
                 this.world.setSelectedAnimal(this);
@@ -261,19 +260,19 @@ public class Animal extends StatefulObject<Animal.State> implements
             });
         }
         animalImageBox.borderProperty()
-                    .bind(Bindings.when(animalImageBox.focusedProperty().or(Bindings.createBooleanBinding(() -> this.isSelected)))
-                            .then(new Border(new BorderStroke(Color.rgb(238, 75, 43), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(5))))
-                            .otherwise(new Border(new BorderStroke(Color.TRANSPARENT, BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.DEFAULT))));
+                .bind(Bindings.when(animalImageBox.focusedProperty().or(Bindings.createBooleanBinding(() -> this.isSelected)))
+                        .then(new Border(new BorderStroke(Color.rgb(238, 75, 43), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(5))))
+                        .otherwise(new Border(new BorderStroke(Color.TRANSPARENT, BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.DEFAULT))));
         return animalImageBox;
     }
-    
-    public static class DefaultConfiguration  {
-        public  int initialEnergy = 100;
+
+    public static class DefaultConfiguration {
+        public int initialEnergy = 100;
         public int genomeLength = 32;
-        public  int maximumEnergy = 300;
-        public  int dailyEnergyLoss = 1;
-        public  int energyToReproduce = 80;
-        public  int energyConsumedWhenReproducing = 50;
+        public int maximumEnergy = 300;
+        public int dailyEnergyLoss = 1;
+        public int energyToReproduce = 80;
+        public int energyConsumedWhenReproducing = 50;
         public MutationVariant mutationVariant = MutationVariant.FULL_RANDOM;
         public AnimalBehaviorVariant animalBehaviorVariant = AnimalBehaviorVariant.FULL_PREDICTABLE;
 
@@ -288,6 +287,7 @@ public class Animal extends StatefulObject<Animal.State> implements
 
         public Vector2D position, previousPosition;
         public MapDirection direction = MapDirection.NORTH;
+
         @Override
         public Vector2D getPosition() {
             return this.position;

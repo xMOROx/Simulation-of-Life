@@ -22,13 +22,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class MainSceneController implements Initializable {
+public class PrimaryScene implements Initializable {
 
     //controllers---------------------------------------
     @FXML
-    private NewSimulationController newSimulationController;
+    private SimulationMenuForNewSimulation simulationMenuForNewSimulation;
     @FXML
-    private final List<SimulationSceneController> simulationSceneControllerList = new ArrayList<>();
+    private final List<SimulationScene> simulationSceneList = new ArrayList<>();
     @FXML
     public Label introduceText;
 
@@ -44,12 +44,12 @@ public class MainSceneController implements Initializable {
 
     @FXML
     public void onNewSimulationButtonClicked() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/new-simulation.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/create_simulationa_menu.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 867, 481);
         Stage stage = new Stage();
-        newSimulationController = fxmlLoader.getController();
-        newSimulationController.setStage(stage);
-        newSimulationController.setControllers(this);
+        simulationMenuForNewSimulation = fxmlLoader.getController();
+        simulationMenuForNewSimulation.setStage(stage);
+        simulationMenuForNewSimulation.setControllers(this);
         stage.setResizable(false);
         stage.setTitle("New simulation");
         stage.setScene(scene);
@@ -57,28 +57,28 @@ public class MainSceneController implements Initializable {
     }
 
     public void createNewSimulation(Parameters parameters) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/simulation-scene.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/simulation_scene.fxml"));
         Parent root = fxmlLoader.load();
-        SimulationSceneController simulationSceneController = fxmlLoader.getController();
-        simulationSceneController.setMainSceneController(this);
+        SimulationScene simulationScene = fxmlLoader.getController();
+        simulationScene.setMainSceneController(this);
 
         WorldMap worldMap = SimulationEngine.fromConfig(parameters);
 
-        simulationSceneController.setWorld(new SimulationEngine(worldMap));
-        simulationSceneController.setRefreshRate(parameters.getRefreshRate());
-        simulationSceneController.setIsSaveToCSV(parameters.isSaveToCSV());
-        simulationSceneControllerList.add(simulationSceneController);
+        simulationScene.setWorld(new SimulationEngine(worldMap));
+        simulationScene.setRefreshRate(parameters.getRefreshRate());
+        simulationScene.setIsSaveToCSV(parameters.isSaveToCSV());
+        simulationSceneList.add(simulationScene);
         Tab tab = new Tab("Simulation " + simulationNumber);
         simulationNumber += 1;
         tab.setContent(root);
         tabPane.getTabs().add(tab);
     }
 
-    public void removeTab(SimulationSceneController simulationSceneController) {
-        if (simulationSceneControllerList.size() == 0) return;
-        int i = simulationSceneControllerList.indexOf(simulationSceneController);
+    public void removeTab(SimulationScene simulationScene) {
+        if (simulationSceneList.size() == 0) return;
+        int i = simulationSceneList.indexOf(simulationScene);
         tabPane.getTabs().remove(i + 1, i + 2);
-        simulationSceneControllerList.remove(i);
+        simulationSceneList.remove(i);
     }
 
 

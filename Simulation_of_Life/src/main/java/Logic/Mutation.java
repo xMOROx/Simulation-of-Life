@@ -1,14 +1,12 @@
 package Logic;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
-public class Mutation
-{
+public class Mutation {
     private final DefaultConfiguration config;
+
     public Mutation(DefaultConfiguration config) {
         this.config = config;
     }
@@ -21,6 +19,7 @@ public class Mutation
     public DefaultConfiguration getConfig() {
         return this.config;
     }
+
     public Genome normalMutation(Genome genome) {
         Random random = new Random();
         List<Integer> genes = genome.getGenes();
@@ -42,9 +41,9 @@ public class Mutation
         for (int i = 0; i < numberOfMutations; i++) {
             int geneIndex = random.nextInt(genes.size());
             int geneValue = List.of(genes.get(geneIndex) + 1, genes.get(geneIndex) - 1).get(random.nextInt(2));
-            if(geneValue < 0) {
+            if (geneValue < 0) {
                 geneValue = 7;
-            } else if(geneValue > 7) {
+            } else if (geneValue > 7) {
                 geneValue = 0;
             }
             newGenes[geneIndex] = geneValue;

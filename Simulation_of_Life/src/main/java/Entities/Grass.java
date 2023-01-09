@@ -16,16 +16,17 @@ public class Grass extends StatefulObject<Grass.State> implements IsAlive<Grass.
 
     protected Vector2D position;
     protected WorldMap world;
-    protected final int imageIndex = new Random().nextInt(0,2);
+    protected final int imageIndex = new Random().nextInt(0, 2);
+
     public Grass(Vector2D position, int grassNutritionValue) {
-        super(new State()
-            {{
-                this.nutritionValue = grassNutritionValue;
-            }}
+        super(new State() {{
+                  this.nutritionValue = grassNutritionValue;
+              }}
         );
         this.position = position;
 
     }
+
     @Override
     public Vector2D getPosition() {
         return this.position;

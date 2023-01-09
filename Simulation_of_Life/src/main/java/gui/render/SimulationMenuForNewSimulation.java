@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
 
 import static Settings.Constants.*;
 
-public class NewSimulationController implements Initializable {
+public class SimulationMenuForNewSimulation implements Initializable {
 
     //Mutations----------------------------------------------
     @FXML
@@ -31,14 +31,17 @@ public class NewSimulationController implements Initializable {
     public TextField maximumMutationTextField;
 
     //------------------------------------------------------
-
+    //Variants---------------------------------------------------
+    AnimalBehaviorVariant animalBehaviorVariant_;
+    GrowthPlantVariant growthPlantVariant_;
+    MapVariants mapVariants_;
+    MutationVariant mutationVariant_;
     //controllers---------------------------------------------
-    private MainSceneController mainSceneController;
-
+    private PrimaryScene primaryScene;
     //--------------------------------------------------------
 //    private Configuration configuration;
     private Stage stage;
-
+    //-----------------------------------------------------------
     //choice boxes----------------------------------------------
     @FXML
     private ChoiceBox<String> mapVariantChoiceBox;
@@ -48,9 +51,6 @@ public class NewSimulationController implements Initializable {
     private ChoiceBox<String> behaviourVariantChoiceBox;
     @FXML
     private ChoiceBox<String> growingVariantChoiceBox;
-    //-----------------------------------------------------------
-
-
     //labels-----------------------------------------------------
     @FXML
     private Label mapVariantLabel;
@@ -78,6 +78,7 @@ public class NewSimulationController implements Initializable {
     private Label animalsStartSpawningLabel;
     @FXML
     private Label plantsStartSpawningLabel;
+    //-----------------------------------------------------------
     @FXML
     private Label plantsEachDaySpawningLabel;
     @FXML
@@ -86,15 +87,11 @@ public class NewSimulationController implements Initializable {
     private Label refreshTimeLabel;
     @FXML
     private Label errorMessagesLabel;
-    //-----------------------------------------------------------
-
     //Text fields------------------------------------------------
     @FXML
     private TextField mapHeightTextField;
-
     @FXML
     private TextField mapWidthTextField;
-
     @FXML
     private TextField plantsEnergyProfitTextField;
     @FXML
@@ -109,6 +106,8 @@ public class NewSimulationController implements Initializable {
     private TextField genomeLengthTextField;
     @FXML
     private TextField animalStartSpawningTextField;
+
+    //-----------------------------------------------------------
     @FXML
     private TextField plantStartSpawningTextField;
     @FXML
@@ -120,14 +119,6 @@ public class NewSimulationController implements Initializable {
 
     //check boxes------------------------------------------------
     private CheckBox saveCSVCheckBox;
-
-    //-----------------------------------------------------------
-
-    //Variants---------------------------------------------------
-    AnimalBehaviorVariant animalBehaviorVariant_;
-    GrowthPlantVariant growthPlantVariant_;
-    MapVariants mapVariants_;
-    MutationVariant mutationVariant_;
 
     //-----------------------------------------------------------
 
@@ -147,8 +138,8 @@ public class NewSimulationController implements Initializable {
         this.stage = stage;
     }
 
-    public void setControllers(MainSceneController mainSceneController) {
-        this.mainSceneController = mainSceneController;
+    public void setControllers(PrimaryScene primaryScene) {
+        this.primaryScene = primaryScene;
     }
 
     @FXML
@@ -161,7 +152,7 @@ public class NewSimulationController implements Initializable {
         if (validateAllUserArguments()) {
             getConfigurationFromUserArguments();
             stage.close();
-            this.mainSceneController.createNewSimulation(new Parameters( new Parameters.ApplicationConfig() {{
+            this.primaryScene.createNewSimulation(new Parameters(new Parameters.ApplicationConfig() {{
                 this.mapVariant = mapVariants_;
                 this.mutationVariant = mutationVariant_;
                 this.behaviourVariant = animalBehaviorVariant_;
@@ -194,7 +185,7 @@ public class NewSimulationController implements Initializable {
     private boolean validateAllUserArguments() {
         return validateArgument(mapHeightLabel, mapHeightTextField, MIN_MAP_HEIGHT, MAX_MAP_HEIGHT)
                 && validateArgument(mapWidthLabel, mapWidthTextField, MIN_MAP_WIDTH, MAX_MAP_WIDTH)
-                && validateArgument(plantsEnergyProfitLabel, plantsEnergyProfitTextField, MIN_PLANTS_ENERGY_PROFIT ,MAX_PLANTS_ENERGY_PROFIT)
+                && validateArgument(plantsEnergyProfitLabel, plantsEnergyProfitTextField, MIN_PLANTS_ENERGY_PROFIT, MAX_PLANTS_ENERGY_PROFIT)
                 && validateArgument(minEnergyToCopulationLabel, minEnergyToCopulationTextField, MIN_MINIMUM_ENERGY_TO_COPULATION, MAX_MINIMUM_ENERGY_TO_COPULATION)
                 && validateArgument(animalStartEnergyLabel, animalStartEnergyTextField, MIN_ANIMAL_START_ENERGY, MAX_ANIMAL_START_ENERGY)
                 && validateArgument(dailyEnergyCostLabel, dailyEnergyCostTextField, MIN_DAILY_ENERGY_COST, MAX_DAILY_ENERGY_COST)
@@ -209,6 +200,7 @@ public class NewSimulationController implements Initializable {
                 && validateTwoArguments(minimumMutationLabel, minimumMutationTextField, maximumMutationLabel, maximumMutationTextField)
                 && validateTwoArguments(energyUsedToCopulationLabel, energyUsedToCopulationTextField, minEnergyToCopulationLabel, minEnergyToCopulationTextField);
     }
+
     private boolean isIntegerValue(String value) {
         try {
             Integer.parseInt(value);
@@ -217,6 +209,7 @@ public class NewSimulationController implements Initializable {
             return false;
         }
     }
+
     private boolean validateArgument(Label argumentLabel, TextField argumentTextField, int minValue, int maxValue) {
         String stringUserArgument = argumentTextField.getText();
         if (stringUserArgument.length() == 0) {
@@ -234,7 +227,7 @@ public class NewSimulationController implements Initializable {
         if (intUserArgument < minValue || intUserArgument > maxValue) {
             argumentLabel.setTextFill(Color.RED);
             errorMessagesLabel.setText("ERROR: The " + argumentLabel.getText() + " value exceeded!\n" +
-                    "It must be a integer between " + minValue +  " and " + maxValue);
+                    "It must be a integer between " + minValue + " and " + maxValue);
             return false;
         }
         argumentLabel.setTextFill(Color.BLACK);

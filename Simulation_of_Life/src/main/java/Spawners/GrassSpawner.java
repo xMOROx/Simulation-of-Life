@@ -1,9 +1,9 @@
 package Spawners;
 
 import Entities.Grass;
-import gui.render.World.Cell;
 import Misc.Vector2D;
 import com.google.gson.JsonElement;
+import gui.render.World.Cell;
 
 import java.util.Random;
 
@@ -24,7 +24,7 @@ public class GrassSpawner extends Spawner {
     @Override
     protected boolean tryToSpawn(int attempts) {
         Vector2D position = findValidPosition(attempts);
-        if(position == null) {
+        if (position == null) {
             return false;
         }
         Grass grass = new Grass(position, this.config.nutritionValue);
@@ -34,11 +34,11 @@ public class GrassSpawner extends Spawner {
 
     @Override
     public void spawn() {
-        if(this.world.getObjects().values().stream().allMatch(object -> object.getObjects().stream().anyMatch(object1 -> object1 instanceof Grass))) {
+        if (this.world.getObjects().values().stream().allMatch(object -> object.getObjects().stream().anyMatch(object1 -> object1 instanceof Grass))) {
             return;
         }
         for (int i = 0; i < this.config.spawnRate; i++) {
-            if(!tryToSpawn(100)) {
+            if (!tryToSpawn(100)) {
                 break;
             }
         }
@@ -47,7 +47,7 @@ public class GrassSpawner extends Spawner {
     @Override
     protected void spawnFirstPopulation() {
         for (int i = 0; i < this.config.firstPopulationSpawnRate; i++) {
-            if(!tryToSpawn(100)) {
+            if (!tryToSpawn(100)) {
                 break;
             }
         }
@@ -57,7 +57,7 @@ public class GrassSpawner extends Spawner {
     protected Vector2D findValidPosition(int attempts) {
         for (int i = 0; i < attempts; i++) {
             Vector2D newPosition = getRandomPosition();
-            if(canSpawn(this.world.cellOrNullAt(newPosition)) && this.world.getNewChildrenToAdd().stream().noneMatch(entity -> entity.getPosition().equals(newPosition))) {
+            if (canSpawn(this.world.cellOrNullAt(newPosition)) && this.world.getNewChildrenToAdd().stream().noneMatch(entity -> entity.getPosition().equals(newPosition))) {
                 return newPosition;
             }
         }

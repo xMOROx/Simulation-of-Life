@@ -7,7 +7,7 @@ public class Vector2D {
     private final int x;
     private final int y;
 
-    public Vector2D (int x, int y) {
+    public Vector2D(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -66,6 +66,7 @@ public class Vector2D {
         int y = random.nextInt(min.y, max.y + 1);
         return new Vector2D(x, y);
     }
+
     @Override
     public String toString() {
         return "(" + this.x + "," + this.y + ")";

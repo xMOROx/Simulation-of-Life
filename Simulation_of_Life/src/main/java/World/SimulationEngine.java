@@ -1,7 +1,6 @@
 package World;
 
 import Settings.Config;
-import Settings.Constants;
 import Settings.Parameters;
 import Settings.SimpleConfig;
 import Settings.Variants.MapVariants;
@@ -17,12 +16,13 @@ import java.util.List;
 public class SimulationEngine extends Thread {
     private final WorldMap world;
     private final List<IGuiObserver> guiObservers = new LinkedList<>();
+
     public SimulationEngine(WorldMap world) {
         this.world = world;
 
     }
 
-    public static WorldMap fromConfig (Config config) {
+    public static WorldMap fromConfig(Config config) {
         WorldMap map = new Earth(config.world.width, config.world.height);
         for (var spawnerConfig : config.spawners) {
             map.registerSpawners(Builder.buildFromConfig(spawnerConfig));
@@ -40,25 +40,25 @@ public class SimulationEngine extends Thread {
         map.registerSpawners(emptyCellSpawner);
 
         Spawner grassSpawner = new GrassSpawner(new GrassSpawner.Config() {{
-          this.nutritionValue = parameters.getPlantsEnergy();
-          this.spawnRate = parameters.getNumberOfPlantGrowingDaily();
-          this.firstPopulationSpawnRate = parameters.getInitialPlantsNumber();
+            this.nutritionValue = parameters.getPlantsEnergy();
+            this.spawnRate = parameters.getNumberOfPlantGrowingDaily();
+            this.firstPopulationSpawnRate = parameters.getInitialPlantsNumber();
         }});
 
         map.registerSpawners(grassSpawner);
 
         Spawner animalSpawner = new AnimalSpawner(new AnimalSpawner.Config() {{
-          this.startEnergy = parameters.getInitialAnimalsEnergy();
-          this.initialPopulation = parameters.getInitialAnimalsNumber();
-          this.dailyEnergyLoss = parameters.getDailyEnergyConsumption();
-          this.energyToReproduce = parameters.getEnergyRequiredForReproduction();
-          this.energyConsumedWhenReproducing =  parameters.getEnergyUsedForReproduction();
-          this.mutationVariant = parameters.getMutationVariant();
-          this.minimumMutations = parameters.getMinimumMutations();
-          this.maximumMutations = parameters.getMaximumMutations();
-          this.animalBehaviorVariant = parameters.getBehaviourVariant();
-          this.genomeLength = parameters.getGenomeLength();
-          this.maximumEnergy = parameters.getInitialAnimalsEnergy() * 2;
+            this.startEnergy = parameters.getInitialAnimalsEnergy();
+            this.initialPopulation = parameters.getInitialAnimalsNumber();
+            this.dailyEnergyLoss = parameters.getDailyEnergyConsumption();
+            this.energyToReproduce = parameters.getEnergyRequiredForReproduction();
+            this.energyConsumedWhenReproducing = parameters.getEnergyUsedForReproduction();
+            this.mutationVariant = parameters.getMutationVariant();
+            this.minimumMutations = parameters.getMinimumMutations();
+            this.maximumMutations = parameters.getMaximumMutations();
+            this.animalBehaviorVariant = parameters.getBehaviourVariant();
+            this.genomeLength = parameters.getGenomeLength();
+            this.maximumEnergy = parameters.getInitialAnimalsEnergy() * 2;
         }});
 
         map.registerSpawners(animalSpawner);
@@ -69,17 +69,18 @@ public class SimulationEngine extends Thread {
         return map;
     }
 
-    public static WorldMap fromConfig (SimpleConfig config) {
+    public static WorldMap fromConfig(SimpleConfig config) {
         WorldMap map = new Earth(config.width, config.height);
-        Spawner grassSpawner = new GrassSpawner(new GrassSpawner.Config(){{
+        Spawner grassSpawner = new GrassSpawner(new GrassSpawner.Config() {{
             this.nutritionValue = config.plantEnergy;
             this.spawnRate = 1;
         }});
         map.registerSpawners(grassSpawner);
 
-        Spawner animalSpawner = new Spawners.AnimalSpawner(new Spawners.AnimalSpawner.Config(){{
+        Spawner animalSpawner = new Spawners.AnimalSpawner(new Spawners.AnimalSpawner.Config() {{
             this.startEnergy = config.startEnergy;
-            this.dailyEnergyLoss = config.moveEnergy;;
+            this.dailyEnergyLoss = config.moveEnergy;
+            ;
         }});
 
         map.registerSpawners(animalSpawner);

@@ -26,7 +26,7 @@ public class Earth extends WorldMap {
         Vector2D oldPosition = this.mapCoords(entity.getState().getPreviousPosition());
         Vector2D newPosition = this.mapCoords(entity.getPosition());
 
-        if(newPosition.getY() < 0 || newPosition.getY() > this.height) {
+        if (newPosition.getY() < 0 || newPosition.getY() > this.height) {
             entity.getState().setPosition(oldPosition);
             entity.getState().setDirection(entity.getState().getDirection().opposite());
         } else {
@@ -36,7 +36,7 @@ public class Earth extends WorldMap {
         this.getCellAt(newPosition).addObject(entity);
 
         Cell cell = objects.get(oldPosition);
-        if(cell == null) return null;
+        if (cell == null) return null;
         cell.removeObject(entity);
         return null;
     }

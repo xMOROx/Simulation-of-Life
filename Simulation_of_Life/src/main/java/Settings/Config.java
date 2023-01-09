@@ -3,7 +3,6 @@ package Settings;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
-
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
@@ -12,10 +11,11 @@ public class Config {
     public WorldConfig world;
     public SpawnerConfig[] spawners;
 
-    private static Gson g = new Gson();
+    private static Gson gson = new Gson();
+
     static Config fromFile(String path) throws FileNotFoundException {
         var fileReader = new FileReader(path);
-        return g.fromJson(fileReader, Config.class);
+        return gson.fromJson(fileReader, Config.class);
     }
 
     public static class WorldConfig {

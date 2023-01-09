@@ -5,27 +5,30 @@ import Entities.Grass;
 import Misc.BestNObjects;
 import gui.render.World.Cell;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class InteractionResolver {
     private final List<BasicInteractions> interactions = new LinkedList<>();
+
     private void registerInteraction(BasicInteractions interaction) {
         interactions.add(interaction);
     }
 
     public void resolve(Cell cell) {
-        for(BasicInteractions interaction : interactions) {
+        for (BasicInteractions interaction : interactions) {
             interaction.resolve(cell);
         }
     }
+
     {
         registerInteraction(new BasicInteractions() {
 
             @Override
             public void resolve(Cell cell) {
-                BestNObjects<Animal> top =  new BestNObjects<>(1, (Animal a1) -> a1.getState().getEnergy());
+                BestNObjects<Animal> top = new BestNObjects<>(1, (Animal a1) -> a1.getState().getEnergy());
 
-                if(this.countAnimalsWithTheHighestSameEnergy(cell) <= 1) {
+                if (this.countAnimalsWithTheHighestSameEnergy(cell) <= 1) {
                     top = new BestNObjects<>(1, (Animal a1) -> a1.getState().getEnergy());
                 } else if (this.countAnimalsWithTheHighestSameAge(cell) <= 1) {
                     top = new BestNObjects<>(1, (Animal a1) -> a1.getState().getAge());
@@ -46,7 +49,7 @@ public class InteractionResolver {
 
                 if (grass != null && top.count() == 1) {
                     Animal animal = top.get(0);
-                    if(animal.isAlive() && grass.isAlive()) {
+                    if (animal.isAlive() && grass.isAlive()) {
                         animal.eat(grass.getState().getEnergy());
                         grass.consumeEnergy(grass.getState().getEnergy());
                     }
@@ -58,9 +61,10 @@ public class InteractionResolver {
             @Override
             public void resolve(Cell cell) {
 
-                BestNObjects<Animal> top =  new BestNObjects<>(2, (Animal a1) -> a1.getState().getEnergy()); ;
+                BestNObjects<Animal> top = new BestNObjects<>(2, (Animal a1) -> a1.getState().getEnergy());
+                ;
 
-                if(this.countAnimalsWithTheHighestSameEnergy(cell) <= 2) {
+                if (this.countAnimalsWithTheHighestSameEnergy(cell) <= 2) {
                     top = new BestNObjects<>(2, (Animal a1) -> a1.getState().getEnergy());
                 } else if (this.countAnimalsWithTheHighestSameAge(cell) <= 2) {
                     top = new BestNObjects<>(2, (Animal a1) -> a1.getState().getAge());
@@ -77,7 +81,7 @@ public class InteractionResolver {
                 if (top.count() == 2) {
                     Animal animal1 = top.get(0);
                     Animal animal2 = top.get(1);
-                    if(animal1.canReproduceWith(animal2)) {
+                    if (animal1.canReproduceWith(animal2)) {
                         animal1.reproduce(animal2);
                     }
                 }

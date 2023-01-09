@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox fx:id="MainHBox" alignment="CENTER" prefHeight="715.0" prefWidth="1530.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.render.SimulationSceneController">
+<HBox fx:id="MainHBox" alignment="CENTER" prefHeight="715.0" prefWidth="1530.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.render.SimulationScene">
    <children>
       <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="715.0" prefWidth="359.0">
          <children>

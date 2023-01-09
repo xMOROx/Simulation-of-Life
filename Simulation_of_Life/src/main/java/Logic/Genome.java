@@ -11,6 +11,7 @@ public class Genome {
     private final int size;
     private static final Random random = new Random();
     private Mutation mutator;
+
     public Genome() {
         this(8);
     }
@@ -45,7 +46,7 @@ public class Genome {
         return new Genome(this.genes.subList(0, nucleusSize), this.mutator);
     }
 
-    public Genome  cutNucleusFromRight(int nucleusSize) {
+    public Genome cutNucleusFromRight(int nucleusSize) {
         return new Genome(this.genes.subList(this.size - nucleusSize, this.size), this.mutator);
     }
 
@@ -56,6 +57,7 @@ public class Genome {
     public void setMutator(Mutation mutator) {
         this.mutator = mutator;
     }
+
     public Mutation getMutator() {
         return this.mutator;
     }
@@ -71,6 +73,7 @@ public class Genome {
     public int getGene(int index) {
         return genes.get(index);
     }
+
     public Genome crossGenomes(Genome other) {
         return new Genome(
                 Stream.of(this.genes, other.getGenes())

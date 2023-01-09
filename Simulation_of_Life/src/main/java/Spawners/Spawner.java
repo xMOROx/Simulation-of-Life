@@ -1,9 +1,9 @@
 package Spawners;
 
-import gui.render.World.Cell;
+import Misc.Vector2D;
 import World.Maps.WorldMap;
 import com.google.gson.Gson;
-import Misc.Vector2D;
+import gui.render.World.Cell;
 
 import java.util.Random;
 
@@ -21,6 +21,7 @@ public abstract class Spawner {
     public abstract void spawn();
 
     protected abstract void spawnFirstPopulation();
+
     protected abstract boolean tryToSpawn(int attempts);
 
     public abstract boolean canSpawn(Cell cell);
@@ -32,7 +33,7 @@ public abstract class Spawner {
     protected Vector2D findValidPosition(int attempts) {
         for (int i = 0; i < attempts; i++) {
             Vector2D newPosition = getRandomPosition();
-            if(canSpawn(world.cellOrNullAt(newPosition))) {
+            if (canSpawn(world.cellOrNullAt(newPosition))) {
                 return newPosition;
             }
         }

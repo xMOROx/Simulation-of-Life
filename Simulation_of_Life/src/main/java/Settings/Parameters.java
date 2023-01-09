@@ -7,6 +7,7 @@ import Settings.Variants.MutationVariant;
 
 public class Parameters {
     private final ApplicationConfig applicationConfig;
+
     public Parameters(ApplicationConfig config) {
         this.applicationConfig = config;
     }
@@ -66,9 +67,11 @@ public class Parameters {
     public GrowthPlantVariant getTerrainVariant() {
         return applicationConfig.terrainVariant;
     }
+
     public int getMinimumMutations() {
         return applicationConfig.minimumMutations;
     }
+
     public int getMaximumMutations() {
         return applicationConfig.maximumMutations;
     }

@@ -5,10 +5,8 @@ import Misc.Vector2D;
 import Settings.Constants;
 import World.Maps.WorldMap;
 import gui.render.World.Cell;
-import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 
 
@@ -26,7 +24,7 @@ public class MapVisualizer {
 
     private void calculateColumnsAndRowsSize() {
         int squareHeight = (int) Math.ceil(1.0 * Constants.GRID_PANE_HEIGHT_PX / map.getHeight());
-        int squareWidth  = (int) Math.ceil(1.0 * Constants.GRID_PANE_WIDTH_PX / map.getWidth());
+        int squareWidth = (int) Math.ceil(1.0 * Constants.GRID_PANE_WIDTH_PX / map.getWidth());
         this.sideLengthOfSquarePx = Math.max(80, Math.max(squareWidth, squareHeight));
         this.gridPane.getColumnConstraints().add(new ColumnConstraints(this.sideLengthOfSquarePx));
         this.gridPane.getRowConstraints().add(new RowConstraints(this.sideLengthOfSquarePx));
@@ -39,7 +37,7 @@ public class MapVisualizer {
             for (int y = 0; y <= this.map.getHeight(); y++) {
                 Vector2D position = new Vector2D(x, y);
                 Cell cell = this.map.cellOrNullAt(position);
-                GridPane cellGrid = cell.render(this.sideLengthOfSquarePx,  this.loadImages);
+                GridPane cellGrid = cell.render(this.sideLengthOfSquarePx, this.loadImages);
                 this.gridPane.add(cellGrid, x, y);
             }
         }

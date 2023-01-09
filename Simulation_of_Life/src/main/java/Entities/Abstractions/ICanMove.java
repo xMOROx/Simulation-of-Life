@@ -5,8 +5,7 @@ import Misc.MapDirection;
 import Misc.Vector2D;
 
 
-public interface ICanMove<State extends ICanMove.State, StateObject extends StatefulObject<State>>
-{
+public interface ICanMove<State extends ICanMove.State, StateObject extends StatefulObject<State>> {
 
     default void move() {
         var stateObject = (StateObject) this;
@@ -16,18 +15,21 @@ public interface ICanMove<State extends ICanMove.State, StateObject extends Stat
     }
 
     default void rotate(int i) {
-        var stateObject = (StateObject)this;
+        var stateObject = (StateObject) this;
         State state = stateObject.getState();
         state.setDirection(state.getDirection().rotateRight(i));
 
     }
 
-    interface State
-    {
+    interface State {
         Vector2D getPreviousPosition();
+
         Vector2D getPosition();
+
         MapDirection getDirection();
+
         void setPosition(Vector2D position);
+
         void setDirection(MapDirection direction);
     }
 

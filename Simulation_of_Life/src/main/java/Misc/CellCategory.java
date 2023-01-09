@@ -1,7 +1,6 @@
 package Misc;
 
-public enum CellCategory
-{
+public enum CellCategory {
     FIRST,
     SECOND,
 }

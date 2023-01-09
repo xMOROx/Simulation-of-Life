@@ -6,9 +6,9 @@ import World.SimulationEngine;
 import gui.interfaces.IGuiObserver;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -19,31 +19,18 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
-public class SimulationSceneController implements IGuiObserver {
+public class SimulationScene implements IGuiObserver {
 
 
-
-    //FXML---------------------------------------------------
     @FXML
-    private MainSceneController mainSceneController;
+    private final XYChart.Series populationData = new XYChart.Series();
     @FXML
-    private Button startButton;
-    @FXML
-    private Button stopButton;
-    @FXML
-    private Button deleteSimulationButton;
-    @FXML
-    private Pane simulationPane;
-    @FXML
-    private GridPane mapGridPane;
-    @FXML
-    private HBox MainHBox;
-    @FXML
-    private LineChart<?, ?> populationChart;
-    @FXML
-    private LineChart<?, ?> plantsChart;
+    private final XYChart.Series grassData = new XYChart.Series();
     @FXML
     public Label numberOfAllPlantsLabel;
     @FXML
@@ -68,12 +55,6 @@ public class SimulationSceneController implements IGuiObserver {
     public Button saveCSVButton;
     @FXML
     public Label theMostPopularGenomeLabelOutPut;
-    @FXML
-    private final XYChart.Series populationData = new XYChart.Series();
-    @FXML
-    private final XYChart.Series grassData = new XYChart.Series();
-    //------------------------------------------------------
-
     //selected animal--------------------------------------
     @FXML
     public Label animalGenomeLabel;
@@ -94,39 +75,56 @@ public class SimulationSceneController implements IGuiObserver {
     @FXML
     public ImageView selectedAnimalPictureView;
     //------------------------------------------------------
-
-
+    CsvWriter csvWriter = null;
+    String path = null;
+    List<String[]> data = new ArrayList<>();
+    //FXML---------------------------------------------------
+    @FXML
+    private PrimaryScene primaryScene;
+    @FXML
+    private Button startButton;
+    @FXML
+    private Button stopButton;
+    @FXML
+    private Button deleteSimulationButton;
+    @FXML
+    private Pane simulationPane;
+    @FXML
+    private GridPane mapGridPane;
+    //------------------------------------------------------
+    @FXML
+    private HBox MainHBox;
+    @FXML
+    private LineChart<?, ?> populationChart;
+    @FXML
+    private LineChart<?, ?> plantsChart;
     //simulation--------------------------------------------
     private SimulationEngine engine;
     private MapVisualizer mapVisualizer;
     private Thread thread;
-
     //------------------------------------------------------
     private boolean firstStart = true;
     private int refreshRate = 200;
     private boolean isSaveToCSV = false;
     private boolean selectedAnimalDeath = false;
-    CsvWriter csvWriter = null;
-    String path = null;
-    List<String[]> data = new ArrayList<>();
 
     public void onDeleteSimulationButtonClicked() throws IOException {
-        if(this.csvWriter != null){
+        if (this.csvWriter != null) {
             this.csvWriter.close();
         }
-        this.mainSceneController.removeTab(this);
+        this.primaryScene.removeTab(this);
     }
 
-    public void setMainSceneController(MainSceneController mainSceneController) {
-        this.mainSceneController = mainSceneController;
+    public void setMainSceneController(PrimaryScene primaryScene) {
+        this.primaryScene = primaryScene;
     }
 
-    public void onStartButtonClicked()  {
+    public void onStartButtonClicked() {
         this.startSimulation();
         this.deleteSimulationButton.setDisable(true);
         this.startButton.setDisable(true);
         this.stopButton.setDisable(false);
-        if(this.isSaveToCSV) {
+        if (this.isSaveToCSV) {
             this.saveCSVButton.setDisable(true);
         }
         this.updateGuiCharts();
@@ -137,7 +135,7 @@ public class SimulationSceneController implements IGuiObserver {
         this.deleteSimulationButton.setDisable(false);
         this.startButton.setDisable(false);
         this.stopButton.setDisable(true);
-        if(this.isSaveToCSV) {
+        if (this.isSaveToCSV) {
             this.saveCSVButton.setDisable(false);
         }
         this.engine.getWorld().noticeAnimals(true);
@@ -151,10 +149,10 @@ public class SimulationSceneController implements IGuiObserver {
         this.animalGenomeLabel.setText("animal's genome: " + selectedAnimal.getGenome().getGenes().toString());
         this.animalActiveGeneLabel.setText("active gene: " + (selectedAnimal.getGenome().getGene(selectedAnimal.getCurrentGeneIndex() % selectedAnimal.genomeLength)));
         this.animalEnergyLabel.setText("animal energy: " + (selectedAnimal.getEnergy()));
-        this.animalNumberOfEatenGrassesLabel.setText("The number of plants eaten: " +(selectedAnimal.getState().getEatenGrass()));
+        this.animalNumberOfEatenGrassesLabel.setText("The number of plants eaten: " + (selectedAnimal.getState().getEatenGrass()));
         this.animalNumberOfChildrenLabel.setText("Number of children: " + (selectedAnimal.getState().getChildren()));
         this.animalDaysOfLifeLabel.setText("Life expectancy: " + (selectedAnimal.getState().getAge()));
-        if(selectedAnimal.isDead() && !this.selectedAnimalDeath) {
+        if (selectedAnimal.isDead() && !this.selectedAnimalDeath) {
             this.selectedAnimalDeath = true;
             this.animalDayOfDeathLabel.setText("Day of death: " + (this.engine.getWorld().getStatistics().day));
         } else if (!selectedAnimal.isDead()) {
@@ -164,12 +162,12 @@ public class SimulationSceneController implements IGuiObserver {
         this.selectedAnimalPictureView.setImage(selectedAnimal.getAnimalImage());
     }
 
-    private void startSimulation()  {
+    private void startSimulation() {
         if (this.firstStart) {
-            if(this.isSaveToCSV){
+            if (this.isSaveToCSV) {
                 try {
                     LocalDate date = LocalDate.now();
-                    this.path = Objects.requireNonNull(getClass().getResource("")).getPath() + "/statistics_"+ date.getYear() + "_" + date.getMonth()+"_"+ date.getDayOfMonth() + "_" + hashCode() + ".csv";
+                    this.path = Objects.requireNonNull(getClass().getResource("")).getPath() + "/statistics_" + date.getYear() + "_" + date.getMonth() + "_" + date.getDayOfMonth() + "_" + hashCode() + ".csv";
                     this.csvWriter = new CsvWriter(this.path);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -182,7 +180,7 @@ public class SimulationSceneController implements IGuiObserver {
         }
     }
 
-    private void pauseSimulation(){
+    private void pauseSimulation() {
         this.thread.suspend();
     }
 
@@ -230,14 +228,13 @@ public class SimulationSceneController implements IGuiObserver {
         this.averageEnergyLevelLabel.setText("Average energy level: " + Math.round(this.engine.getWorld().getAvgStats().avgEnergy * 100.0) / 100.0);
         this.lifeExpectancyLabel.setText("Life expectancy: " + Math.round(this.engine.getWorld().getAvgStats().avgLifespan * 100.0) / 100.0);
         this.dayLabel.setText("Day: " + this.engine.getWorld().getStatistics().day);
-        if(this.isSaveToCSV) {
-            System.out.println("The most popular:" + this.engine.getWorld().getStatistics().theMostPopularGenes.toString());
-            String[] dataToSave = {this.engine.getWorld().getStatistics().day.toString(), Integer.toString(this.engine.getWorld().getStatistics().animalCount), Integer.toString(this.engine.getWorld().getStatistics().grassCount), Integer.toString(this.engine.getWorld().getStatistics().emptyFieldsCount), Integer.toString(this.engine.getWorld().getStatistics().occupiedFieldsCount),Double.toString(this.engine.getWorld().getAvgStats().avgEnergy), Double.toString(this.engine.getWorld().getAvgStats().avgLifespan) ,this.engine.getWorld().getStatistics().theMostPopularGenes.toString()};
+        if (this.isSaveToCSV) {
+            String[] dataToSave = {this.engine.getWorld().getStatistics().day.toString(), Integer.toString(this.engine.getWorld().getStatistics().animalCount), Integer.toString(this.engine.getWorld().getStatistics().grassCount), Integer.toString(this.engine.getWorld().getStatistics().emptyFieldsCount), Integer.toString(this.engine.getWorld().getStatistics().occupiedFieldsCount), Double.toString(this.engine.getWorld().getAvgStats().avgEnergy), Double.toString(this.engine.getWorld().getAvgStats().avgLifespan), this.engine.getWorld().getStatistics().theMostPopularGenes.toString()};
             this.data.add(dataToSave);
         }
     }
 
-    public void updateGuiMap()  {
+    public void updateGuiMap() {
         try {
             Platform.runLater(this::setSelectedAnimalStatistics);
             Platform.runLater(this::updateMap);
@@ -251,6 +248,7 @@ public class SimulationSceneController implements IGuiObserver {
     public void updateGuiCharts() {
         Platform.runLater(this::updateCharts);
     }
+
     public void updateMap() {
         this.mapVisualizer.visualizeMap();
     }
@@ -262,10 +260,9 @@ public class SimulationSceneController implements IGuiObserver {
         this.grassData.getData().add(new XYChart.Data<>(Integer.toString(day), this.engine.getWorld().getStatistics().grassCount));
     }
 
-    public void saveCSV(){
+    public void saveCSV() {
         try {
             this.csvWriter.writeData(this.data);
-            System.out.println("Saved to: " + this.path);
             this.data.clear();
             this.displayPathLabel.setText(this.path);
             this.displayPathLabel.setWrapText(true);

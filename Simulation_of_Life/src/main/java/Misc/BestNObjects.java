@@ -29,18 +29,20 @@ public class BestNObjects<T> {
         Integer value = this.valueFunction.apply(object);
         this.indexes[this.insertIndex] = value;
         this.values[this.insertIndex] = object;
-        if(this.insertIndex < this.size) {
+        if (this.insertIndex < this.size) {
             this.insertIndex++;
         }
-        for(int i = this.insertIndex - 1; i > 0; i--) {
-            if(value > this.indexes[i - 1]) {
+        for (int i = this.insertIndex - 1; i > 0; i--) {
+            if (value > this.indexes[i - 1]) {
                 swap(i, i - 1);
             } else break;
         }
     }
+
     public T get(int index) {
         return (T) this.values[index];
     }
+
     public int count() {
         return this.insertIndex;
     }
