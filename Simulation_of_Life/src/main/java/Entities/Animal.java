@@ -260,17 +260,13 @@ public class Animal extends StatefulObject<Animal.State> implements
                 animalImageBox.requestFocus();
             });
         }
-
         animalImageBox.borderProperty()
-                .bind(Bindings.when(animalImageBox.focusedProperty().or(Bindings.createBooleanBinding(() -> this.isSelected)))
-                        .then(new Border(new BorderStroke(Color.rgb(238, 75, 43), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)))
-                        .otherwise(new Border(new BorderStroke(Color.TRANSPARENT, BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.DEFAULT))));
-
-
-
+                    .bind(Bindings.when(animalImageBox.focusedProperty().or(Bindings.createBooleanBinding(() -> this.isSelected)))
+                            .then(new Border(new BorderStroke(Color.rgb(238, 75, 43), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(5))))
+                            .otherwise(new Border(new BorderStroke(Color.TRANSPARENT, BorderStrokeStyle.NONE, CornerRadii.EMPTY, BorderWidths.DEFAULT))));
         return animalImageBox;
     }
-
+    
     public static class DefaultConfiguration  {
         public  int initialEnergy = 100;
         public int genomeLength = 32;
@@ -282,7 +278,6 @@ public class Animal extends StatefulObject<Animal.State> implements
         public AnimalBehaviorVariant animalBehaviorVariant = AnimalBehaviorVariant.FULL_PREDICTABLE;
 
     }
-
 
     public static class State implements ICanMove.State, IsAlive.State {
         public int energy;
@@ -312,15 +307,6 @@ public class Animal extends StatefulObject<Animal.State> implements
         public void setPosition(Vector2D position) {
             this.previousPosition = this.position;
             this.position = position;
-        }
-
-        @Override
-        public void setDayOfDeath(int dayOfDeath) {
-            this.dayOfDeath = dayOfDeath;
-        }
-
-        public int getDayOfDeath() {
-            return this.dayOfDeath;
         }
 
         @Override

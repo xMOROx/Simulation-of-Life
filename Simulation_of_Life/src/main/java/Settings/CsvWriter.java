@@ -17,7 +17,7 @@ public class CsvWriter {
             this.filePath.createNewFile();
         }
         try {
-            this.writer = new CSVWriter(new FileWriter(filePath, true));
+            this.writer = new CSVWriter(new FileWriter(filePath));
             String [] header = {"Days", "Number of all animals", "Number of all plants", "Number of free fields", "Number of occupied fields", "Average energy level", "Life expectancy", "The most popular genome"};
             this.writer.writeNext(header);
         } catch (IOException e) {
@@ -27,6 +27,8 @@ public class CsvWriter {
 
     public void writeData(List<String[]> data) throws IOException {
         this.writer.writeAll(data);
+    }
+    public void close() throws IOException {
         this.writer.close();
     }
 }

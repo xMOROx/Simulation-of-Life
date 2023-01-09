@@ -305,7 +305,7 @@ public abstract class WorldMap {
         public double avgEnergy = 0;
         public double avgChildren = 0;
         public double avgLifespan = 0;
-        public Integer day = 1;
+        public Integer day = 0;
         public List<Integer> theMostPopularGenes = new LinkedList<>();
     }
 }

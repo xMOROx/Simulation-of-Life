@@ -1,19 +1,15 @@
 package gui.render;
 
 import Entities.Animal;
-import Entities.Grass;
 import Settings.CsvWriter;
 import World.SimulationEngine;
-import com.sun.tools.javac.Main;
 import gui.interfaces.IGuiObserver;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
@@ -21,7 +17,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
@@ -66,7 +61,11 @@ public class SimulationSceneController implements IGuiObserver {
     @FXML
     public Label dayLabel;
     @FXML
+    public Label displayPathLabel;
+    @FXML
     public ScrollPane theMostPopularGenomeScrollPane;
+    @FXML
+    public Button saveCSVButton;
     @FXML
     public Label theMostPopularGenomeLabelOutPut;
     @FXML
@@ -106,14 +105,14 @@ public class SimulationSceneController implements IGuiObserver {
     private boolean firstStart = true;
     private int refreshRate = 200;
     private boolean isSaveToCSV = false;
+    private boolean selectedAnimalDeath = false;
     CsvWriter csvWriter = null;
+    String path = null;
     List<String[]> data = new ArrayList<>();
-
-
 
     public void onDeleteSimulationButtonClicked() throws IOException {
         if(this.csvWriter != null){
-            this.csvWriter.writeData(data);
+            this.csvWriter.close();
         }
         this.mainSceneController.removeTab(this);
     }
@@ -127,6 +126,9 @@ public class SimulationSceneController implements IGuiObserver {
         this.deleteSimulationButton.setDisable(true);
         this.startButton.setDisable(true);
         this.stopButton.setDisable(false);
+        if(this.isSaveToCSV) {
+            this.saveCSVButton.setDisable(true);
+        }
         this.updateGuiCharts();
         this.engine.getWorld().noticeAnimals(false);
     }
@@ -135,6 +137,9 @@ public class SimulationSceneController implements IGuiObserver {
         this.deleteSimulationButton.setDisable(false);
         this.startButton.setDisable(false);
         this.stopButton.setDisable(true);
+        if(this.isSaveToCSV) {
+            this.saveCSVButton.setDisable(false);
+        }
         this.engine.getWorld().noticeAnimals(true);
         this.updateGuiMap();
         this.pauseSimulation();
@@ -149,7 +154,12 @@ public class SimulationSceneController implements IGuiObserver {
         this.animalNumberOfEatenGrassesLabel.setText("The number of plants eaten: " +(selectedAnimal.getState().getEatenGrass()));
         this.animalNumberOfChildrenLabel.setText("Number of children: " + (selectedAnimal.getState().getChildren()));
         this.animalDaysOfLifeLabel.setText("Life expectancy: " + (selectedAnimal.getState().getAge()));
-        this.animalDayOfDeathLabel.setText("Day of death: " + (selectedAnimal.getState().getDayOfDeath()));
+        if(selectedAnimal.isDead() && !this.selectedAnimalDeath) {
+            this.selectedAnimalDeath = true;
+            this.animalDayOfDeathLabel.setText("Day of death: " + (this.engine.getWorld().getStatistics().day));
+        } else if (!selectedAnimal.isDead()) {
+            this.animalDayOfDeathLabel.setText("Day of death: " + "Alive");
+        }
         this.selectedAnimalNameLabel.setText("Animal name: " + (selectedAnimal.getName()));
         this.selectedAnimalPictureView.setImage(selectedAnimal.getAnimalImage());
     }
@@ -159,7 +169,8 @@ public class SimulationSceneController implements IGuiObserver {
             if(this.isSaveToCSV){
                 try {
                     LocalDate date = LocalDate.now();
-                    this.csvWriter = new CsvWriter(Objects.requireNonNull(getClass().getResource("")).getPath() + "/statistics_"+ date.getYear() + "_" + date.getMonth()+"_"+ date.getDayOfMonth() + ".csv");
+                    this.path = Objects.requireNonNull(getClass().getResource("")).getPath() + "/statistics_"+ date.getYear() + "_" + date.getMonth()+"_"+ date.getDayOfMonth() + "_" + hashCode() + ".csv";
+                    this.csvWriter = new CsvWriter(this.path);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -196,7 +207,6 @@ public class SimulationSceneController implements IGuiObserver {
         this.populationChart.getData().add(this.populationData);
         this.plantsChart.getData().add(this.grassData);
 
-
         this.updateGuiMap();
         this.engine.getWorld().UpdateStatistics();
     }
@@ -207,12 +217,21 @@ public class SimulationSceneController implements IGuiObserver {
         this.numberOfAllPlantsLabel.setText("Number of all plants: " + this.engine.getWorld().getStatistics().grassCount);
         this.numberOfFreeFieldLabel.setText("Number of free field: " + this.engine.getWorld().getStatistics().emptyFieldsCount);
         this.numberOfOccupiedFieldLabel1.setText("Number of occupied field: " + this.engine.getWorld().getStatistics().occupiedFieldsCount);
+
+        this.theMostPopularGenomeScrollPane.setFitToWidth(true);
+
         this.theMostPopularGenomeLabelOutPut.setText(engine.getWorld().getStatistics().theMostPopularGenes.toString());
+
+        this.theMostPopularGenomeLabelOutPut.setWrapText(true);
+        this.theMostPopularGenomeLabelOutPut.setPrefWidth(this.theMostPopularGenomeScrollPane.getWidth());
+        this.theMostPopularGenomeLabelOutPut.setPrefHeight(this.theMostPopularGenomeScrollPane.getHeight());
+        this.theMostPopularGenomeScrollPane.setContent(this.theMostPopularGenomeLabelOutPut);
+
         this.averageEnergyLevelLabel.setText("Average energy level: " + Math.round(this.engine.getWorld().getAvgStats().avgEnergy * 100.0) / 100.0);
         this.lifeExpectancyLabel.setText("Life expectancy: " + Math.round(this.engine.getWorld().getAvgStats().avgLifespan * 100.0) / 100.0);
         this.dayLabel.setText("Day: " + this.engine.getWorld().getStatistics().day);
         if(this.isSaveToCSV) {
-            System.out.println(Objects.requireNonNull(getClass().getResource("")).getPath());
+            System.out.println("The most popular:" + this.engine.getWorld().getStatistics().theMostPopularGenes.toString());
             String[] dataToSave = {this.engine.getWorld().getStatistics().day.toString(), Integer.toString(this.engine.getWorld().getStatistics().animalCount), Integer.toString(this.engine.getWorld().getStatistics().grassCount), Integer.toString(this.engine.getWorld().getStatistics().emptyFieldsCount), Integer.toString(this.engine.getWorld().getStatistics().occupiedFieldsCount),Double.toString(this.engine.getWorld().getAvgStats().avgEnergy), Double.toString(this.engine.getWorld().getAvgStats().avgLifespan) ,this.engine.getWorld().getStatistics().theMostPopularGenes.toString()};
             this.data.add(dataToSave);
         }
@@ -241,5 +260,17 @@ public class SimulationSceneController implements IGuiObserver {
         Integer day = this.engine.getWorld().getStatistics().day;
         this.populationData.getData().add(new XYChart.Data<>(Integer.toString(day), this.engine.getWorld().getStatistics().animalCount));
         this.grassData.getData().add(new XYChart.Data<>(Integer.toString(day), this.engine.getWorld().getStatistics().grassCount));
+    }
+
+    public void saveCSV(){
+        try {
+            this.csvWriter.writeData(this.data);
+            System.out.println("Saved to: " + this.path);
+            this.data.clear();
+            this.displayPathLabel.setText(this.path);
+            this.displayPathLabel.setWrapText(true);
+        } catch (IOException ex) {
+            ex.getStackTrace();
+        }
     }
 }

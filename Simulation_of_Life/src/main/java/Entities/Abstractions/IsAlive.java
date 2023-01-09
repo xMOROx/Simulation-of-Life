@@ -1,5 +1,6 @@
 package Entities.Abstractions;
 
+import Entities.Animal;
 import Entities.StateEvent;
 
 public interface IsAlive <State extends IsAlive.State, StateObject extends StatefulObject<State>>{
@@ -17,7 +18,6 @@ public interface IsAlive <State extends IsAlive.State, StateObject extends State
         state.setEnergy(state.getEnergy() - consumedEnergyValue);
         stateObject.notify(consumedEnergy);
         if(isDead()) {
-            state.setDayOfDeath(state.getAge());
             stateObject.notify(died);
         }
     }
@@ -36,13 +36,11 @@ public interface IsAlive <State extends IsAlive.State, StateObject extends State
         }
         default void setAge(int newAge) {
         }
+
         default int getChildren() {
             return 0;
         }
         default void setChildren(int newChildren) {
-
-        }
-        default void setDayOfDeath(int newDayOfDeath) {
 
         }
     }

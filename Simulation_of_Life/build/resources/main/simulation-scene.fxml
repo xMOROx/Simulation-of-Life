@@ -48,7 +48,7 @@
             <Label fx:id="averageEnergyLevelLabel" layoutX="54.0" layoutY="632.0" text="average energy level:" />
             <Label fx:id="lifeExpectancyLabel" layoutX="53.0" layoutY="660.0" text="life expectancy:" />
             <Label fx:id="dayLabel" layoutX="53.0" layoutY="685.0" text="day:" />
-            <ScrollPane layoutX="52.0" layoutY="579.0" prefHeight="42.0" prefWidth="275.0" vbarPolicy="NEVER">
+            <ScrollPane fx:id="theMostPopularGenomeScrollPane" layoutX="52.0" layoutY="579.0" prefHeight="42.0" prefWidth="275.0" vbarPolicy="NEVER">
               <content>
                 <AnchorPane maxHeight="520.0" minHeight="0.0" minWidth="0.0" prefHeight="42.0" prefWidth="275.0">
                      <children>
@@ -77,7 +77,7 @@
             <Button fx:id="startButton" layoutX="233.0" layoutY="672.0" mnemonicParsing="false" onAction="#onStartButtonClicked" prefHeight="26.0" prefWidth="61.0" text="Start" />
             <Button fx:id="stopButton" disable="true" layoutX="160.0" layoutY="673.0" mnemonicParsing="false" onAction="#onStopButtonClicked" prefHeight="26.0" prefWidth="61.0" text="Stop" />
             <Button fx:id="deleteSimulationButton" layoutX="17.0" layoutY="673.0" mnemonicParsing="false" onAction="#onDeleteSimulationButtonClicked" text="Delete Simulation" />
-            <VBox layoutX="11.0" layoutY="460.0" prefHeight="200.0" prefWidth="282.0" spacing="6.0">
+            <VBox layoutX="20.0" layoutY="288.0" prefHeight="200.0" prefWidth="282.0" spacing="6.0">
                <children>
                   <Label fx:id="animalGenomeLabel" text="animal's genome:" />
                   <Label fx:id="animalActiveGeneLabel" text="active gene:" />
@@ -94,21 +94,28 @@
                   <Insets left="15.0" top="10.0" />
                </padding>
             </VBox>
-            <Separator layoutX="20.0" layoutY="415.0" prefHeight="36.0" prefWidth="292.0" />
-            <Label layoutX="70.0" layoutY="437.0" text="Selected Animal statistics" textAlignment="CENTER">
+            <Separator layoutX="10.0" layoutY="505.0" prefHeight="36.0" prefWidth="292.0" />
+            <Label alignment="CENTER" layoutX="40.0" layoutY="244.0" prefHeight="30.0" prefWidth="256.0" text="Selected Animal statistics" textAlignment="CENTER">
                <font>
-                  <Font name="System Bold" size="15.0" />
+                  <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="99.0" layoutY="223.0" text="Selected Animal" textAlignment="CENTER">
+            <Label layoutX="75.0" layoutY="10.0" text="Selected Animal" textAlignment="CENTER">
                <font>
-                  <Font name="System Bold" size="15.0" />
+                  <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Separator layoutX="14.0" layoutY="187.0" prefHeight="36.0" prefWidth="292.0" />
-            <Label fx:id="selectedAnimalNameLabel" layoutX="111.0" layoutY="251.0" text="animal name:" />
-            <Label layoutX="127.0" layoutY="295.0" text="picture:" />
-            <ImageView fx:id="selectedAnimalPictureView" fitHeight="89.0" fitWidth="90.0" layoutX="102.0" layoutY="326.0" pickOnBounds="true" preserveRatio="true" />
+            <Separator layoutX="14.0" layoutY="201.0" prefHeight="36.0" prefWidth="292.0" />
+            <Label fx:id="selectedAnimalNameLabel" layoutX="112.0" layoutY="44.0" text="animal name:" />
+            <Label layoutX="128.0" layoutY="88.0" text="picture:" />
+            <ImageView fx:id="selectedAnimalPictureView" fitHeight="89.0" fitWidth="90.0" layoutX="103.0" layoutY="112.0" pickOnBounds="true" preserveRatio="true" />
+            <Button fx:id="saveCSVButton" disable="true" layoutX="119.0" layoutY="628.0" mnemonicParsing="false" onAction="#saveCSV" text="Save CSV" />
+            <Label alignment="CENTER" layoutX="24.0" layoutY="527.0" prefWidth="269.0" text="File save to path: " textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="displayPathLabel" layoutX="26.0" layoutY="560.0" prefHeight="56.0" prefWidth="269.0" />
          </children>
       </AnchorPane>
    </children>
