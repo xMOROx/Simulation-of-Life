@@ -2,6 +2,7 @@ package World.Maps;
 
 import Entities.Abstractions.ICanMove;
 import Entities.Abstractions.StatefulObject;
+import Entities.Animal;
 import Misc.Vector2D;
 import gui.render.World.Cell;
 
