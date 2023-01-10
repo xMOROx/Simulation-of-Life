@@ -23,7 +23,15 @@ public abstract class WorldMap {
     protected final List<IWorldElement> newChildrenToAdd = new LinkedList<>();
     protected final InteractionResolver resolver = new InteractionResolver();
     protected GrowthPlantVariant growthPlantVariant = GrowthPlantVariant.EQUATOR;
-    protected Animal selectedAnimal = null;
+    protected SelectedAnimal selectedAnimal = null;
+
+    public class SelectedAnimal {
+        public Animal animal;
+        public boolean isDead = false;
+        public SelectedAnimal(Animal animal) {
+            this.animal = animal;
+        }
+    }
     protected final SortedMap<List<Integer>, Integer> genoTypes = new TreeMap<>((o1, o2) -> {
         for (int i = 0; i < o1.size(); i++) {
             if (o1.get(i) < o2.get(i)) return -1;
@@ -206,16 +214,16 @@ public abstract class WorldMap {
         if (entity instanceof Grass) this.statistics.grassCount--;
     }
 
-    public Animal getSelectedAnimal() {
+    public SelectedAnimal getSelectedAnimal() {
         return selectedAnimal;
     }
 
     public void setSelectedAnimal(Animal selectedAnimal) {
         if (this.selectedAnimal != null) {
-            this.selectedAnimal.setIsSelected(false);
+            this.selectedAnimal.animal.setIsSelected(false);
         }
-        this.selectedAnimal = selectedAnimal;
-        this.selectedAnimal.setIsSelected(true);
+        this.selectedAnimal = new SelectedAnimal(selectedAnimal);
+        this.selectedAnimal.animal.setIsSelected(true);
     }
 
     private int countCellWithEmptyEntity() {

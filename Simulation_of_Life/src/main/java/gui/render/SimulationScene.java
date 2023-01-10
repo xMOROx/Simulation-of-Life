@@ -2,6 +2,7 @@ package gui.render;
 
 import Entities.Animal;
 import Settings.CsvWriter;
+import World.Maps.WorldMap;
 import World.SimulationEngine;
 import gui.interfaces.IGuiObserver;
 import javafx.application.Platform;
@@ -106,7 +107,6 @@ public class SimulationScene implements IGuiObserver {
     private boolean firstStart = true;
     private int refreshRate = 200;
     private boolean isSaveToCSV = false;
-    private boolean selectedAnimalDeath = false;
 
     public void onDeleteSimulationButtonClicked() throws IOException {
         if (this.csvWriter != null) {
@@ -144,22 +144,22 @@ public class SimulationScene implements IGuiObserver {
     }
 
     private void setSelectedAnimalStatistics() {
-        Animal selectedAnimal = this.engine.getWorld().getSelectedAnimal();
+        WorldMap.SelectedAnimal selectedAnimal = this.engine.getWorld().getSelectedAnimal();
         if (selectedAnimal == null) return;
-        this.animalGenomeLabel.setText("animal's genome: " + selectedAnimal.getGenome().getGenes().toString());
-        this.animalActiveGeneLabel.setText("active gene: " + (selectedAnimal.getGenome().getGene(selectedAnimal.getCurrentGeneIndex() % selectedAnimal.genomeLength)));
-        this.animalEnergyLabel.setText("animal energy: " + (selectedAnimal.getEnergy()));
-        this.animalNumberOfEatenGrassesLabel.setText("The number of plants eaten: " + (selectedAnimal.getState().getEatenGrass()));
-        this.animalNumberOfChildrenLabel.setText("Number of children: " + (selectedAnimal.getState().getChildren()));
-        this.animalDaysOfLifeLabel.setText("Life expectancy: " + (selectedAnimal.getState().getAge()));
-        if (selectedAnimal.isDead() && !this.selectedAnimalDeath) {
-            this.selectedAnimalDeath = true;
+        this.animalGenomeLabel.setText("animal's genome: " + selectedAnimal.animal.getGenome().getGenes().toString());
+        this.animalActiveGeneLabel.setText("active gene: " + (selectedAnimal.animal.getGenome().getGene(selectedAnimal.animal.getCurrentGeneIndex() % selectedAnimal.animal.genomeLength)));
+        this.animalEnergyLabel.setText("animal energy: " + (selectedAnimal.animal.getEnergy()));
+        this.animalNumberOfEatenGrassesLabel.setText("The number of plants eaten: " + (selectedAnimal.animal.getState().getEatenGrass()));
+        this.animalNumberOfChildrenLabel.setText("Number of children: " + (selectedAnimal.animal.getState().getChildren()));
+        this.animalDaysOfLifeLabel.setText("Life expectancy: " + (selectedAnimal.animal.getState().getAge()));
+        if (selectedAnimal.animal.isDead() && !selectedAnimal.isDead) {
+            selectedAnimal.isDead = true;
             this.animalDayOfDeathLabel.setText("Day of death: " + (this.engine.getWorld().getStatistics().day));
-        } else if (!selectedAnimal.isDead()) {
+        } else if (!selectedAnimal.animal.isDead()) {
             this.animalDayOfDeathLabel.setText("Day of death: " + "Alive");
         }
-        this.selectedAnimalNameLabel.setText("Animal name: " + (selectedAnimal.getName()));
-        this.selectedAnimalPictureView.setImage(selectedAnimal.getAnimalImage());
+        this.selectedAnimalNameLabel.setText("Animal name: " + (selectedAnimal.animal.getName()));
+        this.selectedAnimalPictureView.setImage(selectedAnimal.animal.getAnimalImage());
     }
 
     private void startSimulation() {
