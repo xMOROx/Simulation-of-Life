@@ -22,7 +22,8 @@ Map-based simulation of animals' behavior. This program allows users to observe 
 - Equator - plants in the center of the map has more % to spawn. 
 - Toxic corpses - plants prefer to grow on tills where fewer animals have dead. 
 
-### Mutation Variant (The genomes are from 0 to 7. They map direction of the world)
+### Mutation Variant
+#### The genomes are from 0 to 7. They map direction of the world
 - Full random  - Mutations are not predictable 
 - Slight Correction - Mutations are more predictable because the genome can only mutate one step up or down( in example genome is set to 6, so after a mutation it could be 5 or 7)
 
@@ -34,3 +35,18 @@ Map-based simulation of animals' behavior. This program allows users to observe 
 ```sh 
 ./gradlew run 
 ```
+
+# Preview of main features 
+## Main menu
+![](https://github.com/xMOROx/Simulation-of-Life/blob/main/readme_images/start_menu.png)
+
+## Create new simulation tab
+![](https://github.com/xMOROx/Simulation-of-Life/blob/main/readme_images/options.png)
+
+## Simulation 
+### First day 
+![](https://github.com/xMOROx/Simulation-of-Life/blob/main/readme_images/firstday.png)
+
+### 100 day
+![](https://github.com/xMOROx/Simulation-of-Life/blob/main/readme_images/100day.png)
+
